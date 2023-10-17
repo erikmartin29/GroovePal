@@ -4,11 +4,7 @@ const loginRouter = require('koa-router')({
     prefix: '/login'
 });
 
-loginRouter.get('/:user_id/',LoginController.authorizeUser, (error) => console.log(error));
-
-loginRouter.get('/', (ctx) => {
-    ctx.status = 200;
-    ctx.body = 'ok';
-});
+loginRouter.post('/',LoginController.authorizeUser, (error) => console.log(error));
+loginRouter.post('/new_user/', LoginController.createUser, (error) => console.log(error));
 
 module.exports = loginRouter;
