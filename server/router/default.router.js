@@ -1,8 +1,5 @@
-const Authorize = require('../Middleware/Authorize.js');
-const VerifyJWT = require('../Middleware/VerifyJWT.js');
-
 const router = require('koa-router')({
-    prefix: '/api/v1/'
+    prefix: '/api/v1'
 });
 
 router.get('/', (ctx) => {
@@ -12,10 +9,12 @@ router.get('/', (ctx) => {
 });
 
 // import routes
-const loginRouter = require('./login/login.router');
+const loginRouter = require('./login/login.router.js');
+const secretsRouter = require('./secrets/secrets.router.js');
 
 router.use(
-    loginRouter.routes()
+    loginRouter.routes(),
+    secretsRouter.routes(),
 );
 
 module.exports = (app) => {

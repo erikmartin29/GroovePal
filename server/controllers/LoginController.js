@@ -1,4 +1,5 @@
 const dbConnection = require('../database/mySQLconnect');
+const setAccessToken = require('../utils/setAccessToken');
 
 const authorizeUser = async (ctx) => {
     return new Promise((resolve, reject) => {
@@ -12,7 +13,7 @@ const authorizeUser = async (ctx) => {
                 reject(error);
             }
             if ( tuples.length === 1 ) {
-                // setAccessToken(ctx, tuples[0]);
+                setAccessToken(ctx, tuples[0]);
                 ctx.body = {
                     status: 'OK',
                     user: tuples[0],
