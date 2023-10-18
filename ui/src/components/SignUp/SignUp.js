@@ -1,11 +1,11 @@
 import { Fragment } from "react";
 
 
-export default function CreateUser() {
+export default function SignUp() {
 
     return (
         <Fragment>
-            <h1>Create User</h1>
+            <h1>Account Creation</h1>
         </Fragment>
     );
 }

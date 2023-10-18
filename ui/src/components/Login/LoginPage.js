@@ -5,18 +5,39 @@ import { Fragment, useContext, useState } from "react";
 import { UserContext, UserDispatchContext } from "../../context/UserProvider";
 import { postAuth } from "../../utils/api_provider/api_provider";
 
+import {
+    useLocation,
+    useNavigate
+} from 'react-router-dom';
+
 export default function LoginPage() {
 
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
+    const [ loginError, setLogginError ] = useState(null);
 
     const setUserDetails = useContext(UserDispatchContext);
+
+    let navigate = useNavigate();
+    let location = useLocation();
+    let { from } = location.state || { from: {pathname: "/" }};
 
     const loginHandler = (payload) => {
         postAuth(payload)
             .then( res => res.data.user.user_id )
             .then( uid => setUserDetails({ user_id: uid }))
-            .catch( erorr => console.log(erorr));
+            .catch( error => {
+                console.log(error)
+                setLogginError(error);
+                alert(error);
+            })
+            .finally(() => {
+                navigate(from, {replace: true});
+            });
+    }
+
+    const signUpNav = () => {
+        navigate('/signup', {replace: true});
     }
 
     return (
@@ -65,6 +86,7 @@ export default function LoginPage() {
                 <Button 
                     variant="contained" 
                     sx={{ mt: 2, mb: 3 }}
+                    onClick={signUpNav}
                 >Sign Up</Button>
             </Stack>
         </Box>
