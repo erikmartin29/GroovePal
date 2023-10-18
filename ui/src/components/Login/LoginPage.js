@@ -1,14 +1,23 @@
-import { Box, Stack, Input, InputLabel, Button, Typography } from "@mui/material";
+import { Box, Stack, Input, Button, Typography } from "@mui/material";
 
 import { blue } from '@mui/material/colors';
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
+import { UserContext, UserDispatchContext } from "../../context/UserProvider";
+import { postAuth } from "../../utils/api_provider/api_provider";
 
-export default function LoginPage(props) {
+export default function LoginPage() {
 
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
 
-    const { handler } = props;
+    const setUserDetails = useContext(UserDispatchContext);
+
+    const loginHandler = (payload) => {
+        postAuth(payload)
+            .then( res => res.data.user.user_id )
+            .then( uid => setUserDetails({ user_id: uid }))
+            .catch( erorr => console.log(erorr));
+    }
 
     return (
         <Fragment>
@@ -51,7 +60,7 @@ export default function LoginPage(props) {
                 <Button 
                     variant="contained" 
                     sx={{ mt: 3, mb: 0 }}
-                    onClick={() => handler({user_id: username, user_pass: password })}
+                    onClick={() => loginHandler({ user_id: username, user_pass: password })}
                 >Login</Button>
                 <Button 
                     variant="contained" 

@@ -1,16 +1,18 @@
 import { AppBar, Toolbar, Box, Typography } from "@mui/material";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 
-export default function Header(props) {
+import { UserContext } from "../../context/UserProvider";
 
-    const { activeUser } = props;
+export default function Header() {
+
+    const userDetails = useContext(UserContext);
 
     return (
         <Fragment>
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography>Vinyl Scobbler - {activeUser}</Typography>
+                        <Typography>Vinyl Scobbler - {userDetails.user_id}</Typography>
                     </Toolbar>
                 </AppBar>
             </Box>

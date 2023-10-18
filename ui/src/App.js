@@ -1,53 +1,27 @@
-import { Fragment, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 
 import LoginPage from "./components/Login/LoginPage";
 import Header from "./components/Header/Header";
 
-import { postAuth } from "./utils/api_provider/api_provider";
-
-import {
-    BrowserRouter as Router,
-//   Switch,
-    Route,
-    Routes,
-//    useParams,
-//   useNavigate
-} from 'react-router-dom';
+import { UserContext, UserDispatchContext } from "./context/UserProvider";
 
 export default function App() {
 
-    const [ activeUser, setActiveUser ] = useState(undefined);    
-
-    const handleLogin = (payload) => {
-        postAuth(payload).then( res => {
-            console.log(res);
-            return res.data.user.user_id;
-        })
-        .then( uid => {
-            console.log(uid)
-            setActiveUser(uid)
-        })
-        .catch( error => console.log(error) )
-    }
+    const userDetails = useContext(UserContext);
 
     return (
         <Fragment>
-        {activeUser !== undefined ? 
-            <Header activeUser={activeUser} />
-            : 
-            <LoginPage handler={handleLogin} />}
+            { userDetails.user_id === undefined ?
+                <LoginPage />
+                : 
+                <Main />}
         </Fragment>
     );
 }
 
-function MainRouter() {
+function Main() {
 
     return (
-        <Router>
-            <Routes>
-                <Route path='/' element={<></>} />
-            </Routes>
-        </Router>
-    );
-
+        <Header />
+    )
 }
