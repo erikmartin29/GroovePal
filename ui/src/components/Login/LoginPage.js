@@ -74,6 +74,7 @@ export default function LoginPage() {
                 />
                 <Input 
                     placeholder="password" 
+                    type="password"
                     sx={{ margin: 2 }}
                     required={true}
                     onChange={ event => setPassword(event.target.value) }
