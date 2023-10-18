@@ -130,3 +130,6 @@ dist
 .pnp.*
 
 .env
+.idea/Vinyl-Scrobbler.iml
+.idea/modules.xml
+.idea/vcs.xml
