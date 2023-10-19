@@ -48,13 +48,36 @@ const createUser = async (ctx) => {
                 ctx.body = 'unable to create user';
             }
             ctx.status = 200;
-            ctx.body = 'ok';
+            ctx.body = tuples;
             resolve();
         });
     }).catch( err => console.log(err));
 };
 
+const validateUsername = async (ctx) => {
+    return new Promise( (resolve, reject) => {
+        const query = `
+            SELECT user_id FROM users WHERE user_id = ?;
+        `;
+        dbConnection.query({
+            sql: query,
+            values: [ctx.query.user_id]
+        }, ( error, tuples ) => {
+            if ( error ) {
+                console.log(error);
+                ctx.status = 500;
+                ctx.body = 'error acccessing users table';
+                reject();
+            }
+            ctx.status = 200;
+            ctx.body = `{ "valid": ${(tuples.length === 0)} }`;
+            resolve();
+        });
+    }).catch( err => console.log(err) );
+}
+
 module.exports = {
     authorizeUser,
     createUser,
+    validateUsername,
 };
