@@ -14,4 +14,10 @@ export function postAuth(payload) {
     return axiosClient.post('/login/', payload);
 }
 
+export function signUp(payload) { 
+    return axiosClient.post('/login/new_user/', payload);
+}
 
+export function validUsername(username) {
+    return axiosClient.get(`/login/validate?user_id=${username}`);
+}

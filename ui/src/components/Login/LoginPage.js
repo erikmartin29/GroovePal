@@ -2,7 +2,7 @@ import { Box, Stack, Input, Button, Typography } from "@mui/material";
 
 import { blue } from '@mui/material/colors';
 import { Fragment, useContext, useState } from "react";
-import { UserContext, UserDispatchContext } from "../../context/UserProvider";
+import { UserDispatchContext } from "../../context/UserProvider";
 import { postAuth } from "../../utils/api_provider/api_provider";
 
 import {
@@ -14,7 +14,6 @@ export default function LoginPage() {
 
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
-    const [ loginError, setLogginError ] = useState(null);
 
     const setUserDetails = useContext(UserDispatchContext);
 
@@ -27,8 +26,7 @@ export default function LoginPage() {
             .then( res => res.data.user.user_id )
             .then( uid => setUserDetails({ user_id: uid }))
             .catch( error => {
-                console.log(error)
-                setLogginError(error);
+                console.log(error);
                 alert(error);
             })
             .finally(() => {

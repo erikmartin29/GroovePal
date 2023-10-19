@@ -6,5 +6,6 @@ const loginRouter = require('koa-router')({
 
 loginRouter.post('/',LoginController.authorizeUser, (error) => console.log(error));
 loginRouter.post('/new_user/', LoginController.createUser, (error) => console.log(error));
+loginRouter.get('/validate', LoginController.validateUsername, (error) => console.log(error));
 
 module.exports = loginRouter;
