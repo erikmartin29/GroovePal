@@ -7,7 +7,8 @@ export const axiosClient = axios.create({
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-    }
+    },
+    withCredentials: true // allow the browser to send cookies to the API domain
 });
 
 export function postAuth(payload) {
