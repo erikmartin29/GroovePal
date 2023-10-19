@@ -8,6 +8,7 @@ import {
 import SignUp from "../components/SignUp/SignUp";
 import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "../components/Login/LoginPage";
+import HomePage from '../components/HomePage/HomePage';
 
 export default function AppRouter({children}) {
     return (
@@ -15,7 +16,7 @@ export default function AppRouter({children}) {
             {children}
             <Routes>
                 <Route exact path='/' element={<ProtectedRoute/>}>
-                    <Route exact path='/' element={<Main/>} />
+                    <Route exact path='/' element={<HomePage/>} />
                 </Route>
                 <Route exact path="/login" element={<LoginPage/>} />
                 <Route path="/signup" element={<SignUp/>}/>
@@ -24,11 +25,4 @@ export default function AppRouter({children}) {
     );
 }
 
-// placeholder for main component
-function Main() {
-
-    return (
-        <h1>home - this is a protected page</h1>
-    )
-}
 

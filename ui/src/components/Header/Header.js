@@ -25,7 +25,6 @@ export default function Header() {
                 </AppBar>
             </Box>
             </Fragment>
-
         );
     }
 
@@ -35,7 +34,9 @@ export default function Header() {
             <Box sx={{ flexGrow: 1 }}>
                 <AppBar position="static">
                     <Toolbar>
-                        <Typography>Vinyl Scobbler - {userDetails.user_id}</Typography>
+                        <Typography>
+                            Vinyl Scobbler - {userDetails.user_id}
+                        </Typography>
                         <Button onClick={handleLogout} variant='contained'>Logout</Button>
                     </Toolbar>
                 </AppBar>

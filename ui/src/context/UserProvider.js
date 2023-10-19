@@ -1,13 +1,13 @@
-import { createContext, useState } from "react";
+import { createContext } from "react";
 
-import { useSessionStorage } from "../utils/useSessionStorage";
+import { useLocalStorage } from "../utils/useSessionStorage";
 
 const UserContext = createContext(undefined);
 const UserDispatchContext = createContext(undefined);
 
 function UserProvider({children}) {
 
-    const [ userDetails, setUserDetails] = useSessionStorage('userDetails', {
+    const [ userDetails, setUserDetails] = useLocalStorage('userDetails', {
         user_id: undefined,
     })
 
