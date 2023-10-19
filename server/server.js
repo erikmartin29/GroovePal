@@ -8,7 +8,10 @@ require('dotenv').config();
 
 const PORT = process.env.API_PORT;
 
-app.use(cors()); // cross-origin support 
+app.use(cors({
+    credentials: true,
+    exposeHeaders: ['Access-Token', 'Cookie']
+})); // cross-origin support 
 app.use(bodyParser());
 
 // load middleware

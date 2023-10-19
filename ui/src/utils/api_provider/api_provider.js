@@ -7,6 +7,7 @@ export const axiosClient = axios.create({
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'X-Requested-With': 'XMLHttpRequest',
     },
     withCredentials: true // allow the browser to send cookies to the API domain
 });
