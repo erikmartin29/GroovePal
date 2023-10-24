@@ -8,11 +8,12 @@ var lfm = new LastfmAPI({
 });
 
 // TEST QUERY //
-/*lfm.artist.getInfo({
+lfm.artist.getInfo({
 	'artist' : 'underscores',
 }, function (err, artist) {
 	if (err) { throw err; }
-	console.log(artist.name + " has " + artist.stats.listeners + " listeners");
-});*/
+	console.log("Connection to LastFM API successful!")
+	//console.log(artist.name + " has " + artist.stats.listeners + " listeners");
+});
 
 module.exports = lfm;
