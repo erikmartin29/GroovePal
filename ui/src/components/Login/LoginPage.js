@@ -1,11 +1,9 @@
 import { Box, Stack, Input, Button, Typography } from "@mui/material";
-
+import { Fragment, useState } from "react";
+import { AuthConsumer } from "../../context/AuthProvider";
 import { blue } from '@mui/material/colors';
-import { Fragment, useContext, useState } from "react";
-import { UserDispatchContext } from "../../context/UserProvider";
-import { postAuth } from "../../utils/api_provider/api_provider";
-
 import {
+    Navigate,
     useLocation,
     useNavigate
 } from 'react-router-dom';
@@ -15,30 +13,20 @@ export default function LoginPage() {
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
 
-    const setUserDetails = useContext(UserDispatchContext);
+    const { login, authed } = AuthConsumer();
 
     let navigate = useNavigate();
     let location = useLocation();
     let { from } = location.state || { from: {pathname: "/" }};
 
     const loginHandler = (payload) => {
-        postAuth(payload)
-            .then( res => res.data.user.user_id )
-            .then( uid => setUserDetails({ user_id: uid }))
-            .catch( error => {
-                console.log(error);
-                alert(error);
-            })
-            .finally(() => {
-                navigate(from, {replace: true});
-            });
+        login(payload).then(() => {
+            navigate(from, {replace: true});
+        });
     }
 
-    const signUpNav = () => {
-        navigate('/signup', {replace: true});
-    }
-
-    return (
+    // rediect away from login if already signed in
+    return authed ? <Navigate to={from} replace /> : (
         <Fragment>
         <Box>
             <Typography component='h1' 
@@ -85,7 +73,7 @@ export default function LoginPage() {
                 <Button 
                     variant="contained" 
                     sx={{ mt: 2, mb: 3 }}
-                    onClick={signUpNav}
+                    onClick={() => navigate('/signup', {replace: true})}
                 >Sign Up</Button>
             </Stack>
         </Box>

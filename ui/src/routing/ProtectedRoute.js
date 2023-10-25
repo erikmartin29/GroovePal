@@ -1,11 +1,8 @@
-import { useContext } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { UserContext } from "../context/UserProvider";
+import { AuthConsumer } from "../context/AuthProvider";
 
 export default function ProtectedRoute() {
-    const userDetails = useContext(UserContext);
-
-    return userDetails.user_id !== undefined ? <Outlet /> : <Navigate to="login"/>;
-
+    const { authed } = AuthConsumer();
+    return authed ? <Outlet /> : <Navigate to='/login' replace />
 }
 
