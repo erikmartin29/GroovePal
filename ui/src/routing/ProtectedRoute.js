@@ -1,8 +1,8 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { AuthConsumer } from "../context/AuthProvider";
 
-export default function ProtectedRoute() {
+export default function ProtectedRoute({children}) {
     const { authed } = AuthConsumer();
-    return authed ? <Outlet /> : <Navigate to='/login' replace />
+    return authed ? children : <Navigate to='/login' replace />
 }
 

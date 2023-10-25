@@ -9,6 +9,7 @@ import ProtectedRoute from './ProtectedRoute';
 import { routes } from './routes';
 
 export default function AppRouter({children}) {
+
     return (
         <Router>
             {children}

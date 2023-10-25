@@ -1,5 +1,4 @@
 import SignUp from "../components/SignUp/SignUp";
-import ProtectedRoute from "./ProtectedRoute";
 import LoginPage from "../components/Login/LoginPage";
 import HomePage from '../components/HomePage/HomePage';
 
