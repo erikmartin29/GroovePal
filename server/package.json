@@ -17,7 +17,9 @@
     "koa-jwt": "^4.0.4",
     "koa-router": "^11.0.2",
     "lastfmapi": "^0.1.1",
-    "mysql": "^2.18.1"
+    "mariadb": "^3.2.2",
+    "mysql": "^2.18.1",
+    "sequelize": "^6.33.0"
   },
   "author": "anthony molinari, eric martin, claire anderson",
   "license": "ISC"
