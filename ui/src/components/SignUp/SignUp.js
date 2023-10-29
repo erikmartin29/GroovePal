@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, TextField, Typography, Button, Grid } from "@mui/material";
 
-import { signUp, validUsername } from '../../utils/api_provider/api_provider';
+import { authenticateLastFM, signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -14,7 +14,8 @@ export default function SignUp() {
         event.preventDefault();
 
         if ( newAccount.user_id === undefined || newAccount.user_pass === undefined ||
-             newAccount.user_fname === undefined || newAccount.user_lname === undefined ) 
+             newAccount.user_fname === undefined || newAccount.user_lname === undefined || 
+             newAccount.lastfmToken === undefined || newAccount.discogsToken === undefined) 
         {
             alert("Please provide a value for each field");
             return;
@@ -40,6 +41,18 @@ export default function SignUp() {
             });
         })
         .catch( error => console.log(error) )
+    };
+
+    function connectLastFM(){
+        // alert("Connecting to LastFM");
+        // get token from lastfm
+        // setNewAccount({ ...newAccount, lastfmToken: token })
+    }
+
+    function connectDiscogs(){
+        // alert("Connecting to Discogs");
+        // get token from discogs
+        // setNewAccount({ ...newAccount, discogsToken: token })
     };
 
     return (
@@ -90,6 +103,12 @@ export default function SignUp() {
                             label="Lastname" 
                             onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
                         />    
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button variant='contained' onClick={() => {connectLastFM();}}>Connect LastFM</Button>
+                    </Grid>
+                    <Grid item xs={2}>
+                        <Button variant='contained' onClick={() => {connectDiscogs();}}>Connect Discogs</Button>
                     </Grid>
                     <Grid item xs={2}>
                         <Button type='submit' variant='contained'>Create</Button>
