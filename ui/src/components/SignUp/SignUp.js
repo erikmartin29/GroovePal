@@ -42,19 +42,7 @@ export default function SignUp() {
         })
         .catch( error => console.log(error) )
     };
-
-    function connectLastFM(){
-        // alert("Connecting to LastFM");
-        // get token from lastfm
-        // setNewAccount({ ...newAccount, lastfmToken: token })
-    }
-
-    function connectDiscogs(){
-        // alert("Connecting to Discogs");
-        // get token from discogs
-        // setNewAccount({ ...newAccount, discogsToken: token })
-    };
-
+    
     return (
         <Box sx={{ margin: 'auto', alignItems: 'center', textAlign: 'center', display: 'inline-block'}}>
             <Typography component="h1" sx={{ fontSize: '23px', mt: '15px', width: 'auto'  }} >New Account</Typography>
@@ -103,12 +91,6 @@ export default function SignUp() {
                             label="Lastname" 
                             onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
                         />    
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Button variant='contained' onClick={() => {connectLastFM();}}>Connect LastFM</Button>
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Button variant='contained' onClick={() => {connectDiscogs();}}>Connect Discogs</Button>
                     </Grid>
                     <Grid item xs={2}>
                         <Button type='submit' variant='contained'>Create</Button>
