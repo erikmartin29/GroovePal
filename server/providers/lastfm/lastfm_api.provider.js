@@ -7,13 +7,12 @@ var lfm = new LastfmAPI({
 	'secret' : process.env.LASTFM_API_SECRET
 });
 
-// TEST QUERY //
+// TEST CONNECTION //
 lfm.artist.getInfo({
 	'artist' : 'underscores',
 }, function (err, artist) {
 	if (err) { throw err; }
 	console.log("Connection to LastFM API successful!")
-	//console.log(artist.name + " has " + artist.stats.listeners + " listeners");
 });
 
 module.exports = lfm;
