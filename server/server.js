@@ -8,6 +8,12 @@ require('dotenv').config();
 
 const PORT = process.env.API_PORT;
 
+// sync database database
+require('./database/MigrateDatabase')()
+.then( () => {
+    console.log('*Migration Complete*');
+});
+
 app.use(cors({
     credentials: true,
     exposeHeaders: ['Access-Token', 'Cookie']
