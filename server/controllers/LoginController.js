@@ -1,68 +1,78 @@
-const User = require('../models/user');
+const dbConnection = require('../database/mySQLconnect');
 const setAccessToken = require('../utils/setAccessToken');
 const passwordEncryption = require('../utils/passwordEncrypt');
 
 const authorizeUser = async (ctx) => {
     return new Promise( async (resolve, reject) => {
-        try {    
-            const user = await User.findOne({
-                attributes: ['user_id', 'user_pass']
-            });
-            const matched = await passwordEncryption.compare(
-                ctx.request.body.user_pass,
-                user.user_pass
-            );
-            if (matched) {
-                console.log('passwords match');
-                setAccessToken(ctx, user);
-                ctx.status = 200;
-                ctx.body = {
-                    status: 'authed',
-                    user: {
-                        user_id: user.user_id,
-                        user_fname: user.user_fname,
-                        user_lname: user.user_lname,
-                    },
-                };   
-            } else {
-                console.log('passwords do NOT match');
-                ctx.status = 204; // unauthed
-                ctx.body = {
-                    msg: `incorrect password`
-                }
+        const query = 'SELECT * FROM users where user_id = ? limit 1';
+        dbConnection.query({
+            sql: query,
+            values: [ctx.request.body.user_id],
+        }, ( error, tuples ) => {
+            if ( error ) {
+                console.log(`ERROR [from UserController::authorizeUser]: ${error}`);
+                ctx.status = 500;
+                ctx.body = 'invalid username or password';
+                reject()
             }
-            resolve();
-        } catch (e) {
-            console.log(e);
-            ctx.status = 204; // unauthed
-                ctx.body = {
-                    error: true,
-                    msg: `invalid password: ${e}`
+            if ( tuples[0].user_pass === undefined ) {
+                console.log(`ERROR: invalid username`);
+                reject();
+            }
+            passwordEncryption.compare(ctx.request.body.user_pass, tuples[0].user_pass)
+            .then ( matched => {
+                if ( matched ) {
+                    setAccessToken(ctx, tuples);
+                    ctx.status = 200;
+                    ctx.body = {
+                        user: {
+                            user_id: tuples[0].user_id,
+                            user_pass: tuples[0].user_pass,
+                            user_fname: tuples[0].user_fname,
+                            user_lname: tuples[0].user_lanem,
+                        },
+                        msg: 'authed'
+                    };
+                } else {
+                    ctx.status = 204;
+                    ctx.body = {
+                        user: 'none',
+                        msg: 'password incorrect',
+                    };
                 }
-            reject();
-        }
+                resolve();
+            });
+        });
+    }).catch( e => {
+            console.log(e);
     });
 };
 
 const createUser = async (ctx) => {
     return new Promise( (resolve, reject) => {
-        User.create({
-            user_id: ctx.request.body.user_id,
-            user_pass: ctx.request.body.user_pass,
-            user_fname: ctx.request.body.user_fname,
-            user_lname: ctx.request.body.user_lname,
-        }).then( user => {
-            console.log(user);       
+        const query = `
+            INSERT INTO 
+            users
+            (user_id, user_pass, user_fname, user_lname)
+            VALUES
+            (?,?,?,?);
+        `;
+        dbConnection.query({
+            sql: query,
+            values: [ctx.request.body.user_id, ctx.request.body.user_pass, ctx.request.body.user_fname, ctx.request.body.user_lname],
+        }, (error, tuples) => {
+            if ( error ) {
+                console.log(`ERROR [from UserController::authorizeUser]: ${error}`);
+                ctx.status = 500;
+                ctx.body = 'invalid username or password';
+                reject()
+            }
             ctx.status = 200;
-            ctx.body = 'new user created';
+            // send user credentials back to client
+            ctx.body = ctx.request.body;
             resolve();
-        }).catch( error => {
-            console.log(error);
-            ctx.status = 500;
-            ctx.body = 'error creating user';
-            reject();
-        });
-    });
+        })
+    }).catch( e => console.log(e));
 };
 
 module.exports = {
