@@ -13,6 +13,10 @@ require('./database/MigrateDatabase')()
 .then( () => {
     console.log('*Migration Complete*');
 });
+// database management
+require('./database/MigrateDatabase')
+    .createTables()
+    .then( _ => console.log('database creation complete') )
 
 app.use(cors({
     credentials: true,
