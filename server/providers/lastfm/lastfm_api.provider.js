@@ -1,6 +1,6 @@
 var LastfmAPI = require('lastfmapi');
 
-require('dotenv').config(); //TODO: remove this line later
+require('dotenv').config({path: "/../../dotenv"}); //TODO: remove this line later
 
 var lfm = new LastfmAPI({
 	'api_key' : process.env.LASTFM_API_KEY,

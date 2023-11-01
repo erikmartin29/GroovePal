@@ -14,8 +14,7 @@ export default function SignUp() {
         event.preventDefault();
 
         if ( newAccount.user_id === undefined || newAccount.user_pass === undefined ||
-             newAccount.user_fname === undefined || newAccount.user_lname === undefined || 
-             newAccount.lastfmToken === undefined || newAccount.discogsToken === undefined) 
+             newAccount.user_fname === undefined || newAccount.user_lname === undefined) 
         {
             alert("Please provide a value for each field");
             return;

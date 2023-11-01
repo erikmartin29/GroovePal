@@ -23,3 +23,7 @@ export function signUp(payload) {
 export function validUsername(username) {
     return axiosClient.get(`/login/validate?user_id=${username}`);
 }
+
+export function getDiscogsCollection(user) { 
+    return axiosClient.get(`/discogs/collection-info/${user}`);
+}

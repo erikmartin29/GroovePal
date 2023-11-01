@@ -11,10 +11,12 @@ router.get('/', (ctx) => {
 // import routes
 const loginRouter = require('./login/login.router.js');
 const secretsRouter = require('./secrets/secrets.router.js');
+const discogsRouter = require('./discogs/discogs.router.js');
 
 router.use(
     loginRouter.routes(),
     secretsRouter.routes(),
+    discogsRouter.routes()
 );
 
 module.exports = (app) => {
