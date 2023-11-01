@@ -21,6 +21,7 @@ export default function SignUp() {
             return;
         }
 
+        /*
         validUsername(newAccount.user_id).then( res => {
             console.log(res);
             if ( !res.data.valid ) {
@@ -41,6 +42,13 @@ export default function SignUp() {
             });
         })
         .catch( error => console.log(error) )
+        */
+        signUp(newAccount)
+        .then( res => console.log(res.data) )
+        .catch( error => console.log(error))
+        .finally( () => {
+            navigate('/', {replace: true})
+        });
     };
     
     return (
