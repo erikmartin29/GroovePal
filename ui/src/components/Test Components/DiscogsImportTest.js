@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { getDiscogsCollection } from '../../utils/api_provider/api_provider';
+import { getDiscogsCollection, getDiscogsReleaseImage } from '../../utils/api_provider/api_provider';
 
 export default function DiscogsImportTest() {
     const [collection, setCollection] = useState(null);
@@ -7,8 +7,13 @@ export default function DiscogsImportTest() {
     useEffect(() => {
         getDiscogsCollection("emtacolor")
             .then(response => {
+                response.data["releases"].forEach(release => {
+                    //fetch the image url for each release here
+                    release.imgURL = getDiscogsReleaseImage(release.id);
+                })
+            })
+            .then(response => {
                 setCollection(response.data["releases"]);
-                //console.log(response)
             })
             .catch(error => {
                 console.error('Error fetching Discogs collection:', error);
@@ -23,11 +28,19 @@ export default function DiscogsImportTest() {
                     <div>
                         <h2>Collection</h2>
                         <ul>
-                            {collection.map(item => (
-                                <li key={item.id}>
-                                    {item.basic_information.title} by {item.basic_information.artists[0].name}
-                                </li>
-                            ))}
+                            {collection.map(item => {
+                                return (<div>
+                                    <img 
+                                    src={item.imgURL}
+                                    alt={item.basic_information.title}
+                                    />
+
+                                    <li key={item.id}>
+                                        {item.basic_information.title} by {item.basic_information.artists[0].name}
+                                    </li>
+                                </div>);
+                            }
+                            )}
                         </ul>
                     </div>
                 : <p>Loading...</p>

@@ -5,6 +5,6 @@ const discogsRouter = require('koa-router')({
 });
 
 discogsRouter.get('/collection-info/:user', DiscogsController.getCollection, (error) => console.log(error));
+discogsRouter.get('/releaseImage/:releaseID', DiscogsController.getReleaseImage, (error) => console.log(error));
 
 module.exports = discogsRouter;
-

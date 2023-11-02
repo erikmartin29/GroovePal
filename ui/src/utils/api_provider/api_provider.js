@@ -27,3 +27,7 @@ export function validUsername(username) {
 export function getDiscogsCollection(user) { 
     return axiosClient.get(`/discogs/collection-info/${user}`);
 }
+
+export function getDiscogsReleaseImage(releaseID) { 
+    return axiosClient.get(`/discogs/release-image/${releaseID}`);
+}
