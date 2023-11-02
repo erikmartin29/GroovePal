@@ -1,12 +1,25 @@
 import { Fragment } from 'react';
+import { Box } from '@mui/material';
 
 export default function HomePage() {
 
     return (
         <Fragment>
-            <div style={{ margin: 100, padding: 100 }}>
-                <h1> HOME - this is a protected page</h1>
-            </div>
+            <Box sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <p>
+                The basic homepage for the website. Not protected.
+                <br />
+                Ideas:
+                <br />
+                -explanation as to what this site is
+                <br />
+                -general analytics from user data? (popular songs/albums/artists, overall hours spent listening to music, etc)
+                </p>
+            </Box>
         </Fragment>
     );
 }

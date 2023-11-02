@@ -44,7 +44,6 @@ export default function LoginPage() {
             mt: 10,
             padding: 5, 
             width: 200,
-            height: 250, 
             alignItems: 'center', 
             borderWidth: 1, 
             borderStyle: 'solid',
@@ -75,6 +74,11 @@ export default function LoginPage() {
                     sx={{ mt: 2, mb: 3 }}
                     onClick={() => navigate('/signup', {replace: true})}
                 >Sign Up</Button>
+                <Button
+                    onClick={() => navigate('/', {replace:true})}
+                >
+                    Back
+                </Button>
             </Stack>
         </Box>
         </Fragment>
