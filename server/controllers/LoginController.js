@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const dbConnection = require('../database/mySQLconnect');
 const setAccessToken = require('../utils/setAccessToken');
 const passwordEncryption = require('../utils/passwordEncrypt');
 

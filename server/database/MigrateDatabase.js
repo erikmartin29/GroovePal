@@ -1,23 +1,3 @@
-const User = require('../models/user');
-
-// sync all the models that correspond to a table in the database
-module.exports = async () => {
-    return new Promise( async (resolve, reject) => {
-        const models = [User];
-        try {
-            for ( let model of models ) {
-                console.log(`Syncing Table: ${model.tableName}`);
-                await model.sync({ force: false });
-            }
-        } catch (e) {
-            console.log(`ERROR: ${e}`);
-            reject();
-        } finally {
-            resolve();
-        }
-    })
-}
-
 const dbConnection = require('./mySQLconnect');
 
 const tables = [
@@ -32,28 +12,29 @@ const tables = [
     `,
     `
     CREATE TABLE IF NOT EXISTS secrets (
-        secret_id    VARCHAR(10)  NOT NULL,
-        secret_value VARCHAR(255) NOT NULL,
-        owner_id     VARCHAR(100) NOT NULL,
+        secret   VARCHAR(255) NOT NULL,
+        owner_id VARCHAR(255) NOT NULL,
+        provider VARCHAR(20)  NOT NULL,
         FOREIGN KEY (owner_id) REFERENCES users(user_id),
-        PRIMARY KEY (secret_id)
+        PRIMARY KEY (owner_id, provider)
     );
-    `
+    `,
 ];
 
 // create database tables if they do not exist
 async function createTables() {
     return new Promise( (resolve, reject) => {
+        const logs = [];
         for ( const table of tables ) {
+            console.log(`executing: ${table}`);
             dbConnection.query(table, (error, results) => {
                 if ( error ) {
-                    console.log(error);
-                    reject();
+                    reject(error);
                 }
-                console.log(results);
+                logs.push(results);
             })
         }
-        resolve();
+        resolve(logs);
     }).catch( e => console.log(e) );
 }
 

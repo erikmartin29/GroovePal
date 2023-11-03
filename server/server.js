@@ -8,23 +8,24 @@ require('dotenv').config();
 
 const PORT = process.env.API_PORT;
 
-// sync database database
-require('./database/MigrateDatabase')()
-.then( () => {
-    console.log('*Migration Complete*');
-});
 // database management
 require('./database/MigrateDatabase')
     .createTables()
-    .then( _ => console.log('database creation complete') )
+    .then( logs => {
+        console.log(logs);
+        console.log('database creation complete')
+    }).catch( error => {
+        console.log('Error in database migration', error);
+    });
 
+// cross-origin support
 app.use(cors({
     credentials: true,
     exposeHeaders: ['Access-Token', 'Cookie']
-})); // cross-origin support 
+}));  
 app.use(bodyParser());
 
-// load middleware
+// load error handling middleware
 app.use( async (ctx, next) => {
     return next().catch( error => {
         if ( error.status === 401 ) {

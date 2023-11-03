@@ -23,3 +23,12 @@ export function signUp(payload) {
 export function validUsername(username) {
     return axiosClient.get(`/login/validate?user_id=${username}`);
 }
+
+export function discogs_oauth(username) {
+    return axiosClient.get(`/discogs/auth/${username}`);
+}
+
+export function lastfm_oauth(username) {
+    return axiosClient.get(`/lastfm/auth/${username}`);
+}
+
