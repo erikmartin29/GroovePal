@@ -11,13 +11,22 @@ const tables = [
     );
     `,
     `
-    CREATE TABLE IF NOT EXISTS secrets (
-        secret   VARCHAR(255) NOT NULL,
-        owner_id VARCHAR(255) NOT NULL,
-        provider VARCHAR(20)  NOT NULL,
+    CREATE TABLE IF NOT EXISTS lastfm_secrets (
+        session_user  VARCHAR(255) NOT NULL,
+        session_key   VARCHAR(255) NOT NULL,
+        owner_id      VARCHAR(255) NOT NULL,
         FOREIGN KEY (owner_id) REFERENCES users(user_id),
-        PRIMARY KEY (owner_id, provider)
+        PRIMARY KEY (owner_id, session_user)
     );
+    `,
+    `
+    CREATE TABLE IF NOT EXISTS discogs_secrets (
+        token     VARCHAR(255) NOT NULL,
+        verifier  VARCHAR(255) NOT NULL,
+        owner_id  VARCHAR(255) NOT NULL,
+        FOREIGN KEY (owner_id) REFERENCES users(user_id),
+        PRIMARY KEY (owner_id, token)
+    )
     `,
 ];
 
