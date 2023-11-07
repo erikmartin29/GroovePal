@@ -1,12 +1,16 @@
 import { Fragment, useState } from 'react';
-import { Box, TextField, Typography, Button, Stack, Input } from "@mui/material";
+import { Box, TextField, Typography, Button, Stack, Input, ThemeProvider } from "@mui/material";
 import { blue } from '@mui/material/colors';
 
 import { signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
+import { darkGreen, lightGreen } from '../ColorPalette';
 
 export default function SignUp() {
+    
+    //Claire's Changes and Notes:
+    //made the format look like the login page for uniformity, and added a back button to return to the basic homepage
     
     const [ newAccount, setNewAccount ] = useState({});
     let navigate = useNavigate();
@@ -45,18 +49,25 @@ export default function SignUp() {
 
     return (
             <Fragment>
-            <Box>
-            <Typography component="h1" 
-                sx={{
-                    margin: 'auto',
-                    mt: 10,
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    fontSize: '32px'
-                }}>
-                    New Account
-            </Typography>
-            </Box>
+            <Box sx={{
+                height: 900,
+                bgcolor: '#353939',
+                border: 1,
+                borderColor: '#353939'
+            }}>
+                <Box>
+                    <Typography component="h1"
+                        sx={{
+                            margin: 'auto',
+                            mt: 10,
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            fontSize: '32px',
+                            color: 'white'
+                        }}>
+                            New Account
+                    </Typography>
+                </Box>
             <Box sx={{
                 margin: 'auto',
                 mt: 10,
@@ -66,7 +77,9 @@ export default function SignUp() {
                 borderWidth: 1,
                 borderStyle: 'solid',
                 borderRadius: '10px',
-                borderColor: blue[500] 
+                borderColor: 'black',
+                bgcolor: '#e6e2d3',
+                boxShadow: 8
             }}>
             <Box 
                 component="form" 
@@ -103,17 +116,23 @@ export default function SignUp() {
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
                     />
-                    <Button 
+            <ThemeProvider theme={lightGreen}>
+                    <Button
                         sx={{
                             mt: 3,
+                            bgcolor: '#82B74B'
                         }}
                             type='submit'
                             variant='contained'
+                            color="lightGreen"
                     >
                         Create
                     </Button>
+            </ThemeProvider>
                     <Button
                         sx={{
+                            color: 'black',
+                            fontWeight: 'bold',
                             mt: 2,
                         }}
                         onClick={() => navigate('/', {replace:true})}
@@ -123,6 +142,7 @@ export default function SignUp() {
                 </Stack>
             </Box>
         </Box>
+            </Box>
         </Fragment>
     );
 }

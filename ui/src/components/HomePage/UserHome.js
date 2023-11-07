@@ -1,17 +1,24 @@
 import { Fragment } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 export default function UserHome() {
+    
+    //Claire's Changes and Notes:
+    //added a user homepage that is more personalised for each user, needs ideas of what to display
     
     return (
             <Fragment>
                 <Box sx={{
+                    height: 900,
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center'
+                    alignItems: 'center',
+                    bgcolor: '#353939'
                 }}>
-                    <p>
-                    This is a personalised homepage for a user. Probably protected?
+                    <Typography sx={{
+                        color: 'white'
+                    }}>
+                    This is a personalised homepage for a user.
                     <br />
                     Ideas for this page:
                     <br />
@@ -20,7 +27,7 @@ export default function UserHome() {
                     -suggest records to buy/sell (info gained from Discogs somehow?)
                     <br />
                     -user statistics
-                    </p>
+                    </Typography>
                 </Box>
             </Fragment>
     );

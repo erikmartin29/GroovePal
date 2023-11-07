@@ -1,9 +1,12 @@
-import { AppBar, Toolbar, Box, Typography, Button, Tooltip, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Box, Typography, Button, Tooltip, Menu, MenuItem, ThemeProvider } from "@mui/material";
 import { Fragment, useState } from "react";
 
 import { useNavigate } from 'react-router-dom';
 
 import { AuthConsumer } from "../../context/AuthProvider";
+
+import { darkGreen, lightGreen, headerBrown } from '../ColorPalette';
+
 
 export default function Header() {
     const { authed, username, logout } = AuthConsumer();
@@ -19,6 +22,23 @@ export default function Header() {
     
     let navigate = useNavigate();
     
+    //Claire's Changes and Notes:
+    //added a login/sign up button, and added a dropdown menu on the username (currently a placeholder until I can figure out how to login)
+    //username menu will switch places with the Login/Signup buttons after the user logs in, currently always active for ease of use and also because I can't actually login yet for some reason
+    //may want to add other navigation buttons to pages so not all is in drop down menu?
+    //do we want a search bar so people could look for albums?
+    
+    //Website Name Ideas:
+    //Vinyl Buddy
+    //Vinyl Logger
+    //Vinyl Record
+    //Vinyl Recorder
+    
+    //Login Button colors
+    //6B914A
+    //405d27
+    //618343 : current
+    
     return (
             <Fragment>
             <Box sx={{
@@ -27,7 +47,8 @@ export default function Header() {
             <AppBar position='static'>
                 <Toolbar sx={{
                     display: 'flex',
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between',
+                    bgcolor: '#b9936c'
                 }}>
                     <h2>Vinyl Scrobbler</h2>
                     <Typography>
@@ -37,9 +58,10 @@ export default function Header() {
                     </Typography>
             
             <Box>
+            <ThemeProvider theme={headerBrown}>
             <Button
                 sx={{
-                    color: 'white'
+                    color: 'white',
                 }}
                 color="inherit"
                 id="basic-button"
@@ -50,6 +72,7 @@ export default function Header() {
               >
                 username
               </Button>
+            </ThemeProvider>
               <Menu
                 id="basic-menu"
                 anchorEl={anchorEl}
@@ -100,24 +123,30 @@ export default function Header() {
                         display: 'flex',
                         justifyContent: 'space-evenly'
                     }}>
+            <ThemeProvider theme={darkGreen}>
                         <Button sx={{
-                            color: 'white'
+                            bgcolor: '#618343',
+                            color: 'black'
                         }}
-                            variant="outlined"
-                            color="inherit"
+                            variant="contained"
+                            color="darkGreen"
                             onClick={() => navigate('/login', {replace: true})}
                         >
                             Login
                         </Button>
+                        </ThemeProvider>
+            <ThemeProvider theme={lightGreen}>
                         <Button sx={{
+                            bgcolor: '#82B74B',
                             color: 'black'
                         }}
                             variant="contained"
-                            color="inherit"
+                            color="lightGreen"
                             onClick={() => navigate('/signup', {replace: true})}
                         >
                             Sign Up
                         </Button>
+            </ThemeProvider>
                     </Box>
                     {
                         authed &&

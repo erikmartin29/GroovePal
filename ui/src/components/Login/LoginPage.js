@@ -1,4 +1,4 @@
-import { Box, Stack, Input, Button, Typography } from "@mui/material";
+import { Box, Stack, Input, Button, Typography, ThemeProvider } from "@mui/material";
 import { Fragment, useState } from "react";
 import { AuthConsumer } from "../../context/AuthProvider";
 import { blue } from '@mui/material/colors';
@@ -8,7 +8,12 @@ import {
     useNavigate
 } from 'react-router-dom';
 
+import { darkGreen, lightGreen } from '../ColorPalette';
+
 export default function LoginPage() {
+    
+    //Claire's Changes and Notes:
+    //added a back button so a user can go back to the basic homepage
 
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -28,6 +33,12 @@ export default function LoginPage() {
     // rediect away from login if already signed in
     return authed ? <Navigate to={from} replace /> : (
         <Fragment>
+        <Box sx={{
+            bgcolor: '#353939',
+            border: 1,
+            borderColor: '#353939',
+            height: 900
+        }}>
         <Box>
             <Typography component='h1' 
                 sx={{ 
@@ -35,9 +46,12 @@ export default function LoginPage() {
                     mt: 10, 
                     alignItems: 'center', 
                     textAlign: 'center',
-                    fontSize: '32px'
+                    fontSize: '32px',
+                    color: 'white'
                 }}
-            >Vinyl Scrobbler</Typography>
+            >
+                Vinyl Scrobbler
+            </Typography>
         </Box>
         <Box sx={{ 
             margin: 'auto', 
@@ -48,11 +62,14 @@ export default function LoginPage() {
             borderWidth: 1, 
             borderStyle: 'solid',
             borderRadius: '10px', 
-            borderColor: blue[500] 
+            borderColor: 'black',
+            boxShadow: 8,
+            bgcolor: '#e6e2d3'
         }}>
             <Stack>
-                <Input 
-                    placeholder="username" 
+                <Input
+                    
+                    placeholder="username"
                     sx={{ margin: 2 }}
                     required={true}
                     onChange={ event => setUsername(event.target.value) }     
@@ -64,22 +81,47 @@ export default function LoginPage() {
                     required={true}
                     onChange={ event => setPassword(event.target.value) }
                 />
-                <Button 
-                    variant="contained" 
-                    sx={{ mt: 3, mb: 0 }}
-                    onClick={() => loginHandler({ user_id: username, user_pass: password })}
-                >Login</Button>
-                <Button 
-                    variant="contained" 
-                    sx={{ mt: 2, mb: 3 }}
-                    onClick={() => navigate('/signup', {replace: true})}
-                >Sign Up</Button>
+                <ThemeProvider theme={darkGreen}>
                 <Button
+                    sx={{
+                        bgcolor: '#618343',
+                        color: 'black',
+                        mt: 3,
+                        mb: 0
+                    }}
+                    variant="contained"
+                    color="darkGreen"
+                    onClick={() => loginHandler({ user_id: username, user_pass: password })}
+                >
+                    Login
+                </Button>
+                </ThemeProvider>
+                <ThemeProvider theme={lightGreen}>
+                <Button
+                    sx={{
+                        bgcolor: '#82B74B',
+                        color: 'black',
+                        mt: 2,
+                        mb: 3
+                    }}
+                    variant="contained"
+                    color="lightGreen"
+                    onClick={() => navigate('/signup', {replace: true})}
+                >
+                    Sign Up
+                </Button>
+                </ThemeProvider>
+                <Button
+                    sx={{
+                        color: 'black',
+                        fontWeight: 'bold'
+                    }}
                     onClick={() => navigate('/', {replace:true})}
                 >
                     Back
                 </Button>
             </Stack>
+        </Box>
         </Box>
         </Fragment>
     );
