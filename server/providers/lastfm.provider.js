@@ -9,7 +9,7 @@ const client = new LastfmAPI({
 const lfm_oauth = (ctx) => {
     return new Promise( (resolve, reject) => {
         try {
-            const authUrl = client.getAuthenticationUrl({ 'cb': callback_url + `/${ctx.request.params.user_id}`});
+            const authUrl = client.getAuthenticationUrl({ 'cb': callback_url + `/${ctx.request.params.user_id}/`});
             ctx.status = 200;
             ctx.body = {
                 authurl: authUrl,
@@ -28,9 +28,11 @@ const lfm_callback = (ctx) => {
         console.log(ctx.request);
         const { token } = ctx.request.query;
         const { user_id } = ctx.request.params
+        console.log('user_id:', user_id);
+        console.log('auth_token:', token);
         client.authenticate(token, (error, session) => {
             if ( error ) 
-                return reject(error)
+                return reject(`error in lastfm authenticator: ${JSON.stringify(error)}`)
             console.log(session.username, session.key);
             resolve({
                 usesername: session.username,

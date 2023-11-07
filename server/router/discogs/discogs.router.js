@@ -5,12 +5,12 @@ const discogsRouter = require('koa-router')({
 });
 
 
-discogsRouter.get('/auth', discogs_provider.discogs_oath , err => console.log(err));
+discogsRouter.get('/auth/:user_id', discogs_provider.discogs_oath , err => console.log(err));
 
-discogsRouter.get('/callback', async (ctx) => {
+discogsRouter.get('/callback/:user_id', async (ctx) => {
     discogs_provider.discogs_callback(ctx)
-    .then( tokens => {
-        console.log(tokens);
+    .then( secrets => {
+        console.log(secrets);
         // write token to database, status and body are handled in controller
         secretsController.storeSecretKey(ctx);
     })
