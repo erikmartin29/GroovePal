@@ -1,23 +1,30 @@
-// this middleare provides valid oauth tokens based on the user_id of the
+// this middleare provides valid oauth credentials based on the user_id of the
 // request body to api enpoints that make requests to 
 // lastfm and discogs 
 const dbConnection = require('../database/mySQLconnect');
 
-/*
-request body should contain the following
+async function discogs_middleware (ctx, next) {
+    console.log(ctx.request.body);
+    // grab user_id from body
 
-body = {
-    provider: "discogs" || "lasfm",
-    user_id: <user_id>,
+    // get credentials database
+
+    // insert token into body for authed external requests
+    return next();
 }
-*/
 
-module.exports = () => {
-    return async (ctx, next) => {
-        console.log(`user_id: ${ctx.request.body.user_id}, provider: ${ctx.request.body.provider}`);
-        // 1. await database query to get token
-        // 2. append token to body
-        // 3. forward request
-        return next();
-    }
+async function lastfm_middleware (ctx, next) {
+    console.log(ctx.request.body);
+    // grab user_id from body
+    
+    // get credentials database
+
+    // insert token into body for authed external requests
+
+    return next();
+}
+
+module.exports =  {
+    discogs_middleware,
+    lastfm_middleware
 }

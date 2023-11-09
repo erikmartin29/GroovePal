@@ -1,11 +1,8 @@
 const Koa = require('koa');
-const cors = require('@koa/cors');
-
 const app = new Koa();
-const bodyParser = require('koa-bodyparser');
 
+// environment variables
 require('dotenv').config();
-
 const PORT = process.env.API_PORT;
 
 // database management
@@ -19,10 +16,14 @@ require('./database/MigrateDatabase')
     });
 
 // cross-origin support
+const cors = require('@koa/cors');
 app.use(cors({
     credentials: true,
     exposeHeaders: ['Access-Token', 'Cookie']
 }));  
+
+// body parser
+const bodyParser = require('koa-bodyparser');
 app.use(bodyParser());
 
 // load error handling middleware

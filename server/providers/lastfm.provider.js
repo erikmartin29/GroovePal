@@ -3,7 +3,7 @@ const LastfmAPI = require('lastfmapi');
 const callback_url = 'http://localhost:8282/api/v1/lastfm/callback';
 const client = new LastfmAPI({
     'api_key': process.env.LASTFM_API_KEY,
-    'secrect': process.env.LASTFM_API_SECRET
+    'secret': process.env.LASTFM_API_SECRET
 });
 
 const lfm_oauth = (ctx) => {
@@ -35,7 +35,7 @@ const lfm_callback = (ctx) => {
                 return reject(`error in lastfm authenticator: ${JSON.stringify(error)}`)
             console.log(session.username, session.key);
             resolve({
-                usesername: session.username,
+                username: session.username,
                 key: session.key,
                 local_user: user_id,
             });

@@ -1,80 +1,50 @@
 const dbConnection = require('../database/mySQLconnect');
 
-const storeSecretKey = async (ctx) => {
+const storeDiscogsSecretKey = async ({ token, token_secret, user_id }) => {
     return new Promise((resolve, reject) => {
         const query = `
-            INSERT INTO secrets
-            (secret, owner_id, provider)
+            INSERT INTO discogs_secrets
+            (token, token_secret, owner_id)
             VALUES
             (?,?,?);
         `;
         dbConnection.query({
             sql: query,
-            values: [ctx.request.body.token, ctx.request.body.user_id, ctx.request.body.provider]
+            values: [token, token_secret, user_id]
         }, ( error, results) => {
             if ( error ) {
-                console.log(`Error in secrets controller: ${error}`);
-                ctx.status = 500;
-                ctx.body = {
-                    msg: error,
-                }
-                return reject();
+                return reject(error);
             }
-            console.log(results);
-            ctx.status = 200;
-            ctx.body = ctx.request.body;
-            return resolve()
+            return resolve(results)
         })
     }).catch( err => console.log(err));
 };
 
-const getSecretKey = async (ctx) => {
+const getDiscogsSecretKey = async ({ user_id }) => {
     return new Promise((resolve, reject) => {
         const query = `
             SELECT * 
-            FROM secrets 
-            WHERE 
-                provider = ?
-            AND
-                owner_id = ?;
+            FROM discogs_secrets 
+            WHERE owner_id = ?;
         `;
         dbConnection.query({
             sql: query,
-            values: [ctx.request.body.provider, ctx.request.body.user_id]
+            values: [user_id]
         }, (error, results) => {
-            if ( error ) {
-                console.log(`Error in secrets controller: ${error}`);
-                ctx.status = 500;
-                ctx.body = {
-                    msg: error,
-                }
-                return reject();
-            }
-            if ( results[0].secret === undefined ) {
-                ctx.status = 204;
-                ctx.body = {
-                    msg: 'no token for user'
-                }
-                return reject();
-            } 
-            ctx.status = 200;
-            ctx.body = {
-                ...ctx.request.body,
-                token: results[0].secret
-            }
-            return resolve();
+            if ( error ) 
+                reject(error);
+            resolve(results[0]);
         })
     }).catch( err => console.log(err));
 };
 
-const replaceSecret = async (ctx) => {
+const updateSecret = async (ctx) => {
     return new Promise( (resolve, reject) => {
 
     })
 }
 
 module.exports = {
-    storeSecretKey,
-    getSecretKey,
-    replaceSecret,
+    storeDiscogsSecretKey,
+    getDiscogsSecretKey
 };

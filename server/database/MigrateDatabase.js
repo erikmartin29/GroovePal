@@ -21,9 +21,9 @@ const tables = [
     `,
     `
     CREATE TABLE IF NOT EXISTS discogs_secrets (
-        token     VARCHAR(255) NOT NULL,
-        verifier  VARCHAR(255) NOT NULL,
-        owner_id  VARCHAR(255) NOT NULL,
+        token        VARCHAR(255) NOT NULL,
+        token_secret VARCHAR(255) NOT NULL,
+        owner_id     VARCHAR(255) NOT NULL,
         FOREIGN KEY (owner_id) REFERENCES users(user_id),
         PRIMARY KEY (owner_id, token)
     )
