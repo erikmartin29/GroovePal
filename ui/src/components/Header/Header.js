@@ -27,12 +27,7 @@ export default function Header() {
     //username menu will switch places with the Login/Signup buttons after the user logs in, currently always active for ease of use and also because I can't actually login yet for some reason
     //may want to add other navigation buttons to pages so not all is in drop down menu?
     //do we want a search bar so people could look for albums?
-    
-    //Website Name Ideas:
-    //Vinyl Buddy
-    //Vinyl Logger
-    //Vinyl Record
-    //Vinyl Recorder
+    //add breadcrumbs?
     
     //Login Button colors
     //6B914A

@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Box, Grid, Button, Container, TextField } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ const Cell = (props) => {
     
     return (
             <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={1}>
+                <Container>
                 <Box sx={{
                     width: 175,
                     height: 175,
@@ -36,6 +37,16 @@ const Cell = (props) => {
                         alt={ collectionData.releases[rowIdx].basic_information.title }
                         width="175" height="175" />
                 </Box>
+                <Box>
+                    <Typography sx={{
+                        color: 'white'
+                    }}>
+                        {collectionData.releases[rowIdx].basic_information.title}
+                        <br />
+                        {collectionData.releases[rowIdx].basic_information.artists[0].name}
+                    </Typography>
+                </Box>
+            </Container>
             </Grid>
     );
 }

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Box, Container, Typography, Button } from '@mui/material';
+import { Box, Container, Typography, Button, Chip, Stack } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -15,13 +15,21 @@ const displayArtists = (props) => {
     );
 }
 
+const handleDelete = () => {
+    console.log("delete was clicked");
+}
+
+const handleClick = () => {
+    console.log("Tag was clicked");
+}
+
 export default function PlayPage() {
     
     //Claire's Changes and Notes:
     //created the page, some things hardcoded for now
     //need some data to be passed from the Collection Page
     //need to display track list
-    //how do we want to do tags?
+    //how do we want to do tags? (use mui Chips?)
     //need to implement actual
     
     //hard coding this for now, needs to be given to this page by Collection Page
@@ -122,7 +130,25 @@ export default function PlayPage() {
                                 border: 1,
                                 borderRadius: '16px'
                             }}>
-                                Tags
+                                <Stack>
+                                    <Chip
+                                        sx={{
+                                            width: '100%',
+                                        }}
+                                        label="Testing Width Tag"
+                                    />
+                                    <Chip
+                                        sx={{
+                                            
+                                        }}
+                                        label="Test"
+                                    />
+                                    <Chip
+                                        sx={{
+                                        }}
+                                        label="Tag 3"
+                                    />
+                                </Stack>
                             </Box>
                         </Box>
                         <Box sx={{
