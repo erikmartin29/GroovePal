@@ -10,7 +10,6 @@ discogsRouter.get('/callback/:user_id/', async (ctx) => {
     discogs_provider.discogs_callback(ctx)
     .then( secrets => {
         console.log('secrets', secrets);
-        // write token to database, status and body are handled in controller
         secretsController.storeDiscogsSecretKey(secrets)
             .then( results => {
                 console.log(results);
