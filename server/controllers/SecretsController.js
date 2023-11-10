@@ -38,13 +38,47 @@ const getDiscogsSecretKey = async ({ user_id }) => {
     }).catch( err => console.log(err));
 };
 
-const updateSecret = async (ctx) => {
-    return new Promise( (resolve, reject) => {
-
+const setLastfmSecretKey = async({ session_user, session_key, user_id }) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            INSERT INTO lastfm_secrets
+            (session_user, session_key, owner_id)
+            VALUES
+            (?,?,?);
+        `;
+        dbConnection.query({
+            sql: query,
+            values: [session_user, session_key, user_id]
+        }, ( error, results) => {
+             if ( error ) {
+                return reject(error);
+            }
+            return resolve(results)
+        })
     })
 }
 
+const getLastfmSecretKey = async({ user_id }) => {
+    return new Promise((resolve, reject) => {
+        const query = `
+            SELECT *
+            FROM lastfm_secrets
+            WHERE owner_id = ?;
+        `;
+        dbConnection.query({
+            sql: query,
+            values: [user_id]
+        }, (error, results) => {
+            if ( error ) 
+                reject(error);
+            resolve(results[0]);
+        });
+    });
+};
+
 module.exports = {
     storeDiscogsSecretKey,
-    getDiscogsSecretKey
+    getDiscogsSecretKey,
+    setLastfmSecretKey,
+    getLastfmSecretKey
 };

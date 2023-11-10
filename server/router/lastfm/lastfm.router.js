@@ -10,10 +10,15 @@ lastfmRouter.get('/callback/:user_id/', async (ctx) => {
     lastfm_provider.lfm_callback(ctx)
     .then( data => {
         console.log(data);
-        // write token to database, body is set in controller
-        //SecretsController.storeSecretKey(ctx)
-        ctx.status = 200;
-        
+        SecretsController.setLastfmSecretKey(data)
+            .then( res => {
+                console.log(res);
+                ctx.status = 200;
+            })
+            .catch( error => {
+                console.log(error);
+                ctx.status = 500
+            })
     }).catch( error => {
         console.log(error) 
         ctx.status = 500

@@ -45,8 +45,7 @@ const lfm_callback = (ctx) => {
 
 const scrobble = (ctx) => {
     return new Promise( (resolve, reject) => {
-        
-
+        // create a new session?        
     });
 }
 

@@ -3,11 +3,15 @@
 // lastfm and discogs 
 const SecretsController = require('../controllers/SecretsController');
 
+// todo: 
+//  rewrite as single middleware: check path to determine which
+//  service is being authenticated        
+
 async function discogs_middleware (ctx, next) {
     const { user_id } = ctx.request.params;
     if ( user_id !== undefined ) {
         // get credentials database
-        SecretsController({ user_id })
+        SecretsController.getDiscogsSecretKey({ user_id })
             .then( creds => {
                 // insert token into body for authed external requests
                 ctx.request.body = {
@@ -27,14 +31,23 @@ async function discogs_middleware (ctx, next) {
 }
 
 async function lastfm_middleware (ctx, next) {
-    console.log(ctx.request.body);
-    // grab user_id from body
-    
-    // get credentials database
-
-    // insert token into body for authed external requests
-
-    return next();
+    const { user_id } = ctx.request.params;
+    if ( user_id !== undefined ) {
+        SecretsController.getLastfmSecretKey({ user_id })
+            .then( creds => {
+                ctx.request.body = {
+                    ...ctx.request.body,
+                    credentials: creds
+                };
+                return next();
+            })
+            .catch( error => {
+                console.log(`Error: ${error}`);
+                ctx.status = 500;
+                ctx.body = error;
+            });
+    }
+    ctx.status = 500;   
 }
 
 module.exports =  {
