@@ -35,9 +35,9 @@ const lfm_callback = (ctx) => {
                 return reject(`error in lastfm authenticator: ${JSON.stringify(error)}`)
             console.log(session.username, session.key);
             resolve({
-                username: session.username,
-                key: session.key,
-                local_user: user_id,
+                session_user: session.username,
+                session_key: session.key,
+                user_id: user_id,
             });
         })
     });
