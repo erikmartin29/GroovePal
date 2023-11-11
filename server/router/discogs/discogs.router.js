@@ -3,13 +3,13 @@ const secretsController = require('../../controllers/SecretsController');
 const VerifyJWT = require('../../Middleware/VerifyJWT');
 const Authorize = require('../../Middleware/Authorize');
 
-// require user to be logged in
-discogsRouter.use(VerifyJWT);
 
 const discogsRouter = require('koa-router')({
     prefix: '/discogs'
 });
 
+// require user to be logged in
+discogsRouter.use(VerifyJWT);
 discogsRouter.get('/auth/:user_id', Authorize(), discogs_provider.discogs_oath , err => console.log(err));
 
 // external request no jwt is going to be provided?
