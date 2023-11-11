@@ -31,3 +31,12 @@ export function getDiscogsCollection(user) {
 export function getDiscogsReleaseImage(releaseID) { 
     return axiosClient.get(`/discogs/release-image/${releaseID}`);
 }
+
+export function discogs_oauth(username) {
+    return axiosClient.get(`/discogs/auth/${username}`);
+}
+
+export function lastfm_oauth(username) {
+    return axiosClient.get(`/lastfm/auth/${username}`);
+}
+
