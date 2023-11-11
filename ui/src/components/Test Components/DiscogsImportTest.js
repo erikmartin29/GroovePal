@@ -1,11 +1,14 @@
 import { Fragment, useEffect, useState } from 'react';
+import { AuthConsumer } from '../../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsReleaseImage } from '../../utils/api_provider/api_provider';
 
 export default function DiscogsImportTest() {
     const [collection, setCollection] = useState(null);
+    const { username } = AuthConsumer();
 
     useEffect(() => {
-        getDiscogsCollection("emtacolor")
+        // pass local user; discogs user is determined by the server after oauth
+        getDiscogsCollection(username)
             .then(response => {
                 response.data["releases"].forEach(release => {
                     //fetch the image url for each release here

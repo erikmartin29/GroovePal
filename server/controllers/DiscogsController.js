@@ -2,18 +2,15 @@ var Discogs = require('disconnect').Client;
 
 const getCollection = async (ctx) => {
     try {
-        // check if user parameter is present
-        const user = ctx.params.user;
-        if (user === undefined) { 
-            ctx.status = 400;
-            ctx.body = { error: "User parameter is missing" };
-            return;
-        }
-
+        console.log('creds', ctx.request.body.credentials)
         // query Discogs using collection endpoint
-        var col = new Discogs('MyUserAgent/1.0').user().collection();
+        const dis = new Discogs(ctx.request.body.credentials)
+        const discogs_user = await dis.getIdentity();
+
+        // to change it becuase this works for now
+        var col = dis.user().collection();
         var releasesData;
-        col.getReleases(`${user}`, 0, {page: 1, per_page: 75}, function(err, data){ releasesData = data; });
+        col.getReleases(`${discogs_user}`, 0, {page: 1, per_page: 75}, function(err, data){ releasesData = data; });
 
         // wait for the getReleases call to complete before continuing
         await new Promise(resolve => setTimeout(resolve, 1000));
@@ -41,9 +38,11 @@ const getReleaseImage = async (ctx) => {
 
         // query Discogs using collection endpoint
         // TODO: pass accessData from OAuth into Discogs constructor
-        var db = new Discogs(accessData).database();
+        var db = new Discogs(ctx.request.body.credentials).database();
         var imgUrl;
         db.getRelease(releaseID, function(err, data){
+            if ( err )
+                console.log(err);
             imgUrl = data.images[0].resource_url;
         });
 

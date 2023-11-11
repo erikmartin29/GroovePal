@@ -1,8 +1,9 @@
 const discogs_provider = require('../../providers/discogs.provider');
 const secretsController = require('../../controllers/SecretsController');
+const TokenInjector = require('../../Middleware/TokenInjector');
 const VerifyJWT = require('../../Middleware/VerifyJWT');
 const Authorize = require('../../Middleware/Authorize');
-
+const DiscogsController = require('../../controllers/DiscogsController');
 
 const discogsRouter = require('koa-router')({
     prefix: '/discogs'
@@ -36,5 +37,19 @@ discogsRouter.get('/callback/:user_id/', async (ctx) => {
     })
 });
 
+const discogsDataRouter = require('koa-router')({
+    prefix: '/data',
+});
+
+discogsDataRouter.use(TokenInjector.discogs_middleware);
+
+discogsDataRouter.post('/collection-info/:user', Authorize(), DiscogsController.getCollection)
+discogsDataRouter.post('/release-image/:releaseID', Authorize(), DiscogsController.getReleaseImage)
+
+
+// append data api routes
+discogsRouter.use(
+    discogsDataRouter.routes(),
+);
 
 module.exports = discogsRouter

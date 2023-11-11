@@ -24,14 +24,6 @@ export function validUsername(username) {
     return axiosClient.get(`/login/validate?user_id=${username}`);
 }
 
-export function getDiscogsCollection(user) { 
-    return axiosClient.get(`/discogs/collection-info/${user}`);
-}
-
-export function getDiscogsReleaseImage(releaseID) { 
-    return axiosClient.get(`/discogs/release-image/${releaseID}`);
-}
-
 export function discogs_oauth(username) {
     return axiosClient.get(`/discogs/auth/${username}`);
 }
@@ -39,4 +31,13 @@ export function discogs_oauth(username) {
 export function lastfm_oauth(username) {
     return axiosClient.get(`/lastfm/auth/${username}`);
 }
+
+export function getDiscogsCollection(username) { 
+    return axiosClient.post(`/discogs/data/collection-info`, { user_id: username });
+}
+
+export function getDiscogsReleaseImage(releaseID, username) { 
+    return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
+}
+
 

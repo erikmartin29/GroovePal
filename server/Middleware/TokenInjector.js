@@ -8,7 +8,8 @@ const SecretsController = require('../controllers/SecretsController');
 //  service is being authenticated        
 
 async function discogs_middleware (ctx, next) {
-    const { user_id } = ctx.request.params;
+    const { user_id } = ctx.request.body;
+    console.log('discogs middleware hit');
     if ( user_id !== undefined ) {
         // get credentials database
         SecretsController.getDiscogsSecretKey({ user_id })
@@ -18,6 +19,7 @@ async function discogs_middleware (ctx, next) {
                     ...ctx.request.body,
                     credentials: creds,
                 };
+                console.log('discogs credentials retrived');
                 return next(); // continue to data route
             })
             .catch( error => {
@@ -27,6 +29,7 @@ async function discogs_middleware (ctx, next) {
             })
     }
     // internal server error -> don't continue to data endpoint
+    ctx.body = 'no user id provided';
     ctx.status = 500; 
 }
 
