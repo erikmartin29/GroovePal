@@ -2,7 +2,8 @@
 // request body to api enpoints that make requests to 
 // lastfm and discogs 
 const SecretsController = require('../controllers/SecretsController');
-
+const consumer_key = process.env.DISCOGS_KEY;
+const consumer_secret = process.env.DISCOGS_SECRET;
 // todo: 
 //  rewrite as single middleware: check path to determine which
 //  service is being authenticated        
@@ -17,7 +18,14 @@ async function discogs_middleware (ctx, next) {
                 // insert token into body for authed external requests
                 ctx.request.body = {
                     ...ctx.request.body,
-                    credentials: creds,
+                    credentials: {
+                        method: 'oauth',
+                        level: 0,
+                        consumerKey: consumer_key,
+                        consumerSecret: consumer_secret,
+                        token: creds.token,
+                        tokenSecret: creds.token_secret,
+                    },
                 };
                 console.log('discogs credentials retrived');
                 return next(); // continue to data route

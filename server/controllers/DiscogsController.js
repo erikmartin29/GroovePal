@@ -4,7 +4,7 @@ const getCollection = async (ctx) => {
     try {
         console.log('creds', ctx.request.body.credentials)
         // query Discogs using collection endpoint
-        const dis = new Discogs(ctx.request.body.credentials)
+        const dis = new Discogs(ctx.request.body.credentials);
         const discogs_user = await dis.getIdentity();
 
         // to change it becuase this works for now
