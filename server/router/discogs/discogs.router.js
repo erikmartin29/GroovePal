@@ -43,9 +43,9 @@ const discogsDataRouter = require('koa-router')({
 
 discogsDataRouter.use(TokenInjector.discogs_middleware);
 
-discogsDataRouter.post('/collection-info', Authorize(), DiscogsController.getCollection)
-discogsDataRouter.post('/release-image/:releaseID', Authorize(), DiscogsController.getReleaseImage)
-
+// todo utilize local auth middleware
+discogsDataRouter.post('/collection-info', DiscogsController.getCollection)
+discogsDataRouter.post('/release-image/:releaseID', DiscogsController.getReleaseImage)
 
 // append data api routes
 discogsRouter.use(
