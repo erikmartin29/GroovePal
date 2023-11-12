@@ -14,7 +14,7 @@ async function discogs_middleware (ctx, next) {
     if ( user_id !== undefined ) {
         // get credentials database
         SecretsController.getDiscogsSecretKey({ user_id })
-            .then( creds => {
+            .then( async creds => {
                 // insert token into body for authed external requests
                 ctx.request.body = {
                     ...ctx.request.body,
@@ -28,17 +28,18 @@ async function discogs_middleware (ctx, next) {
                     },
                 };
                 console.log('discogs credentials retrived');
-                return next(); // continue to data route
+                await next(); // continue to data route
             })
             .catch( error => {
                 console.log(`Error: ${error}`);
                 ctx.status = 500; 
                 ctx.body = error; // forward error to the client
             })
+    } else {
+        // internal server error -> don't continue to data endpoint
+        ctx.body = 'no user id provided';
+        ctx.status = 500; 
     }
-    // internal server error -> don't continue to data endpoint
-    ctx.body = 'no user id provided';
-    ctx.status = 500; 
 }
 
 async function lastfm_middleware (ctx, next) {
@@ -57,8 +58,11 @@ async function lastfm_middleware (ctx, next) {
                 ctx.status = 500;
                 ctx.body = error;
             });
+    } else {
+        // internal server error -> don't continue to data endpoint
+        ctx.body = 'no user id provided';
+        ctx.status = 500; 
     }
-    ctx.status = 500;   
 }
 
 module.exports =  {
