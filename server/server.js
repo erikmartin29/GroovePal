@@ -31,7 +31,6 @@ app.use( async (ctx, next) => {
     return next().catch( error => {
         if ( error.status === 401 ) {
             console.log('sending 401 to the client')
-            ctx.status = 401;
             ctx.body = 'JWT token expired'
         } else {
             console.log('one of the modules in the chain fired an exception.');

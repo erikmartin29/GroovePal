@@ -1,33 +1,28 @@
 var Discogs = require('disconnect').Client;
 
-const getCollection = async (ctx) => {
-    try {
-        console.log('creds', ctx.request.body.credentials)
+const getCollection = (ctx) => {
+    return new Promise((resolve, reject) => {
+        console.log('From getCollection::doing oauth with: ', ctx.request.body.credentials)
         // query Discogs using collection endpoint
         const dis = new Discogs(ctx.request.body.credentials);
-
-        const discogs_user = await dis.getIdentity();
-
-        /*
-        // to change it becuase this works for now
-        var col = dis.user().collection();
-        var releasesData;
-        col.getReleases(`${discogs_user}`, 0, {page: 1, per_page: 75}, function(err, data){ releasesData = data; });
-
-        // wait for the getReleases call to complete before continuing
-        await new Promise(resolve => setTimeout(resolve, 1000));
-
-        ctx.body = releasesData;
-        //console.log(ctx.status)
-        //console.log(ctx.body)
-        */
-
-        ctx.status = 200;
-    } catch (error) {
+        dis.getIdentity()
+            .then( discogs_user => {
+                // to change it becuase this works for now
+                var col = dis.user().collection();
+                var releasesData;
+                col.getReleases(`${discogs_user.username}`, 0, {page: 1, per_page: 75}, function(err, data) { 
+                    ctx.body = data;
+                    ctx.status = 200;
+                    console.log(ctx.status);
+                    console.log(ctx.body);
+                    resolve();
+                });
+            });
+    }).catch(error => {
         console.error('Error in getCollection:', error);
         ctx.status = 500;
         ctx.body = 'Internal Server Error';
-    }
+    });
 };
 
 const getReleaseImage = async (ctx) => {

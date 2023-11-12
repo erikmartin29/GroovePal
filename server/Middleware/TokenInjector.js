@@ -20,7 +20,7 @@ async function discogs_middleware (ctx, next) {
                     ...ctx.request.body,
                     credentials: {
                         method: 'oauth',
-                        level: 0,
+                        level: 2,
                         consumerKey: consumer_key,
                         consumerSecret: consumer_secret,
                         token: creds.token,

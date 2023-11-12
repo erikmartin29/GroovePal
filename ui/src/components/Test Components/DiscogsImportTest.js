@@ -10,10 +10,13 @@ export default function DiscogsImportTest() {
         // pass local user; discogs user is determined by the server after oauth
         getDiscogsCollection(username)
             .then(response => {
+                console.log(response);
+                /*
                 response.data["releases"].forEach(release => {
                     //fetch the image url for each release here
                     release.imgURL = getDiscogsReleaseImage(release.id);
                 })
+                */
             })
             .then(response => {
                 setCollection(response.data["releases"]);
@@ -21,7 +24,7 @@ export default function DiscogsImportTest() {
             .catch(error => {
                 console.error('Error fetching Discogs collection:', error);
             });
-    }, []);
+    }, [username]);
 
     return (
         <Fragment>
