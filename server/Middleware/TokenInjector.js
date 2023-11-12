@@ -25,6 +25,7 @@ async function discogs_middleware (ctx, next) {
                         consumerSecret: consumer_secret,
                         token: creds.token,
                         tokenSecret: creds.token_secret,
+                        authorizeUrl: `https://www.discogs.com/oauth/authrize?oauth_token=${creds.token}`
                     },
                 };
                 console.log('discogs credentials retrived');

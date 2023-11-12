@@ -5,8 +5,10 @@ const getCollection = async (ctx) => {
         console.log('creds', ctx.request.body.credentials)
         // query Discogs using collection endpoint
         const dis = new Discogs(ctx.request.body.credentials);
+
         const discogs_user = await dis.getIdentity();
 
+        /*
         // to change it becuase this works for now
         var col = dis.user().collection();
         var releasesData;
@@ -16,9 +18,11 @@ const getCollection = async (ctx) => {
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         ctx.body = releasesData;
-        ctx.status = 200;
         //console.log(ctx.status)
         //console.log(ctx.body)
+        */
+
+        ctx.status = 200;
     } catch (error) {
         console.error('Error in getCollection:', error);
         ctx.status = 500;
