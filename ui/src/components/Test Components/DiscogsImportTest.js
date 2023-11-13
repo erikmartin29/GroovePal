@@ -3,24 +3,24 @@ import { AuthConsumer } from '../../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsReleaseImage } from '../../utils/api_provider/api_provider';
 
 export default function DiscogsImportTest() {
-    const [collection, setCollection] = useState(null);
+    const [collection, setCollection] = useState([]);
     const { username } = AuthConsumer();
 
+    const getData = async (username) => {
+         let col = await getDiscogsCollection(username)
+         var tmpArr = [];
+         for(let i = 0; i < 10; i++) {
+                let release = col.data["releases"][i];
+                let imgRes = await getDiscogsReleaseImage(release.id, username)
+                release.imgURL = imgRes.data;
+                console.log(release.imgURL)
+                tmpArr.push(release)
+         }
+         setCollection(tmpArr);
+    }
+
     useEffect(() => {
-        // pass local user; discogs user is determined by the server after oauth
-        getDiscogsCollection(username)
-            /*.then(response => {
-                response.data["releases"].forEach(release => {
-                    //fetch the image url for each release here
-                    release.imgURL = getDiscogsReleaseImage(release.id);
-                })
-            })*/
-            .then(response => {
-                setCollection(response.data["releases"]);
-            })
-            .catch(error => {
-                console.error('Error fetching Discogs collection:', error);
-            });
+        getData(username);
     }, [username]);
 
     return (
@@ -31,14 +31,14 @@ export default function DiscogsImportTest() {
                     <div>
                         <h2>Collection</h2>
                         <ul>
-                            {collection.map(item => {
+                            {collection.map((item, idx) => {
                                 return (<div>
                                     <img 
-                                    src={item.imgURL}
+                                    src={item.imgURL || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
                                     alt={item.basic_information.title}
                                     />
 
-                                    <li key={item.id}>
+                                    <li key={idx}>
                                         {item.basic_information.title} by {item.basic_information.artists[0].name}
                                     </li>
                                 </div>);
