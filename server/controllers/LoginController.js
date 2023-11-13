@@ -67,6 +67,7 @@ const createUser = async (ctx) => {
                 ctx.body = 'invalid username or password';
                 reject()
             }
+            console.log(tuples);
             ctx.status = 200;
             // send user credentials back to client
             ctx.body = ctx.request.body;

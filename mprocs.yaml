@@ -1,0 +1,6 @@
+procs:
+  server: 
+    shell: "cd server && npm run start"
+  ui:
+    shell: "cd ui && npm start"
+

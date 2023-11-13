@@ -10,12 +10,5 @@ secretsRouter.get('/validate/', Authorize(), async (ctx) => {
     ctx.status = 200;
     ctx.body = 'ok';
 });
-// placeholder
-secretsRouter.post('/store/discogs_key', Authorize(), async (ctx) => {
-    console.log(ctx.request.body);
-
-    ctx.status = 200;
-    ctx.body = 'ok';
-})
 
 module.exports = secretsRouter;

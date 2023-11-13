@@ -7,7 +7,6 @@ export const axiosClient = axios.create({
     headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest',
     },
     withCredentials: true // allow the browser to send cookies to the API domain
 });
@@ -23,3 +22,21 @@ export function signUp(payload) {
 export function validUsername(username) {
     return axiosClient.get(`/login/validate?user_id=${username}`);
 }
+
+export function discogs_oauth(username) {
+    return axiosClient.get(`/discogs/auth/${username}`);
+}
+
+export function lastfm_oauth(username) {
+    return axiosClient.get(`/lastfm/auth/${username}`);
+}
+
+export function getDiscogsCollection(username) { 
+    return axiosClient.post(`/discogs/data/collection-info`, { user_id: username });
+}
+
+export function getDiscogsReleaseImage(releaseID, username) { 
+    return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
+}
+
+

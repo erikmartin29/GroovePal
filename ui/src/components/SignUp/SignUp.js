@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Box, TextField, Typography, Button, Grid } from "@mui/material";
 
-import { signUp, validUsername } from '../../utils/api_provider/api_provider';
+import { authenticateLastFM, signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
 
@@ -14,7 +14,7 @@ export default function SignUp() {
         event.preventDefault();
 
         if ( newAccount.user_id === undefined || newAccount.user_pass === undefined ||
-             newAccount.user_fname === undefined || newAccount.user_lname === undefined ) 
+             newAccount.user_fname === undefined || newAccount.user_lname === undefined) 
         {
             alert("Please provide a value for each field");
             return;
@@ -49,7 +49,7 @@ export default function SignUp() {
             navigate('/', {replace: true})
         });
     };
-
+    
     return (
         <Box sx={{ margin: 'auto', alignItems: 'center', textAlign: 'center', display: 'inline-block'}}>
             <Typography component="h1" sx={{ fontSize: '23px', mt: '15px', width: 'auto'  }} >New Account</Typography>
