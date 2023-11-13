@@ -13,34 +13,36 @@ async function discogs_middleware (ctx, next) {
     console.log('discogs middleware hit');
     if ( user_id !== undefined ) {
         // get credentials database
-        SecretsController.getDiscogsSecretKey({ user_id })
-            .then( async creds => {
-                // insert token into body for authed external requests
-                ctx.request.body = {
-                    ...ctx.request.body,
-                    credentials: {
-                        method: 'oauth',
-                        level: 2,
-                        consumerKey: consumer_key,
-                        consumerSecret: consumer_secret,
-                        token: creds.token,
-                        tokenSecret: creds.token_secret,
-                        authorizeUrl: `https://www.discogs.com/oauth/authorize?oauth_token=${creds.token}`
-                    },
-                };
-                console.log('discogs credentials retrived');
-                await next(); // continue to data route
-            })
-            .catch( error => {
-                console.log(`Error: ${error}`);
-                ctx.status = 500; 
-                ctx.body = error; // forward error to the client
-            })
+        try {
+            const creds = await SecretsController.getDiscogsSecretKey({ user_id });
+            // insert token into body for authed external requests
+            ctx.request.body = {
+                ...ctx.request.body,
+                credentials: {
+                    method: 'oauth',
+                    level: 2,
+                    consumerKey: consumer_key,
+                    consumerSecret: consumer_secret,
+                    token: creds.token,
+                    tokenSecret: creds.token_secret,
+                    authorizeUrl: `https://www.discogs.com/oauth/authorize?oauth_token=${creds.token}`
+                },
+            };
+            console.log('discogs credentials retrived');
+        } catch (error) {
+            console.log(`Error: ${error}`);
+            ctx.status = 500; 
+            ctx.body = error; // forward error to the client
+            return; // Don't continue to the next middleware
+        }
     } else {
         // internal server error -> don't continue to data endpoint
         ctx.body = 'no user id provided';
         ctx.status = 500; 
+        return; // Don't continue to the next middleware
     }
+    await next(); // continue to data route
+    console.log(`status: ${ctx.status}`)
 }
 
 async function lastfm_middleware (ctx, next) {
