@@ -10,7 +10,7 @@ const getCollection = async (ctx) => {
         // to change it because this works for now
         var col = dis.user().collection();
 
-        // Wrap getReleases in a new Promise
+        // wrap getReleases in a new Promise
         var releasesData = await new Promise((resolve, reject) => {
             col.getReleases(`${discogs_user.username}`, 0, {page: 1, per_page: 75}, function(err, data){
                 if (err) {
@@ -47,13 +47,16 @@ const getReleaseImage = async (ctx) => {
         // query Discogs using collection endpoint
         // TODO: pass accessData from OAuth into Discogs constructor
         var db = new Discogs(ctx.request.body.credentials).database();
-        var imgUrl;
-        db.getRelease(releaseID, function(err, data){
-            if ( err )
-                console.log(err);
-            imgUrl = data.images[0].resource_url;
-        });
 
+        var imgUrl = await new Promise((resolve, reject) => {
+            db.getRelease(releaseID, function(err, data){
+                if ( err )
+                    reject(err);
+                else
+                    resolve(data.images[0].resource_url);
+            });
+        });
+        
         // wait for the getRelease call to complete before continuing
         await new Promise(resolve => setTimeout(resolve, 1000));
 
