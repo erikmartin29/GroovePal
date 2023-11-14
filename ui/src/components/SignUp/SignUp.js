@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { Box, TextField, Typography, Button, Stack, Input, ThemeProvider } from "@mui/material";
 import { blue } from '@mui/material/colors';
 
-import { signUp, validUsername } from '../../utils/api_provider/api_provider';
+import { authenticateLastFM, signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
 import { darkGreen, lightGreen } from '../ColorPalette';
@@ -19,12 +19,13 @@ export default function SignUp() {
         event.preventDefault();
 
         if ( newAccount.user_id === undefined || newAccount.user_pass === undefined ||
-             newAccount.user_fname === undefined || newAccount.user_lname === undefined ) 
+             newAccount.user_fname === undefined || newAccount.user_lname === undefined) 
         {
             alert("Please provide a value for each field");
             return;
         }
 
+        /*
         validUsername(newAccount.user_id).then( res => {
             console.log(res);
             if ( !res.data.valid ) {
@@ -45,8 +46,15 @@ export default function SignUp() {
             });
         })
         .catch( error => console.log(error) )
+        */
+        signUp(newAccount)
+        .then( res => console.log(res.data) )
+        .catch( error => console.log(error))
+        .finally( () => {
+            navigate('/', {replace: true})
+        });
     };
-
+    
     return (
             <Fragment>
             <Box sx={{

@@ -1,34 +1,26 @@
 import { Fragment } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 export default function HomePage() {
 
-    //Claire's Changes and Notes:
-    //basic homepage anyone will see when they reach the site, needs ideas of what to display
-    //reccomendations for vinyl albums based on tags/artists
-    //what friends are listening to (if friends/follow system implemented)
-    //
+    let navigate = useNavigate();
+
     return (
         <Fragment>
-            <Box sx={{
-                height: 900,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                bgcolor: '#353939'
-            }}>
-            <Typography sx={{
-                color: 'white'
-            }}>
-                The basic homepage for the website. Not protected.
-                <br />
-                Ideas:
-                <br />
-                -explanation as to what this site is
-                <br />
-                -general analytics from user data? (popular songs/albums/artists, overall hours spent listening to music, etc)
-                </Typography>
-            </Box>
+            <div style={{ margin: 100, padding: 100 }}>
+                <h1> HOME - this is a protected page</h1>
+                <Button 
+                    variant="contained" 
+                    sx={{ mt: 2, mb: 3 }}
+                    onClick={() => navigate('/settings', {replace: true})}
+                >Settings</Button>
+                <Button 
+                    variant="contained" 
+                    sx={{ mt: 2, mb: 3 }}
+                    onClick={() => navigate('/discogs-test', {replace: true})}
+                >Discogs Test</Button>
+            </div>
         </Fragment>
     );
 }

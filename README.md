@@ -1,1 +1,1 @@
-# Vinyl-Scrobbler
+# GroovePal
