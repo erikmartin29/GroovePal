@@ -1,19 +1,11 @@
-import { Fragment } from 'react';
-import { Box, Container, Typography, Button, Chip, Stack } from '@mui/material';
+import { Fragment, useState } from 'react';
+import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
+import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
 const collectionData = require ("./discogs_releases_example.json");
 
-const displayArtists = (props) => {
-    const {index, item, rowIdx} = props;
-    
-    return (
-            <Fragment>
-            {collectionData.releases[rowIdx].basic_information.artists[index]}
-            </Fragment>
-    );
-}
 
 const handleDelete = () => {
     console.log("delete was clicked");
@@ -21,6 +13,136 @@ const handleDelete = () => {
 
 const handleClick = () => {
     console.log("Tag was clicked");
+}
+
+const Tag = (props) => {
+    
+    const {index} = props;
+    
+    let title = "Tag " + `${index+1}`;
+    
+    let disable = "";
+    
+    return (
+            <ThemeProvider theme={lightGreen}>
+                <Grid item key={index}>
+                    <Chip
+                        label={title}
+                        color="lightGreen"
+                        disabled={disable}
+                    />
+                </Grid>
+            </ThemeProvider>
+    );
+}
+
+const EditTag = (props) => {
+    const {index} = props;
+    
+    let title = "Tag " + `${index+1}`;
+    
+    let disable = "";
+    
+    return (
+            <ThemeProvider theme={lightGreen}>
+                <Grid item key={index}>
+                    <Chip
+                        sx={{
+                
+                        }}
+                        label={title}
+                        color="lightGreen"
+                        onDelete={handleDelete}
+                        disabled={disable}
+                    />
+                </Grid>
+            </ThemeProvider>
+    );
+}
+
+const Editor = (props) => {
+    
+    const {allTags} = props;
+    
+    return (
+            <Box sx={{
+                width: 230,
+                height: 300,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'space-between',
+                mt: 2,
+                ml: 2,
+                bgcolor: '#e6e2d3',
+                boxShadow: 8,
+                border: 1,
+                borderRadius: '16px'
+            }}>
+                <Grid container
+                    spacing={1}
+                    sx={{
+                        m: 2,
+                    }}>
+                        {
+                            allTags.map((cur, Index) => <EditTag index={Index} />)
+                        }
+                </Grid>
+                <Button
+                    sx={{
+                        color: 'red'
+                    }}
+                    color="inherit"
+                >
+                    Finish
+                </Button>
+            </Box>
+    );
+}
+
+const TagDisplay = (props) => {
+    
+    const {tagsList} = props;
+    
+    return (
+            <Box sx={{
+                width: 230,
+                height: 300,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                alignItems: 'space-between',
+                mt: 2,
+                ml: 2,
+                bgcolor: '#e6e2d3',
+                boxShadow: 8,
+                border: 1,
+                borderRadius: '16px'
+            }}>
+                <Grid container
+                    spacing={1}
+                    sx={{
+                        m: 2,
+                    }}>
+                        {
+                            tagsList.map((cur, Index) => <Tag index={Index} />)
+                        }
+                </Grid>
+                <Button
+                    sx={{
+                        color: 'red'
+                    }}
+                    color="inherit"
+                >
+                    Edit Tags
+                </Button>
+            </Box>
+    );
+};
+
+//create the array for the tags
+const blankTags = (num) => {
+    return (new Array(num).fill());
 }
 
 export default function PlayPage() {
@@ -34,16 +156,25 @@ export default function PlayPage() {
     
     //hard coding this for now, needs to be given to this page by Collection Page
     let rowIdx = 0
-    let keys = Object.keys(collectionData.releases[0].basic_information.artists)
     
-    let text = "";
-    for (let x in keys) {
-        text += x + ", ";
+    //create useState for the array of tags, hard code size for now, figure out dynamics later
+    const [tagsList, setTagsList] = useState(blankTags(5));
+    const [allTags, setAllTags] = useState(blankTags(10));
+    const [editting, setEditting] = useState(false);
+    
+    //onclickcallbacks for the tag editting buttons
+    const onClickCallbackEdit = () => {
+        setEditting(true);
     }
     
-    let navigate = useNavigate();
+    const onClickCallbackFinish = () => {
+        setEditting(false);
+    }
     
-    const artists = new Array(collectionData.releases[rowIdx].basic_information.artists.length).fill();
+    //<TagDisplay tagsList={tagsList} />
+    //<Editor allTags={allTags} />
+    
+    let navigate = useNavigate();
     
     //#353939
     return (
@@ -109,47 +240,14 @@ export default function PlayPage() {
                                 border: 1
                             }}>
                                 <p>
-                                Album: {collectionData.releases[rowIdx].basic_information.title}
-                                <br />
-            Artists: {artists.map((item, index) => <displayArtists index={index} item={item} rowIdx={rowIdx} />)}
-            <br />
-            anything else?
+                                    Album: {collectionData.releases[rowIdx].basic_information.title}
+                                    <br />
+                                    Artists:
+                                    <br />
+                                    anything else?
                                 </p>
                             </Box>
-                            <Box sx={{
-                                width: 230,
-                                height: 300,
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                mt: 2,
-                                ml: 2,
-                            bgcolor: '#e6e2d3',
-                            boxShadow: 8,
-
-                                border: 1,
-                                borderRadius: '16px'
-                            }}>
-                                <Stack>
-                                    <Chip
-                                        sx={{
-                                            width: '100%',
-                                        }}
-                                        label="Testing Width Tag"
-                                    />
-                                    <Chip
-                                        sx={{
-                                            
-                                        }}
-                                        label="Test"
-                                    />
-                                    <Chip
-                                        sx={{
-                                        }}
-                                        label="Tag 3"
-                                    />
-                                </Stack>
-                            </Box>
+                            <TagDisplay tagsList={tagsList}  />
                         </Box>
                         <Box sx={{
                             width: '75%',
