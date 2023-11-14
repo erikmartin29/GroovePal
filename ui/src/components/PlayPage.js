@@ -62,7 +62,14 @@ const EditTag = (props) => {
 
 const Editor = (props) => {
     
-    const {allTags} = props;
+    const {allTags, editting, onClickCallback} = props;
+    
+    if (editting == false) {
+        return (
+                <Fragment>
+                </Fragment>
+        )
+    }
     
     return (
             <Box sx={{
@@ -93,6 +100,7 @@ const Editor = (props) => {
                         color: 'red'
                     }}
                     color="inherit"
+                    onClick={onClickCallback()}
                 >
                     Finish
                 </Button>
@@ -102,7 +110,14 @@ const Editor = (props) => {
 
 const TagDisplay = (props) => {
     
-    const {tagsList} = props;
+    const {tagsList, editting, onClickCallback} = props;
+    
+    if (editting == true) {
+        return (
+                <Fragment>
+                </Fragment>
+        )
+    }
     
     return (
             <Box sx={{
@@ -133,6 +148,7 @@ const TagDisplay = (props) => {
                         color: 'red'
                     }}
                     color="inherit"
+                    onClick={onClickCallback()}
                 >
                     Edit Tags
                 </Button>
@@ -247,7 +263,8 @@ export default function PlayPage() {
                                     anything else?
                                 </p>
                             </Box>
-                            <TagDisplay tagsList={tagsList}  />
+                            <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
+            <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
                         <Box sx={{
                             width: '75%',
