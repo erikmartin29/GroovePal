@@ -5,9 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
-//const collectionData = require ("./discogs_releases_example.json");
-
-
 const handleDelete = () => {
     console.log("delete was clicked");
 }
@@ -18,10 +15,8 @@ const handleClick = () => {
 
 const Tag = (props) => {
     
-    const {index} = props;
-    
-    let title = "Tag " + `${index+1}`;
-    
+    const {item, index} = props;
+    let title = item;
     let disable = "";
     
     return (
@@ -141,7 +136,7 @@ const TagDisplay = (props) => {
                         m: 2,
                     }}>
                         {
-                            tagsList.map((cur, Index) => <Tag index={Index} />)
+                            tagsList.map((item, idx) => <Tag item={item} index={idx} />)
                         }
                 </Grid>
                 <Button
@@ -182,6 +177,7 @@ export default function PlayPage() {
         console.log(`fetching ${release}`)
         let rel = await getDiscogsRelease(albumID, username);
         setRelease(rel.data);
+        setTagsList(rel.data.genres); //change later
         let relImg = await getDiscogsReleaseImage(albumID, username);
         setReleaseImg(relImg.data);
         setLoading(false);
@@ -189,8 +185,6 @@ export default function PlayPage() {
 
     useEffect(() => {
         getData(albumID);
-        //console.log(release);
-        //console.log(releaseImg);
     }, [albumID]);
     
     //hard coding this for now, needs to be given to this page by Collection Page
