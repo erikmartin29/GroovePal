@@ -71,7 +71,6 @@ async function lastfm_middleware (ctx, next) {
         ctx.body = 'no user id provided';
         ctx.status = 500;
         return;
-
     }
     await next();
     console.log(`status: ${ctx.status}`);
