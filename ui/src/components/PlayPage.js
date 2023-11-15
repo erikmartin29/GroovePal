@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider } from '@mui/material';
 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
 const collectionData = require ("./discogs_releases_example.json");
@@ -169,6 +169,11 @@ export default function PlayPage() {
     //need to display track list
     //how do we want to do tags? (use mui Chips?)
     //need to implement actual
+
+    const { albumID } = useParams();
+    console.log(`ID: ${albumID}`);
+
+    //TODO: grab info based on albumID
     
     //hard coding this for now, needs to be given to this page by Collection Page
     let rowIdx = 0

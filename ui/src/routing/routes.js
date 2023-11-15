@@ -44,7 +44,7 @@ const routes = [
         protected: false,
     },
     {
-        href: '/play',
+        href: '/play/:albumID',
         component: <PlayPage />,
         protected: false,
     }
