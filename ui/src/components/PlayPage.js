@@ -13,7 +13,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-
 const handleDelete = () => {
     console.log("delete was clicked");
 }
@@ -23,33 +22,24 @@ const handleClick = () => {
 }
 
 const TracklistTable = (props) => {
-    
-    //props will go here
-    //onclick to change to the play page with the album info
     const {tracks} = props
-
-    console.log("TRACKS", tracks)
     
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
       <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
         <TableHead>
-                <TableRow></TableRow>
+            <TableRow></TableRow>
         </TableHead>
         <TableBody>
-          {
-          tracks.map((track) => (
+          {tracks.map((track) => (
             <TableRow
               key={track.title}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
-              <TableCell>
-                { track.title }
-              </TableCell>
+              <TableCell>{ track.title }</TableCell>
               <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
             </TableRow>
-          ))
-          }
+          ))}
         </TableBody>
 
       </Table>
@@ -305,7 +295,7 @@ export default function PlayPage() {
                             boxShadow: 8,
                                 border: 1
                             }}>
-                                <img src={ releaseImg || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
+                                <img src={ releaseImg || release.thumb || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
                                     alt={ release.title}
                                 width="175" height="175" />
                             </Box>
