@@ -33,7 +33,7 @@ const Cell = (props) => {
                 navigate(`/play/${item.id}`)
             }}
                 >
-                    <img src={ item.basic_information.thumb }
+                    <img src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
                         width="175" height="175" />
                 </Box>
@@ -69,9 +69,6 @@ export default function CollectionPage() {
         var tmpArr = [];
         for(let i = 0; i < 10; i++) {
                let release = col.data["releases"][i];
-               let imgRes = await getDiscogsReleaseImage(release.id, username)
-               release.imgURL = imgRes.data;
-               console.log(release.imgURL)
                tmpArr.push(release)
                setCollection(tmpArr);
         }
