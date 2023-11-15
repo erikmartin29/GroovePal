@@ -1,10 +1,11 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider } from '@mui/material';
-
+import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
+import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
-const collectionData = require ("./discogs_releases_example.json");
+//const collectionData = require ("./discogs_releases_example.json");
 
 
 const handleDelete = () => {
@@ -170,10 +171,27 @@ export default function PlayPage() {
     //how do we want to do tags? (use mui Chips?)
     //need to implement actual
 
+    const [loading, setLoading] = useState(true);
+    const { username } = AuthConsumer();
     const { albumID } = useParams();
-    console.log(`ID: ${albumID}`);
 
-    //TODO: grab info based on albumID
+    const [release, setRelease] = useState([]);
+    const [releaseImg, setReleaseImg] = useState([]);
+
+    const getData = async (release) => {
+        console.log(`fetching ${release}`)
+        let rel = await getDiscogsRelease(albumID, username);
+        setRelease(rel.data);
+        let relImg = await getDiscogsReleaseImage(albumID, username);
+        setReleaseImg(relImg.data);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getData(albumID);
+        //console.log(release);
+        //console.log(releaseImg);
+    }, [albumID]);
     
     //hard coding this for now, needs to be given to this page by Collection Page
     let rowIdx = 0
@@ -196,9 +214,14 @@ export default function PlayPage() {
     //<Editor allTags={allTags} />
     
     let navigate = useNavigate();
+
+    // TODO: make this look pretty
+    if(loading) {
+        return ( <Fragment> loading </Fragment> );
+    }
     
     //#353939
-    return (
+    return ( 
             <Fragment>
                 <Box sx={{
                     width: '100%',
@@ -243,8 +266,8 @@ export default function PlayPage() {
                             boxShadow: 8,
                                 border: 1
                             }}>
-                                <img src={ collectionData.releases[rowIdx].basic_information.thumb }
-                                    alt={ collectionData.releases[rowIdx].basic_information.title }
+                                <img src={ releaseImg || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
+                                    alt={ release.title}
                                 width="175" height="175" />
                             </Box>
                             <Box sx={{
@@ -261,11 +284,10 @@ export default function PlayPage() {
                                 border: 1
                             }}>
                                 <p>
-                                    Album: {collectionData.releases[rowIdx].basic_information.title}
+                                    { release.title }
                                     <br />
-                                    Artists:
+                                    { release.artists[0].name }
                                     <br />
-                                    anything else?
                                 </p>
                             </Box>
                             <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />

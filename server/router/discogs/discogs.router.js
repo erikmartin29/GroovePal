@@ -45,6 +45,7 @@ discogsDataRouter.use(TokenInjector.discogs_middleware);
 
 // todo utilize local auth middleware
 discogsDataRouter.post('/collection-info', DiscogsController.getCollection)
+discogsDataRouter.post('/release/:releaseID', DiscogsController.getRelease)
 discogsDataRouter.post('/release-image/:releaseID', DiscogsController.getReleaseImage)
 
 // append data api routes

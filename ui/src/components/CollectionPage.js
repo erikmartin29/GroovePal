@@ -5,8 +5,6 @@ import { getDiscogsCollection, getDiscogsReleaseImage } from '../utils/api_provi
 
 import { useNavigate } from 'react-router-dom';
 
-const collectionData = require ("./discogs_releases_example.json");
-
 //Claire's Changes and Notes:
 //created the page, procedurally generates the collection grid, some things hardcoded for now
 //do we want a tooltip for the grid with each album's name and artist?

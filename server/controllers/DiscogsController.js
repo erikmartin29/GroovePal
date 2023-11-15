@@ -34,6 +34,39 @@ const getCollection = async (ctx) => {
     }
 };
 
+const getRelease = async (ctx) => {
+    try {
+        // check if releaseID parameter is present
+        const releaseID = ctx.params.releaseID;
+        if (releaseID === undefined) { 
+            ctx.status = 400;
+            ctx.body = { error: "ReleaseID parameter is missing" };
+            return;
+        }
+
+        // query Discogs using database endpoint
+        var db = new Discogs(ctx.request.body.credentials).database();
+
+        var releaseData = await new Promise((resolve, reject) => {
+            db.getRelease(releaseID, function(err, data){
+                if ( err )
+                    reject(err);
+                else
+                    resolve(data);
+            });
+        });
+        
+        // wait for the getRelease call to complete before continuing
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        ctx.body = releaseData;
+        ctx.status = 200;
+    } catch (error) {
+        console.error('Error in getRelease:', error);
+        ctx.status = 500;
+        ctx.body = 'Internal Server Error';
+    }
+};
+
 const getReleaseImage = async (ctx) => {
     try {
         // check if releaseID parameter is present
@@ -45,7 +78,6 @@ const getReleaseImage = async (ctx) => {
         }
 
         // query Discogs using collection endpoint
-        // TODO: pass accessData from OAuth into Discogs constructor
         var db = new Discogs(ctx.request.body.credentials).database();
 
         var imgUrl = await new Promise((resolve, reject) => {
@@ -59,11 +91,8 @@ const getReleaseImage = async (ctx) => {
         
         // wait for the getRelease call to complete before continuing
         await new Promise(resolve => setTimeout(resolve, 1000));
-
         ctx.body = imgUrl;
         ctx.status = 200;
-        //console.log(ctx.status)
-        //console.log(ctx.body)
     } catch (error) {
         console.error('Error in getReleaseImage:', error);
         ctx.status = 500;
@@ -71,4 +100,4 @@ const getReleaseImage = async (ctx) => {
     }
 };
 
-module.exports = { getCollection, getReleaseImage };
+module.exports = { getCollection, getRelease, getReleaseImage };
