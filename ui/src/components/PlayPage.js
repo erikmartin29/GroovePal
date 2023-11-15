@@ -5,12 +5,56 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+
+
 const handleDelete = () => {
     console.log("delete was clicked");
 }
 
 const handleClick = () => {
     console.log("Tag was clicked");
+}
+
+const TracklistTable = (props) => {
+    
+    //props will go here
+    //onclick to change to the play page with the album info
+    const {tracks} = props
+
+    console.log("TRACKS", tracks)
+    
+    return (
+    <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+      <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
+        <TableHead>
+                <TableRow></TableRow>
+        </TableHead>
+        <TableBody>
+          {
+          tracks.map((track) => (
+            <TableRow
+              key={track.title}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell>
+                { track.title }
+              </TableCell>
+              <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
+            </TableRow>
+          ))
+          }
+        </TableBody>
+
+      </Table>
+    </TableContainer>
+  );
 }
 
 const Tag = (props) => {
@@ -178,6 +222,7 @@ export default function PlayPage() {
         let rel = await getDiscogsRelease(albumID, username);
         setRelease(rel.data);
         setTagsList(rel.data.genres); //change later
+        console.log(rel.data.tracklist)
         let relImg = await getDiscogsReleaseImage(albumID, username);
         setReleaseImg(relImg.data);
         setLoading(false);
@@ -287,20 +332,22 @@ export default function PlayPage() {
                             <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
             <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
+                        
                         <Box sx={{
                             width: '75%',
-                            height: '90%',
+                            height: '500px',
                             display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            justifyContent: 'top',
+                            alignItems: 'top',
                             mx: 2,
                             my: 2,
-                        bgcolor: '#e6e2d3',
-                        boxShadow: 8,
-
+                            bgcolor: '#ffffff',
+                            boxShadow: 0,
                             border: 1
                         }}>
-                            Track List
+                            
+                        <TracklistTable tracks={release.tracklist} />
+                            
                         </Box>
                     </Container>
             <Typography sx={{
