@@ -1,10 +1,17 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider } from '@mui/material';
-
-import { useNavigate } from 'react-router-dom';
+import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
+import { useNavigate, useParams } from 'react-router-dom';
+import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 
-const collectionData = require ("./discogs_releases_example.json");
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 
 const handleDelete = () => {
@@ -15,12 +22,45 @@ const handleClick = () => {
     console.log("Tag was clicked");
 }
 
+const TracklistTable = (props) => {
+    
+    //props will go here
+    //onclick to change to the play page with the album info
+    const {tracks} = props
+
+    console.log("TRACKS", tracks)
+    
+    return (
+    <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+      <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
+        <TableHead>
+                <TableRow></TableRow>
+        </TableHead>
+        <TableBody>
+          {
+          tracks.map((track) => (
+            <TableRow
+              key={track.title}
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+            >
+              <TableCell>
+                { track.title }
+              </TableCell>
+              <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
+            </TableRow>
+          ))
+          }
+        </TableBody>
+
+      </Table>
+    </TableContainer>
+  );
+}
+
 const Tag = (props) => {
     
-    const {index} = props;
-    
-    let title = "Tag " + `${index+1}`;
-    
+    const {item, index} = props;
+    let title = item;
     let disable = "";
     
     return (
@@ -140,7 +180,7 @@ const TagDisplay = (props) => {
                         m: 2,
                     }}>
                         {
-                            tagsList.map((cur, Index) => <Tag index={Index} />)
+                            tagsList.map((item, idx) => <Tag item={item} index={idx} />)
                         }
                 </Grid>
                 <Button
@@ -169,6 +209,28 @@ export default function PlayPage() {
     //need to display track list
     //how do we want to do tags? (use mui Chips?)
     //need to implement actual
+
+    const [loading, setLoading] = useState(true);
+    const { username } = AuthConsumer();
+    const { albumID } = useParams();
+
+    const [release, setRelease] = useState([]);
+    const [releaseImg, setReleaseImg] = useState([]);
+
+    const getData = async (release) => {
+        console.log(`fetching ${release}`)
+        let rel = await getDiscogsRelease(albumID, username);
+        setRelease(rel.data);
+        setTagsList(rel.data.genres); //change later
+        console.log(rel.data.tracklist)
+        let relImg = await getDiscogsReleaseImage(albumID, username);
+        setReleaseImg(relImg.data);
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        getData(albumID);
+    }, [albumID]);
     
     //hard coding this for now, needs to be given to this page by Collection Page
     let rowIdx = 0
@@ -191,9 +253,14 @@ export default function PlayPage() {
     //<Editor allTags={allTags} />
     
     let navigate = useNavigate();
+
+    // TODO: make this look pretty
+    if(loading) {
+        return ( <Fragment> loading </Fragment> );
+    }
     
     //#353939
-    return (
+    return ( 
             <Fragment>
                 <Box sx={{
                     width: '100%',
@@ -238,8 +305,8 @@ export default function PlayPage() {
                             boxShadow: 8,
                                 border: 1
                             }}>
-                                <img src={ collectionData.releases[rowIdx].basic_information.thumb }
-                                    alt={ collectionData.releases[rowIdx].basic_information.title }
+                                <img src={ releaseImg || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
+                                    alt={ release.title}
                                 width="175" height="175" />
                             </Box>
                             <Box sx={{
@@ -256,30 +323,31 @@ export default function PlayPage() {
                                 border: 1
                             }}>
                                 <p>
-                                    Album: {collectionData.releases[rowIdx].basic_information.title}
+                                    { release.title }
                                     <br />
-                                    Artists:
+                                    { release.artists[0].name }
                                     <br />
-                                    anything else?
                                 </p>
                             </Box>
                             <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
             <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
+                        
                         <Box sx={{
                             width: '75%',
-                            height: '90%',
+                            height: '500px',
                             display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                            justifyContent: 'top',
+                            alignItems: 'top',
                             mx: 2,
                             my: 2,
-                        bgcolor: '#e6e2d3',
-                        boxShadow: 8,
-
+                            bgcolor: '#ffffff',
+                            boxShadow: 0,
                             border: 1
                         }}>
-                            Track List
+                            
+                        <TracklistTable tracks={release.tracklist} />
+                            
                         </Box>
                     </Container>
             <Typography sx={{
