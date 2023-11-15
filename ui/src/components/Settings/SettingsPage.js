@@ -2,10 +2,13 @@ import { useState, useEffect, useRef } from 'react';
 import { Box, Stack, Button } from '@mui/material';
 import { discogs_oauth, lastfm_oauth } from '../../utils/api_provider/api_provider';
 import { AuthConsumer } from '../../context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function SettingsPage() {
 
     const { username } = AuthConsumer();
+
+    let navigate = useNavigate();
 
     const [ discogsUrl, setDiscogsUrl ] = useState('');
     const [ lastfmUrl, setLastfmUrl ] = useState('');
@@ -36,6 +39,11 @@ export default function SettingsPage() {
             <Stack direction='column'>
                 <Button onClick={ () => handlePopup(discogsUrl)}>Link Discogs</Button>
                 <Button onClick={ () => handlePopup(lastfmUrl)}>Link LastFM</Button>
+                <Button 
+                    variant="contained" 
+                    sx={{ mt: 2, mb: 3 }}
+                    onClick={() => navigate('/', {replace: true})}
+                >Back To Home</Button>
             </Stack>
         </Box>
     );

@@ -1,11 +1,16 @@
-import { useState } from 'react';
-import { Box, TextField, Typography, Button, Grid } from "@mui/material";
+import { Fragment, useState } from 'react';
+import { Box, TextField, Typography, Button, Stack, Input, ThemeProvider } from "@mui/material";
+import { blue } from '@mui/material/colors';
 
 import { authenticateLastFM, signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
+import { darkGreen, lightGreen } from '../ColorPalette';
 
 export default function SignUp() {
+    
+    //Claire's Changes and Notes:
+    //made the format look like the login page for uniformity, and added a back button to return to the basic homepage
     
     const [ newAccount, setNewAccount ] = useState({});
     let navigate = useNavigate();
@@ -51,8 +56,39 @@ export default function SignUp() {
     };
     
     return (
-        <Box sx={{ margin: 'auto', alignItems: 'center', textAlign: 'center', display: 'inline-block'}}>
-            <Typography component="h1" sx={{ fontSize: '23px', mt: '15px', width: 'auto'  }} >New Account</Typography>
+            <Fragment>
+            <Box sx={{
+                height: 900,
+                bgcolor: '#353939',
+                border: 1,
+                borderColor: '#353939'
+            }}>
+                <Box>
+                    <Typography component="h1"
+                        sx={{
+                            margin: 'auto',
+                            mt: 10,
+                            alignItems: 'center',
+                            textAlign: 'center',
+                            fontSize: '32px',
+                            color: 'white'
+                        }}>
+                            New Account
+                    </Typography>
+                </Box>
+            <Box sx={{
+                margin: 'auto',
+                mt: 10,
+                padding: 5,
+                width: 200,
+                alignItems: 'center',
+                borderWidth: 1,
+                borderStyle: 'solid',
+                borderRadius: '10px',
+                borderColor: 'black',
+                bgcolor: '#e6e2d3',
+                boxShadow: 8
+            }}>
             <Box 
                 component="form" 
                 sx={{ 
@@ -62,48 +98,59 @@ export default function SignUp() {
                 autoComplete="off"
                 onSubmit={handleSubmit}
             >
-                <Grid container columns={2}>
-                    <Grid item xs={2}>
-                        <TextField 
-                            require="true" 
-                            id="user_id"  
-                            type="text" 
-                            label="Username" 
-                            onChange={ e => setNewAccount({ ...newAccount, user_id: e.target.value })}
-                        />    
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField 
-                            require="true" 
-                            id="user_pass" 
-                            type="password" 
-                            label="Password"
-                            onChange={ e => setNewAccount({ ...newAccount, user_pass: e.target.value })}
-                        />    
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField 
-                            require="true" 
-                            id="user_fname" 
-                            type="text" 
-                            label="Firstname" 
-                            onChange={ e => setNewAccount({ ...newAccount, user_fname: e.target.value })}
-                        />    
-                    </Grid>
-                    <Grid item xs={2}>
-                        <TextField 
-                            require="true" 
-                            id="user_lname" 
-                            type="text" 
-                            label="Lastname" 
-                            onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
-                        />    
-                    </Grid>
-                    <Grid item xs={2}>
-                        <Button type='submit' variant='contained'>Create</Button>
-                    </Grid>
-                </Grid>
+                <Stack>
+                    <Input
+                        placeholder="username"
+                        sx={{ magin: 2, mb: 2 }}
+                        required={true}
+                        onChange={ e => setNewAccount({ ...newAccount, user_id: e.target.value })}
+                    />
+                    <Input
+                        placeholder="password"
+                        type="password"
+                        sx={{ mt: 2, mb: 2, width: '100%' }}
+                        required={true}
+                        onChange={ e => setNewAccount({ ...newAccount, user_pass: e.target.value })}
+                    />
+                    <Input
+                        placeholder="firstname"
+                        sx={{ mt: 2, mb: 2 }}
+                        required={true}
+                        onChange={ e => setNewAccount({ ...newAccount, user_fname: e.target.value })}
+                    />
+                    <Input
+                        placeholder="lastname"
+                        sx={{ mt: 2 }}
+                        required={true}
+                        onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
+                    />
+            <ThemeProvider theme={lightGreen}>
+                    <Button
+                        sx={{
+                            mt: 3,
+                            bgcolor: '#82B74B'
+                        }}
+                            type='submit'
+                            variant='contained'
+                            color="lightGreen"
+                    >
+                        Create
+                    </Button>
+            </ThemeProvider>
+                    <Button
+                        sx={{
+                            color: 'black',
+                            fontWeight: 'bold',
+                            mt: 2,
+                        }}
+                        onClick={() => navigate('/', {replace:true})}
+                    >
+                        Back
+                    </Button>
+                </Stack>
             </Box>
         </Box>
+            </Box>
+        </Fragment>
     );
 }
