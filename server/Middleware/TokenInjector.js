@@ -48,24 +48,33 @@ async function discogs_middleware (ctx, next) {
 async function lastfm_middleware (ctx, next) {
     const { user_id } = ctx.request.params;
     if ( user_id !== undefined ) {
-        SecretsController.getLastfmSecretKey({ user_id })
-            .then( creds => {
-                ctx.request.body = {
-                    ...ctx.request.body,
-                    credentials: creds
-                };
-                return next();
-            })
-            .catch( error => {
-                console.log(`Error: ${error}`);
-                ctx.status = 500;
-                ctx.body = error;
-            });
+        // get credentials from database
+        try {
+            const creds = await SecretsController.getLastfmSecretKey({user_id})
+            console.log(creds);
+            // insert in to request body
+            ctx.request.body = {
+                ...ctx.request.body,
+                credentials: {
+                    session_user: creds.session_user,
+                    session_key: creds.session_key,
+                }
+            };
+            console.log('lastfm credentials retrived');
+        } catch (error) {
+            console.log(`Error: ${error}`);
+            ctx.status = 500;
+            ctx.body = error;
+            return; // don't continue to next middleware
+        }
     } else {
-        // internal server error -> don't continue to data endpoint
         ctx.body = 'no user id provided';
-        ctx.status = 500; 
+        ctx.status = 500;
+        return;
+
     }
+    await next();
+    console.log(`status: ${ctx.status}`);
 }
 
 module.exports =  {

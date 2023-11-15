@@ -1,5 +1,6 @@
 const lastfm_provider = require('../../providers/lastfm.provider');
 const SecretsController = require('../../controllers/SecretsController');
+const TokenInjector = require('../../Middleware/TokenInjector');
 const lastfmRouter = require('koa-router')({
     prefix: '/lastfm'
 });
@@ -24,5 +25,7 @@ lastfmRouter.get('/callback/:user_id/', async (ctx) => {
         ctx.status = 500
     });
 });
+
+lastfmRouter.post('/scrobble/:user_id', TokenInjector.lastfm_middleware, lastfm_provider.scrobble); 
 
 module.exports = lastfmRouter;

@@ -43,13 +43,46 @@ const lfm_callback = (ctx) => {
     });
 }
 
-const scrobble = (ctx) => {
+/*
+    * srobbles need to contain artist, track, timestamp
+    */
+const scrobble = async (ctx) => {
     return new Promise( (resolve, reject) => {
         // create a new session?        
+        let sesh = new LastfmAPI({
+            'api_key': process.env.LASTFM_API_KEY,
+            'secret': process.env.LASTFM_API_SECRET
+        });
+        sesh.setSessionCredentials(ctx.request.body.credentials.session_user, ctx.request.body.credentials.session_key)
+
+        const scrobble_list = ctx.request.body.scrobble_list;
+
+        const log = async (track_list) => {
+            return await Promise.all(track_list.map( (track) => {
+                return new Promise((resolve, reject) => {
+                    sesh.track.scrobble(track, (err, scrobbles) => {
+                        if (err) {
+                            reject(err);
+
+                        }
+                        resolve(scrobbles);
+                    })   
+                })         
+            }))
+        };
+
+        log(scrobble_list).then( scrobbles => {
+            ctx.status = 200;
+            ctx.body = scrobbles;
+        }).catch( error => {
+            ctx.status = 201;
+            ctx.body = `one or more songs were not scrobbled: ${error}`;
+        }).finally( () => resolve());
     });
 }
 
 module.exports = {
     lfm_oauth,
     lfm_callback,
+    scrobble,
 };
