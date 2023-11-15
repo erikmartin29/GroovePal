@@ -48,6 +48,25 @@ async function discogs_middleware (ctx, next) {
 async function lastfm_middleware (ctx, next) {
     const { user_id } = ctx.request.params;
     if ( user_id !== undefined ) {
+        // get credentials from database
+        try {
+            const creds = await SecretsController.getLastfmSecretKey({user_id})
+            // insert in to request body
+            ctx.request.body = {
+                ...ctx.request.body,
+                credentials: {
+                    
+                },
+            };
+            console.log('lastfm credentials retrived');
+        } catch (error) {
+            console.log(`Error: ${error}`);
+            ctx.status = 500;
+            ctx.body = error;
+            return; // don't continue to next middleware
+        }
+
+
         SecretsController.getLastfmSecretKey({ user_id })
             .then( creds => {
                 ctx.request.body = {

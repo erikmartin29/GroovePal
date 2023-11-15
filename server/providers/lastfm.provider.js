@@ -43,13 +43,33 @@ const lfm_callback = (ctx) => {
     });
 }
 
+/*
+    * srobbles need to contain artist, track, timestamp
+    */
 const scrobble = (ctx) => {
     return new Promise( (resolve, reject) => {
         // create a new session?        
+        let sesh = new LastfmAPI({
+            'api_key': process.env.LASTFM_API_KEY,
+            'secret': process.env.LASTFM_API_SECRET
+        });
+        sesh.setSessionCredentials(ctx.request.credentials.session_user, ctx.request.credentials.session_key)
+
+        const scrobble_list = ctx.request.body.scrobble_list;
+
+        for ( let scrobb of scrobble_list ) {
+            sesh.track.scrobble(scrobb, (err, scrobbles) => {
+                if (err) { 
+                    console.log(err)
+                }
+                console.log(scrobbles);
+            });
+        }
     });
 }
 
 module.exports = {
     lfm_oauth,
     lfm_callback,
+    scrobble,
 };
