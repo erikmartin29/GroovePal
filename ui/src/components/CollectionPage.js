@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography, CircularProgress, Tooltip } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress } from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 
@@ -35,12 +35,9 @@ const Cell = (props) => {
                 navigate(`/play/${item.id}`)
                 }}
                 >
-                <Tooltip title={`${item.basic_information.artists[0].name} - ${item.basic_information.title}`} >
                     <img src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
                         width="175" height="175" />
-                
-                </Tooltip>
                 </Box>
                 <Box>
                     <Typography sx={{
