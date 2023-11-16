@@ -11,6 +11,11 @@ export const axiosClient = axios.create({
     withCredentials: true // allow the browser to send cookies to the API domain
 });
 
+// check that token has not expired
+export function keepAlive() {
+    return axiosClient.get('/validate/')
+}
+
 export function postAuth(payload) {
     return axiosClient.post('/login/', payload);
 }
