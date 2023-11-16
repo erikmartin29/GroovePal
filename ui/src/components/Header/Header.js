@@ -1,10 +1,7 @@
 import { AppBar, Toolbar, Box, Typography, Button, Tooltip, Menu, MenuItem, ThemeProvider } from "@mui/material";
 import { Fragment, useState } from "react";
-
 import { useNavigate } from 'react-router-dom';
-
 import { AuthConsumer } from "../../context/AuthProvider";
-
 import { darkGreen, lightGreen, headerBrown } from '../ColorPalette';
 
 
@@ -47,7 +44,7 @@ export default function Header() {
                     justifyContent: 'space-between',
                     bgcolor: '#b9936c'
                 }}>
-                    <h2>Vinyl Scrobbler</h2>
+                    <h2>GroovePal</h2>
             
             <Box>
             <ThemeProvider theme={headerBrown}>

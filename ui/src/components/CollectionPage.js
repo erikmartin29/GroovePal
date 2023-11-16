@@ -23,16 +23,16 @@ const Cell = (props) => {
                 <Container>
                 <Box sx={{
                     flexGrow: 1,
-                    minWidth: 175,
-                    minHeight: 175,
+                    width: 175,
+                    height: 175,
                     bgcolor: 'white',
                     boxShadow: 8,
                     border: 1
                 }}
-            onClick={() => {
+                onClick={() => {
                 console.log(`${item.basic_information.title}  was clicked`);
                 navigate(`/play/${item.id}`)
-            }}
+                }}
                 >
                     <img src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
@@ -95,20 +95,40 @@ export default function CollectionPage() {
     if ( loading ) 
         return (
             <Box>
-                <CircularProgress />
+                <Box sx={{
+                    width: '100%',
+                    height: '100vh',
+                    bgcolor: '#353939',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    }}> 
+                    <CircularProgress sx={{color:'white'}}/>
+                </Box> 
             </Box>
         )
 
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100%',
                     bgcolor: '#353939',
                     border: 1
                 }}>
+                    {/*temp spacer box for demo*/}
+                    <Box
+                        sx={{
+                        height: 40,
+                        bgcolor: '353939',
+                        }}
+                        >
+                    </Box>
+                    
+                    {/*
+                    //commenting out for demo since its not working
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                     }}>
                         <TextField
                             sx={{
@@ -122,6 +142,7 @@ export default function CollectionPage() {
                             variant="filled"
                         >
                         </TextField>
+                        
                         <Button sx={{
                             bgcolor: '#e6e2d3',
                             color: 'black',
@@ -133,7 +154,7 @@ export default function CollectionPage() {
                         color="inherit">
                             Add Album
                         </Button>
-                    </Box>
+                    </Box> */}
                     <Container sx={{
                         display: 'flex',
                     }}>

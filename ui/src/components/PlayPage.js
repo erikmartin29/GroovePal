@@ -293,7 +293,13 @@ export default function PlayPage() {
 
     // TODO: make color match theme, increase size and center 
     if(loading) {
-        return ( <Box> <CircularProgress /> </Box> );
+        return ( <Box sx={{
+                    width: '100%',
+                    height: '100vh',
+                    bgcolor: '#353939',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}> <CircularProgress sx={{color:'white'}} /> </Box> );
     }
     
     //#353939
