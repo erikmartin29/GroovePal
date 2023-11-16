@@ -42,9 +42,9 @@ const Cell = (props) => {
                     <Typography sx={{
                         color: 'white'
                     }}>
-                        {item.basic_information.title}
+                        {/*item.basic_information.title*/}
                         <br />
-                        {item.basic_information.artists[0].name}
+                        {/*item.basic_information.artists[0].name*/}
                     </Typography>
                 </Box>
             </Container>
@@ -122,7 +122,7 @@ export default function CollectionPage() {
                         }}
                         >
                     </Box>
-                    
+
                     {/*
                     //commenting out for demo since its not working
                     <Box sx={{
@@ -154,7 +154,8 @@ export default function CollectionPage() {
                         color="inherit">
                             Add Album
                         </Button>
-                    </Box> */}
+                    </Box>
+                    */}
                     <Container sx={{
                         display: 'flex',
                     }}>

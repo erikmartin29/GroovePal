@@ -38,7 +38,7 @@ export default function LoginPage() {
             bgcolor: '#353939',
             border: 1,
             borderColor: '#353939',
-            height: 900
+            height: '100vh'
         }}>
         <Box>
             <Typography component='h1' 

@@ -38,74 +38,79 @@ export default function Header() {
                 flexGrow: 1,
             }}>
             <AppBar position='static'>
-                
                 <Toolbar sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     bgcolor: '#b9936c'
                 }}>
                     <h2>GroovePal</h2>
-            
-            <Box>
-            <ThemeProvider theme={headerBrown}>
-            <Button
-                sx={{
-                    color: 'white',
-                }}
-                color="inherit"
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-              >
-                {username}
-              </Button>
-            </ThemeProvider>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                  'aria-labelledby': 'basic-button',
-                }}
-                >
-                <MenuItem onClick={() => {
-                    handleClose();
-                    navigate('/home', {replace: true});
-                }}>
-                    Home
-                </MenuItem>
-            <MenuItem onClick={() => {
-                handleClose();
-                navigate('/profile', {replace: true})
-            }}
-            >
-                Profile
-            </MenuItem>
-            <MenuItem onClick={() => {
-                handleClose();
-                navigate('/collection', {replace: true})
-            }}
-                >
-                    Collection
-                </MenuItem>
-            <MenuItem onClick={() => {
-                handleClose();
-                navigate('/settings', {replace: true})
-            }}
-            >
-                Settings
-            </MenuItem>
-                <MenuItem onClick={() => {
-                    logout();
-                    handleClose();
-                }}>
-                    Logout
-                </MenuItem>
-              </Menu>
-            </Box>
+                    <Box 
+                        sx={{
+                            width:'80%',
+                            display: 'flex',
+                            justifyContent: 'space-evenly'
+                        }}
+                    >
+                    <ThemeProvider theme={headerBrown}>
+                    <Button
+                        sx={{
+                            color: 'white',
+                        }}
+                        color="inherit"
+                        id="basic-button"
+                        aria-controls={open ? 'basic-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+
+                    >
+                        {username}
+                    </Button>
+                    </ThemeProvider>
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                            'aria-labelledby': 'basic-button',
+                            }}
+                            >
+                            <MenuItem onClick={() => {
+                                handleClose();
+                                navigate('/home', {replace: true});
+                            }}>
+                                Home
+                            </MenuItem>
+                        <MenuItem onClick={() => {
+                            handleClose();
+                            navigate('/profile', {replace: true})
+                        }}
+                        >
+                            Profile
+                        </MenuItem>
+                        <MenuItem onClick={() => {
+                            handleClose();
+                            navigate('/collection', {replace: true})
+                        }}
+                            >
+                                Collection
+                            </MenuItem>
+                        <MenuItem onClick={() => {
+                            handleClose();
+                            navigate('/settings', {replace: true})
+                        }}
+                        >
+                            Settings
+                        </MenuItem>
+                            <MenuItem onClick={() => {
+                                logout();
+                                handleClose();
+                            }}>
+                                Logout
+                            </MenuItem>
+                        </Menu>
+                    </Box>
             
                     <Box sx={{
                         width: 250,
@@ -113,34 +118,36 @@ export default function Header() {
                         display: 'flex',
                         justifyContent: 'space-evenly'
                     }}>
-            <ThemeProvider theme={darkGreen}>
-                        { authed ? <></> : (
-                        <Button sx={{
-                            bgcolor: '#618343',
-                            color: 'black'
-                        }}
-                            variant="contained"
-                            color="darkGreen"
-                            onClick={() => navigate('/login', {replace: true})}
-                        >
-                            Login
-                        </Button>
-                        )}
-            </ThemeProvider>
-            <ThemeProvider theme={lightGreen}>
-                        { authed ? <></> : (
-                        <Button sx={{
-                            bgcolor: '#82B74B',
-                            color: 'black'
-                        }}
-                            variant="contained"
-                            color="lightGreen"
-                            onClick={() => navigate('/signup', {replace: true})}
-                        >
-                            Sign Up
-                        </Button>
-                        )}
-            </ThemeProvider>
+                        <ThemeProvider theme={darkGreen}>
+                                    { authed ? <></> : (
+                                    <Button 
+                                        sx={{
+                                        bgcolor: '#618343',
+                                        color: 'black'
+                                        }}
+                                        variant="contained"
+                                        color="darkGreen"
+                                        onClick={() => navigate('/login', {replace: true})}
+                                    >
+                                        Login
+                                    </Button>
+                                    )}
+                        </ThemeProvider>
+                        <ThemeProvider theme={lightGreen}>
+                                    { authed ? <></> : (
+                                    <Button 
+                                        sx={{
+                                        bgcolor: '#82B74B',
+                                        color: 'black'
+                                        }}
+                                        variant="contained"
+                                        color="lightGreen"
+                                        onClick={() => navigate('/signup', {replace: true})}
+                                    >
+                                        Sign Up
+                                    </Button>
+                                    )}
+                        </ThemeProvider>
                     </Box>
                 </Toolbar>
             </AppBar>

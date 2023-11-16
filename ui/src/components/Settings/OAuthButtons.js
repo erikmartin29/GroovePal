@@ -37,13 +37,14 @@ export default function OAuthButtons() {
     return loading ? <span>loading</span> : (
         <Box>
             <Stack direction='column'>
-                <Button onClick={ () => handlePopup(discogsUrl)}>Link Discogs</Button>
-                <Button onClick={ () => handlePopup(lastfmUrl)}>Link LastFM</Button>
                 <Button 
                     variant="contained" 
                     sx={{ mt: 2, mb: 3 }}
-                    onClick={() => navigate('/', {replace: true})}
-                >Back To Home</Button>
+                    onClick={ () => handlePopup(discogsUrl)}>Link Discogs</Button>
+                <Button 
+                    variant="contained"
+                    sx={{ mt: 2, mb: 3 }}
+                    onClick={ () => handlePopup(lastfmUrl)}>Link LastFM</Button>
             </Stack>
         </Box>
     );
