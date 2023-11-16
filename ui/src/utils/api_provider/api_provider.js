@@ -15,7 +15,8 @@ export const axiosClient = axios.create({
 axiosClient.interceptors.response.use(
     (response) => response,
     (error) => { 
-        if ( error.respons.status === 401 ) {
+        console.log('I see you encountered an error');
+        if ( error.response.status === 401 ) {
             window.location.href = '/login'
         }
     return Promise.reject(error);
@@ -59,4 +60,7 @@ export function getDiscogsReleaseImage(releaseID, username) {
     return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
 }
 
+export function bulkScrobble(username, track_list) {
+    return axiosClient.post(`/lastfm/scrobble`, { user_id: username, scrobble_list: track_list })
+}
 
