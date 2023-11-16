@@ -113,7 +113,8 @@ export default function CollectionPage() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: '100%',
+                    height: '100vh',
+                    maring: 'auto',
                     bgcolor: '#353939',
                     border: 1
                 }}>
