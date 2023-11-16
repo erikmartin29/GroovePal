@@ -37,7 +37,8 @@ export default function Header() {
     return (
             <Fragment>
             <Box sx={{
-                flexGrow: 1
+                display: 'block',
+                flexGrow: 1,
             }}>
             <AppBar position='static'>
                 
@@ -116,6 +117,7 @@ export default function Header() {
                         justifyContent: 'space-evenly'
                     }}>
             <ThemeProvider theme={darkGreen}>
+                        { authed ? <></> : (
                         <Button sx={{
                             bgcolor: '#618343',
                             color: 'black'
@@ -126,8 +128,10 @@ export default function Header() {
                         >
                             Login
                         </Button>
-                        </ThemeProvider>
+                        )}
+            </ThemeProvider>
             <ThemeProvider theme={lightGreen}>
+                        { authed ? <></> : (
                         <Button sx={{
                             bgcolor: '#82B74B',
                             color: 'black'
@@ -138,6 +142,7 @@ export default function Header() {
                         >
                             Sign Up
                         </Button>
+                        )}
             </ThemeProvider>
                     </Box>
                 </Toolbar>
