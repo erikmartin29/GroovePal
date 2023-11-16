@@ -29,6 +29,7 @@ const Cell = (props) => {
                     boxShadow: 8,
                     border: 1
                 }}
+
                 onClick={() => {
                 console.log(`${item.basic_information.title}  was clicked`);
                 navigate(`/play/${item.id}`)
@@ -114,7 +115,6 @@ export default function CollectionPage() {
             <Fragment>
                 <Box sx={{
                     height: '100vh',
-                    maring: 'auto',
                     bgcolor: '#353939',
                     border: 1
                 }}>
