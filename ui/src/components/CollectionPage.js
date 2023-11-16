@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress } from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
-import { getDiscogsCollection, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
+import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -19,11 +19,12 @@ const Cell = (props) => {
     const {item ,rowIdx, navigate} = props
     
     return (
-            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={1}>
+            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Container>
                 <Box sx={{
-                    width: 175,
-                    height: 175,
+                    flexGrow: 1,
+                    minWidth: 175,
+                    minHeight: 175,
                     bgcolor: 'white',
                     boxShadow: 8,
                     border: 1
@@ -61,8 +62,12 @@ export default function CollectionPage() {
 
     const [collection, setCollection] = useState([]);
     const { username } = AuthConsumer();
+    const [ loading, setLoading ] = useState(true);
     
     let navigate = useNavigate();
+
+    // note: simplified api call, now that we dont need to 
+    // explicity request the images
 
     const getData = async (username) => {
         let col = await getDiscogsCollection(username)
@@ -71,13 +76,28 @@ export default function CollectionPage() {
                let release = col.data["releases"][i];
                tmpArr.push(release)
                setCollection(tmpArr);
+               setLoading(false);
         }
    }
 
-   useEffect(() => {
-       getData(username);
-   }, [username]);
+    useEffect(() => {
+        //getData(username);
+        getDiscogsCollection(username).then( res => {
+            console.log(res);
+            setCollection(res.data['releases']);
+        }).catch( error => {
+            console.log(error);
+        }).finally( () => {
+            setLoading(false);
+        })
+    }, [username]);
 
+    if ( loading ) 
+        return (
+            <Box>
+                <CircularProgress />
+            </Box>
+        )
 
     return (
             <Fragment>
