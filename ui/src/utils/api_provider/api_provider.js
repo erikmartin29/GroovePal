@@ -19,8 +19,8 @@ axiosClient.interceptors.response.use(
         console.log('I see you encountered an error');
         const { logout } = AuthConsumer();
         if ( error.response.status === 401 ) {
-            window.location.href = '/login'
             logout();
+            window.location.href = '/login'
         }
     return Promise.reject(error);
     }
