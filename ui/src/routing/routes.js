@@ -8,6 +8,11 @@ import PlayPage from '../components/PlayPage';
 
 const routes = [
     {
+        href: '/home',
+        component: <UserHome />,
+        protected: true,
+    },
+    {
         href: '/',
         component: <UserHome />,
         protected: true,

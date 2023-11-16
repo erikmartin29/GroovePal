@@ -9,7 +9,7 @@ export default function UserHome() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

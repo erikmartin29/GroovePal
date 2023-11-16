@@ -299,13 +299,14 @@ export default function PlayPage() {
                     bgcolor: '#353939',
                     alignItems: 'center',
                     justifyContent: 'center',
-                }}> <CircularProgress sx={{color:'white'}} /> </Box> );
+                }}> <CircularProgress sx={{color:'white'}} /> 
+                </Box> );
     }
     
     //#353939
     return ( 
             <Fragment>
-                <Box sx={{ width: '100%', height: 900, bgcolor: '#353939'}}>
+                <Box sx={{ width: '100%', height: '100vh', bgcolor: '#353939'}}>
                     <Box sx={{ display: 'flex' }}>
                         <Button sx={{ m: 2 }}
                             variant="contained"
