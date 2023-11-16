@@ -1,6 +1,5 @@
 import SignUp from "../components/SignUp/SignUp";
 import LoginPage from "../components/Login/LoginPage";
-import HomePage from '../components/HomePage/HomePage';
 import UserHome from '../components/HomePage/UserHome';
 import CollectionPage from '../components/CollectionPage';
 import ProfilePage from '../components/ProfilePage';
