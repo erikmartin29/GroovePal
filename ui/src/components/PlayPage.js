@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress } from '@mui/material';
 import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -207,6 +207,7 @@ export default function PlayPage() {
     const [loading, setLoading] = useState(true);
     const { username } = AuthConsumer();
     const { albumID } = useParams();
+    const [ scrobbling, setScrobbling ] = useState(false);
 
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
@@ -217,6 +218,7 @@ export default function PlayPage() {
     }
 
     const buildScrobbleList = () => {
+        setScrobbling(true)
         let start_time = Date.now();
         return release.tracklist.map( (track) => {
             const timestamp = convertToMilliseconds(track.duration);
@@ -229,6 +231,13 @@ export default function PlayPage() {
         });
     }
 
+    // emulate api call w/ timeout
+    const bulkScrobble_mock = () => {
+        setTimeout(() => {
+            setScrobbling(false);
+        }, 5 * 1000)
+    }
+
     const scrobble = () => {
         const scrobble_list = buildScrobbleList();
         console.log(scrobble_list)
@@ -239,6 +248,8 @@ export default function PlayPage() {
             .catch( error => {
                 console.log('error scrobbling', error);
             })
+            .finally( () => setScrobbling(false) )
+        //bulkScrobble_mock();
     }
 
     useEffect(() => {
@@ -286,7 +297,7 @@ export default function PlayPage() {
     }
     
     //#353939
-    return !loading && ( 
+    return ( 
             <Fragment>
                 <Box sx={{ width: '100%', height: 900, bgcolor: '#353939'}}>
                     <Box sx={{ display: 'flex' }}>
@@ -343,7 +354,8 @@ export default function PlayPage() {
                                     { release.artists[0].name }
                                 </Typography>
                                 <Box sx={{margin: 1, textAlign: 'center'}}>
-                                    <Button sx={{ bgcolor: 'brown', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
+                                    <Button disabled={scrobbling} sx={{ bgcolor: 'brown', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
+                                    { scrobbling && <LinearProgress />}
                                 </Box>
                             </Box>
                             <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
@@ -368,6 +380,7 @@ export default function PlayPage() {
             <Typography sx={{
                 color: 'white'
             }}>
+            { /*
             Ideas/Notes:
             <br />
             -liner notes?
@@ -375,6 +388,7 @@ export default function PlayPage() {
             -display back image as well as front
             <br />
             -add title at top of page (not app bar), album title with artist?
+                */}
             </Typography>
                 </Box>
             
