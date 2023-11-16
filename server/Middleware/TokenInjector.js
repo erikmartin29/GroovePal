@@ -47,7 +47,7 @@ async function discogs_middleware (ctx, next) {
 }
 
 async function lastfm_middleware (ctx, next) {
-    const { user_id } = ctx.request.params;
+    const { user_id } = ctx.request.body;
     if ( user_id !== undefined ) {
         // get credentials from database
         try {

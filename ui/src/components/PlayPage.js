@@ -1,10 +1,10 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider } from '@mui/material';
-import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
+import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress } from '@mui/material';
+import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
 import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
-
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,12 +23,16 @@ const handleClick = () => {
 
 const TracklistTable = (props) => {
     const {tracks} = props
+    console.log(tracks);
     
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
       <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
         <TableHead>
-            <TableRow></TableRow>
+            <TableRow>
+                <TableCell sx={{ textAlign: 'start'}}><Typography sx={{ fontWeight: 'bold' }}>Track</Typography></TableCell>
+                <TableCell sx={{ textAlign: 'end' }}><AccessTimeIcon /></TableCell>
+            </TableRow>
         </TableHead>
         <TableBody>
           {tracks.map((track) => (
@@ -94,7 +98,7 @@ const Editor = (props) => {
     
     const {allTags, editting, onClickCallback} = props;
     
-    if (editting == false) {
+    if (editting === false) {
         return (
                 <Fragment>
                 </Fragment>
@@ -142,7 +146,7 @@ const TagDisplay = (props) => {
     
     const {tagsList, editting, onClickCallback} = props;
     
-    if (editting == true) {
+    if (editting === true) {
         return (
                 <Fragment>
                 </Fragment>
@@ -170,7 +174,7 @@ const TagDisplay = (props) => {
                         m: 2,
                     }}>
                         {
-                            tagsList.map((item, idx) => <Tag item={item} index={idx} />)
+                            tagsList.map((item, idx) => <Tag key={idx} item={item} index={idx} />)
                         }
                 </Grid>
                 <Button
@@ -207,20 +211,51 @@ export default function PlayPage() {
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
 
-    const getData = async (release) => {
-        console.log(`fetching ${release}`)
-        let rel = await getDiscogsRelease(albumID, username);
-        setRelease(rel.data);
-        setTagsList(rel.data.genres); //change later
-        console.log(rel.data.tracklist)
-        let relImg = await getDiscogsReleaseImage(albumID, username);
-        setReleaseImg(relImg.data);
-        setLoading(false);
+    const convertToMilliseconds = (timestr) => {
+        const [ minutes, seconds] = timestr.split(':').map(Number);
+        return (minutes*60000) + (seconds+1000);
+    }
+
+    const buildScrobbleList = () => {
+        let start_time = Date.now();
+        return release.tracklist.map( (track) => {
+            const timestamp = convertToMilliseconds(track.duration);
+            start_time += timestamp;
+            return {
+                artist: release['artists'][0]['name'],
+                track: track.title,
+                timestamp: Math.floor(start_time/1000),
+            };
+        });
+    }
+
+    const scrobble = () => {
+        const scrobble_list = buildScrobbleList();
+        console.log(scrobble_list)
+        bulkScrobble(username, scrobble_list)
+            .then( res => {
+                console.log(res);
+            })
+            .catch( error => {
+                console.log('error scrobbling', error);
+            })
     }
 
     useEffect(() => {
+        const getData = async (release) => {
+            console.log(`fetching ${release}`)
+            let rel = await getDiscogsRelease(albumID, username);
+            console.log(rel.data);
+            setRelease(rel.data);
+            setTagsList([...rel.data.genres, ...rel.data.styles]); //change later
+            console.log(rel.data.tracklist)
+            let relImg = await getDiscogsReleaseImage(albumID, username);
+            setReleaseImg(relImg.data);
+            setLoading(false);
+        }
+
         getData(albumID);
-    }, [albumID]);
+    }, [albumID, username]);
     
     //hard coding this for now, needs to be given to this page by Collection Page
     let rowIdx = 0
@@ -228,6 +263,7 @@ export default function PlayPage() {
     //create useState for the array of tags, hard code size for now, figure out dynamics later
     const [tagsList, setTagsList] = useState(blankTags(5));
     const [allTags, setAllTags] = useState(blankTags(10));
+    const [ tracklist, setTrackList ] = useState([]);
     const [editting, setEditting] = useState(false);
     
     //onclickcallbacks for the tag editting buttons
@@ -244,26 +280,17 @@ export default function PlayPage() {
     
     let navigate = useNavigate();
 
-    // TODO: make this look pretty
+    // TODO: make color match theme, increase size and center 
     if(loading) {
-        return ( <Fragment> loading </Fragment> );
+        return ( <Box> <CircularProgress /> </Box> );
     }
     
     //#353939
-    return ( 
+    return !loading && ( 
             <Fragment>
-                <Box sx={{
-                    width: '100%',
-                    height: 900,
-                    bgcolor: '#353939',
-                }}>
-                    <Box sx={{
-                        display: 'flex'
-                    }}>
-                        <Button 
-                            sx={{
-                                m: 2
-                            }}
+                <Box sx={{ width: '100%', height: 900, bgcolor: '#353939'}}>
+                    <Box sx={{ display: 'flex' }}>
+                        <Button sx={{ m: 2 }}
                             variant="contained"
                             color="inherit"
                             onClick={() => navigate('/collection', {replace:true})}
@@ -291,8 +318,8 @@ export default function PlayPage() {
                                 alignItems: 'center',
                                 mt: 2,
                                 ml: 2,
-                            bgcolor: 'white',
-                            boxShadow: 8,
+                                bgcolor: 'white',
+                                boxShadow: 8,
                                 border: 1
                             }}>
                                 <img src={ releaseImg || release.thumb || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
@@ -301,28 +328,27 @@ export default function PlayPage() {
                             </Box>
                             <Box sx={{
                                 width: 230,
-                                height: 100,
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
+                                height: 150,
+                                display: 'block',
                                 mt: 2,
                                 ml: 2,
+                                borderRadius: 3,
                             bgcolor: '#e6e2d3',
                             boxShadow: 8,
-
                                 border: 1
                             }}>
-                                <p>
+                                <Typography sx={{ alignText: 'center', padding: '10px' }}>
                                     { release.title }
-                                    <br />
+                                    <Divider />
                                     { release.artists[0].name }
-                                    <br />
-                                </p>
+                                </Typography>
+                                <Box sx={{margin: 1, textAlign: 'center'}}>
+                                    <Button sx={{ bgcolor: 'brown', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
+                                </Box>
                             </Box>
                             <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
-            <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
+                            <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
-                        
                         <Box sx={{
                             width: '75%',
                             height: '500px',
@@ -335,8 +361,7 @@ export default function PlayPage() {
                             boxShadow: 0,
                             border: 1
                         }}>
-                            
-                        <TracklistTable tracks={release.tracklist} />
+                        <TracklistTable tracks={release.tracklist || []} />
                             
                         </Box>
                     </Container>
