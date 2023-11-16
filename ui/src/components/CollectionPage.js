@@ -139,7 +139,7 @@ export default function CollectionPage() {
                     }}>
             <Grid container spacing={2}>
             {
-                collection.map((item, idx) => <Cell item={item} rowIdx={idx} navigate={navigate}/>)
+                collection.map((item, idx) => <Cell key={idx} item={item} rowIdx={idx} navigate={navigate}/>)
             }
             </Grid>
                     </Container>
