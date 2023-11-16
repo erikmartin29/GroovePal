@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AuthConsumer } from '../../context/AuthProvider';
 
 const url = 'http://localhost:8282';
 
@@ -16,8 +17,10 @@ axiosClient.interceptors.response.use(
     (response) => response,
     (error) => { 
         console.log('I see you encountered an error');
+        const { logout } = AuthConsumer();
         if ( error.response.status === 401 ) {
             window.location.href = '/login'
+            logout();
         }
     return Promise.reject(error);
     }
