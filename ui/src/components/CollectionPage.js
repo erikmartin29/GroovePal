@@ -1,9 +1,9 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Box, Grid, Button, Container, TextField, Typography } from '@mui/material';
+import { AuthConsumer } from '../context/AuthProvider';
+import { getDiscogsCollection, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 
 import { useNavigate } from 'react-router-dom';
-
-const collectionData = require ("./discogs_releases_example.json");
 
 //Claire's Changes and Notes:
 //created the page, procedurally generates the collection grid, some things hardcoded for now
@@ -16,7 +16,7 @@ const Cell = (props) => {
     
     //props will go here
     //onclick to change to the play page with the album info
-    const {rowIdx, navigate} = props
+    const {item ,rowIdx, navigate} = props
     
     return (
             <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={1}>
@@ -29,21 +29,21 @@ const Cell = (props) => {
                     border: 1
                 }}
             onClick={() => {
-                console.log(`${rowIdx} album was clicked`);
-                navigate('/play')
+                console.log(`${item.basic_information.title}  was clicked`);
+                navigate(`/play/${item.id}`)
             }}
                 >
-                    <img src={ collectionData.releases[rowIdx].basic_information.thumb }
-                        alt={ collectionData.releases[rowIdx].basic_information.title }
+                    <img src={ item.basic_information.cover_image }
+                        alt={ item.basic_information.title }
                         width="175" height="175" />
                 </Box>
                 <Box>
                     <Typography sx={{
                         color: 'white'
                     }}>
-                        {collectionData.releases[rowIdx].basic_information.title}
+                        {item.basic_information.title}
                         <br />
-                        {collectionData.releases[rowIdx].basic_information.artists[0].name}
+                        {item.basic_information.artists[0].name}
                     </Typography>
                 </Box>
             </Container>
@@ -58,20 +58,27 @@ const albumDisplay = (num) => {
 }
 
 export default function CollectionPage() {
+
+    const [collection, setCollection] = useState([]);
+    const { username } = AuthConsumer();
     
     let navigate = useNavigate();
-    
-    let numReleases = collectionData.releases.length;
-    
-    const [albumsList, setAlbumsList] = useState(albumDisplay(numReleases));
-    const keys = Object.keys(collectionData.releases[0].basic_information);
-    
-    let tempHolder = collectionData.releases[0].basic_information.thumb;
-    let testEevee = "https://s1.zerochan.net/Eevee.600.2390141.jpg"
-    let testThumb = "http://api-img.discogs.com/FGmDbZ6M9wNPwEAsn0yWz1jzQuI=/fit-in/150x150/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-7781525-1449187274-5587.jpeg.jpg"
-    
-    let rowIdx = 0;
-    
+
+    const getData = async (username) => {
+        let col = await getDiscogsCollection(username)
+        var tmpArr = [];
+        for(let i = 0; i < 10; i++) {
+               let release = col.data["releases"][i];
+               tmpArr.push(release)
+               setCollection(tmpArr);
+        }
+   }
+
+   useEffect(() => {
+       getData(username);
+   }, [username]);
+
+
     return (
             <Fragment>
                 <Box sx={{
@@ -112,7 +119,7 @@ export default function CollectionPage() {
                     }}>
             <Grid container spacing={2}>
             {
-                albumsList.map((cur, Index) => <Cell rowIdx={Index} navigate={navigate}/>)
+                collection.map((item, idx) => <Cell item={item} rowIdx={idx} navigate={navigate}/>)
             }
             </Grid>
                     </Container>

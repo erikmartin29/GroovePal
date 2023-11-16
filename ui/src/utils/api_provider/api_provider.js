@@ -51,6 +51,10 @@ export function getDiscogsCollection(username) {
     return axiosClient.post(`/discogs/data/collection-info`, { user_id: username });
 }
 
+export function getDiscogsRelease(releaseID, username) { 
+    return axiosClient.post(`/discogs/data/release/${releaseID}`, { user_id: username });
+}
+
 export function getDiscogsReleaseImage(releaseID, username) { 
     return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
 }
