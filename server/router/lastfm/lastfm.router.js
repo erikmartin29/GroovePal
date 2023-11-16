@@ -26,6 +26,6 @@ lastfmRouter.get('/callback/:user_id/', async (ctx) => {
     });
 });
 
-lastfmRouter.post('/scrobble/:user_id', TokenInjector.lastfm_middleware, lastfm_provider.scrobble); 
+lastfmRouter.post('/scrobble', TokenInjector.lastfm_middleware, lastfm_provider.scrobble); 
 
 module.exports = lastfmRouter;
