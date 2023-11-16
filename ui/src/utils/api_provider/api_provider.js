@@ -11,6 +11,17 @@ export const axiosClient = axios.create({
     withCredentials: true // allow the browser to send cookies to the API domain
 });
 
+// gracefully handle 401 errors, when jwt token has expired
+axiosClient.interceptors.response.use(
+    (response) => response,
+    (error) => { 
+        if ( error.respons.status === 401 ) {
+            window.location.href = '/login'
+        }
+    return Promise.reject(error);
+    }
+)
+
 // check that token has not expired
 export function keepAlive() {
     return axiosClient.get('/validate/')

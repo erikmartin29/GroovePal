@@ -40,17 +40,13 @@ export default function Header() {
                 flexGrow: 1
             }}>
             <AppBar position='static'>
+                
                 <Toolbar sx={{
                     display: 'flex',
                     justifyContent: 'space-between',
                     bgcolor: '#b9936c'
                 }}>
                     <h2>Vinyl Scrobbler</h2>
-                    <Typography>
-                        { 
-                            authed && ` - ${username}`
-                        }
-                    </Typography>
             
             <Box>
             <ThemeProvider theme={headerBrown}>
@@ -65,7 +61,7 @@ export default function Header() {
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
               >
-                username
+                {username}
               </Button>
             </ThemeProvider>
               <Menu
@@ -105,6 +101,7 @@ export default function Header() {
                 Settings
             </MenuItem>
                 <MenuItem onClick={() => {
+                    logout();
                     handleClose();
                 }}>
                     Logout
@@ -143,13 +140,6 @@ export default function Header() {
                         </Button>
             </ThemeProvider>
                     </Box>
-                    {
-                        authed &&
-                        <Button variant="contained" onClick={logout}
-                        >
-                            Logout
-                        </Button>
-                    }
                 </Toolbar>
             </AppBar>
         </Box>

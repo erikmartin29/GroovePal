@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Box, Typography } from '@mui/material';
+import OAuthButtons from './Settings/OAuthButtons';
 
 export default function Settings() {
     
@@ -20,7 +21,9 @@ export default function Settings() {
                     }}>
                         This is the settings page
                     </Typography>
+                    <OAuthButtons />
                 </Box>
             </Fragment>
     );
 }
+

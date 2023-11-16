@@ -4,7 +4,7 @@ import { discogs_oauth, lastfm_oauth } from '../../utils/api_provider/api_provid
 import { AuthConsumer } from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
-export default function SettingsPage() {
+export default function OAuthButtons() {
 
     const { username } = AuthConsumer();
 

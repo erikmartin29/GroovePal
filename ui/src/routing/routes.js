@@ -10,13 +10,8 @@ import PlayPage from '../components/PlayPage';
 const routes = [
     {
         href: '/',
-        component: <HomePage />,
-        protected: false,
-    },
-    {
-        href: '/home',
         component: <UserHome />,
-        protected: false,
+        protected: true,
     },
     {
         href: '/login',
@@ -31,22 +26,22 @@ const routes = [
     {
         href: '/collection',
         component: <CollectionPage />,
-        protected: false,
+        protected: true,
     },
     {
         href: '/profile',
         component: <ProfilePage />,
-        protected: false,
+        protected: true,
     },
     {
         href: '/settings',
         component: <Settings />,
-        protected: false,
+        protected: true,
     },
     {
         href: '/play',
         component: <PlayPage />,
-        protected: false,
+        protected: true,
     }
 ];
 
