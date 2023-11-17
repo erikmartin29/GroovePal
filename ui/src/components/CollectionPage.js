@@ -99,7 +99,7 @@ export default function CollectionPage() {
             <Box>
                 <Box sx={{
                     width: '100%',
-                    height: '100vh',
+                    height: '100%',
                     bgcolor: '#353939',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -112,28 +112,20 @@ export default function CollectionPage() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: '100vh',
+                    height: '100%',
                     bgcolor: '#353939',
                     border: 1
                 }}>
-                    {/*temp spacer box for demo*/}
-                    <Box
-                        sx={{
-                        height: 40,
-                        bgcolor: '353939',
-                        }}
-                        >
-                    </Box>
 
                     <Box sx={{
                         display: 'flex',
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                         alignItems: 'center',
+                        m: 4
                     }}>
                         <TextField
                             sx={{
                                 width: 400,
-                                m: 2,
                                 bgcolor: 'white',
                                 boxShadow: 3
                             }}
@@ -141,8 +133,7 @@ export default function CollectionPage() {
                             type="search"
                             variant="filled"
                             onChange={(event) => setFilterString(event.target.value.toLowerCase())}
-                        >
-                        </TextField>
+                        />
                     </Box>
                     <Container sx={{
                         display: 'flex',
