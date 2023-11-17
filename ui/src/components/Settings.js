@@ -1,5 +1,6 @@
 import { Fragment } from 'react';
 import { Box, Typography } from '@mui/material';
+import OAuthButtons from './Settings/OAuthButtons';
 
 export default function Settings() {
     
@@ -9,18 +10,15 @@ export default function Settings() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     bgcolor: '#353939'
                 }}>
-                    <Typography sx={{
-                        color: 'white'
-                    }}>
-                        This is the settings page
-                    </Typography>
+                <OAuthButtons />
                 </Box>
             </Fragment>
     );
 }
+

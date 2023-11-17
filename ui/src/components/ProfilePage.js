@@ -10,7 +10,7 @@ export default function ProfilePage() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100vh',
                     bgcolor: '#353939',
                     display: 'flex',
                     justifyContent: 'center',

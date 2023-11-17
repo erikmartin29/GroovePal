@@ -9,7 +9,7 @@ export default function UserHome() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -27,6 +27,9 @@ export default function UserHome() {
                     -suggest records to buy/sell (info gained from Discogs somehow?)
                     <br />
                     -user statistics
+                    <br />
+                    - new note: if user hasn't linked their discogs or lastfm, show an alter here?
+                    <br />
                     </Typography>
                 </Box>
             </Fragment>

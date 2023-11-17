@@ -10,6 +10,7 @@ const consumer_secret = process.env.DISCOGS_SECRET;
 
 async function discogs_middleware (ctx, next) {
     const { user_id } = ctx.request.body;
+    console.log(ctx.request.body);
     console.log('discogs middleware hit');
     if ( user_id !== undefined ) {
         // get credentials database
@@ -46,7 +47,7 @@ async function discogs_middleware (ctx, next) {
 }
 
 async function lastfm_middleware (ctx, next) {
-    const { user_id } = ctx.request.params;
+    const { user_id } = ctx.request.body;
     if ( user_id !== undefined ) {
         // get credentials from database
         try {

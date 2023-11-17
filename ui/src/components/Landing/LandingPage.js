@@ -1,10 +1,7 @@
-import { Fragment } from 'react';
-import { Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { Fragment } from "react";
 
-export default function HomePage() {
+export default function LandingPage() {
 
-    let navigate = useNavigate();
 
     return (
         <Fragment>
@@ -30,5 +27,5 @@ export default function HomePage() {
                 </div>
             </Box>
         </Fragment>
-    );
+    )
 }

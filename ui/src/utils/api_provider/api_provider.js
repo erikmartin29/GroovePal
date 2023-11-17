@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { AuthConsumer } from '../../context/AuthProvider';
 
 const url = 'http://localhost:8282';
 
@@ -10,6 +11,25 @@ export const axiosClient = axios.create({
     },
     withCredentials: true // allow the browser to send cookies to the API domain
 });
+
+// gracefully handle 401 errors, when jwt token has expired
+axiosClient.interceptors.response.use(
+    (response) => response,
+    (error) => { 
+        console.log('I see you encountered an error');
+        const { logout } = AuthConsumer();
+        if ( error.response.status === 401 ) {
+            logout();
+            window.location.href = '/login'
+        }
+    return Promise.reject(error);
+    }
+)
+
+// check that token has not expired
+export function keepAlive() {
+    return axiosClient.get('/validate/')
+}
 
 export function postAuth(payload) {
     return axiosClient.post('/login/', payload);
@@ -43,4 +63,7 @@ export function getDiscogsReleaseImage(releaseID, username) {
     return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
 }
 
+export function bulkScrobble(username, track_list) {
+    return axiosClient.post(`/lastfm/scrobble`, { user_id: username, scrobble_list: track_list })
+}
 

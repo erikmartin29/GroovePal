@@ -1,7 +1,6 @@
 import { Box, Stack, Input, Button, Typography, ThemeProvider } from "@mui/material";
 import { Fragment, useState } from "react";
 import { AuthConsumer } from "../../context/AuthProvider";
-import { blue } from '@mui/material/colors';
 import {
     Navigate,
     useLocation,
@@ -14,6 +13,8 @@ export default function LoginPage() {
     
     //Claire's Changes and Notes:
     //added a back button so a user can go back to the basic homepage
+    
+    // removed the old homepage, moved /home to /
 
     const [ username, setUsername ] = useState("");
     const [ password, setPassword ] = useState("");
@@ -37,7 +38,7 @@ export default function LoginPage() {
             bgcolor: '#353939',
             border: 1,
             borderColor: '#353939',
-            height: 900
+            height: '100vh'
         }}>
         <Box>
             <Typography component='h1' 

@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress, Tooltip } from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
-import { getDiscogsCollection, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
+import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 
 import { useNavigate } from 'react-router-dom';
 
@@ -19,31 +19,35 @@ const Cell = (props) => {
     const {item ,rowIdx, navigate} = props
     
     return (
-            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={1}>
+            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
                 <Container>
                 <Box sx={{
+                    flexGrow: 1,
                     width: 175,
                     height: 175,
                     bgcolor: 'white',
                     boxShadow: 8,
                     border: 1
                 }}
-            onClick={() => {
+
+                onClick={() => {
                 console.log(`${item.basic_information.title}  was clicked`);
                 navigate(`/play/${item.id}`)
-            }}
+                }}
                 >
+                <Tooltip title={`${item.basic_information.artists[0].name} - ${item.basic_information.title}`} >
                     <img src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
                         width="175" height="175" />
+                </Tooltip>
                 </Box>
                 <Box>
                     <Typography sx={{
                         color: 'white'
                     }}>
-                        {item.basic_information.title}
+                        {/*item.basic_information.title*/}
                         <br />
-                        {item.basic_information.artists[0].name}
+                        {/*item.basic_information.artists[0].name*/}
                     </Typography>
                 </Box>
             </Container>
@@ -61,8 +65,12 @@ export default function CollectionPage() {
 
     const [collection, setCollection] = useState([]);
     const { username } = AuthConsumer();
+    const [ loading, setLoading ] = useState(true);
     
     let navigate = useNavigate();
+
+    // note: simplified api call, now that we dont need to 
+    // explicity request the images
 
     const getData = async (username) => {
         let col = await getDiscogsCollection(username)
@@ -71,24 +79,59 @@ export default function CollectionPage() {
                let release = col.data["releases"][i];
                tmpArr.push(release)
                setCollection(tmpArr);
+               setLoading(false);
         }
    }
 
-   useEffect(() => {
-       getData(username);
-   }, [username]);
+    useEffect(() => {
+        //getData(username);
+        getDiscogsCollection(username).then( res => {
+            console.log(res);
+            setCollection(res.data['releases']);
+        }).catch( error => {
+            console.log(error);
+        }).finally( () => {
+            setLoading(false);
+        })
+    }, [username]);
 
+    if ( loading ) 
+        return (
+            <Box>
+                <Box sx={{
+                    width: '100%',
+                    height: '100vh',
+                    bgcolor: '#353939',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    }}> 
+                    <CircularProgress sx={{color:'white'}}/>
+                </Box> 
+            </Box>
+        )
 
     return (
             <Fragment>
                 <Box sx={{
-                    height: 900,
+                    height: '100vh',
                     bgcolor: '#353939',
                     border: 1
                 }}>
+                    {/*temp spacer box for demo*/}
+                    <Box
+                        sx={{
+                        height: 40,
+                        bgcolor: '353939',
+                        }}
+                        >
+                    </Box>
+
+                    {/*
+                    //commenting out for demo since its not working
                     <Box sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
+                        alignItems: 'center',
                     }}>
                         <TextField
                             sx={{
@@ -102,6 +145,7 @@ export default function CollectionPage() {
                             variant="filled"
                         >
                         </TextField>
+                        
                         <Button sx={{
                             bgcolor: '#e6e2d3',
                             color: 'black',
@@ -114,12 +158,13 @@ export default function CollectionPage() {
                             Add Album
                         </Button>
                     </Box>
+                    */}
                     <Container sx={{
                         display: 'flex',
                     }}>
             <Grid container spacing={2}>
             {
-                collection.map((item, idx) => <Cell item={item} rowIdx={idx} navigate={navigate}/>)
+                collection.map((item, idx) => <Cell key={idx} item={item} rowIdx={idx} navigate={navigate}/>)
             }
             </Grid>
                     </Container>

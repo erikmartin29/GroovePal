@@ -2,7 +2,7 @@ var Discogs = require('disconnect').Client;
 
 const getCollection = async (ctx) => {
     try {
-        console.log('creds', ctx.request.body.credentials)
+        console.log('grabbing discogs collection');
         // query Discogs using collection endpoint
         const dis = new Discogs(ctx.request.body.credentials)
         const discogs_user = await dis.getIdentity();
