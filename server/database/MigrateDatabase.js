@@ -26,8 +26,20 @@ const tables = [
         owner_id     VARCHAR(255) NOT NULL,
         FOREIGN KEY (owner_id) REFERENCES users(user_id),
         PRIMARY KEY (owner_id, token)
-    )
+    );
     `,
+    `
+    CREATE TABLE IF NOT EXISTS scrobbles (
+        owner_id      VARCHAR(255)  NOT NULL,
+        track_name    VARCHAR(255)  NOT NULL,
+        track_artist  VARCHAR(255)  NOT NULL,
+        track_album   VARCHAR(255)  NOT NULL,
+        timestamp     VARCHAR(255)  NOT NULL, 
+        image_url     VARCHAR(255)  NOT NULL,
+        FOREIGN KEY (owner_id) REFERENCES users(user_id),
+        PRIMARY KEY (owner_id, track_name, timestamp)
+    );
+    `
 ];
 
 // create database tables if they do not exist
@@ -38,6 +50,7 @@ async function createTables() {
             console.log(`executing: ${table}`);
             dbConnection.query(table, (error, results) => {
                 if ( error ) {
+                    console.log(error);
                     reject(error);
                 }
                 logs.push(results);

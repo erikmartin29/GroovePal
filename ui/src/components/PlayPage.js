@@ -225,6 +225,7 @@ export default function PlayPage() {
             start_time += timestamp;
             return {
                 artist: release['artists'][0]['name'],
+                album: release['title'],
                 track: track.title,
                 timestamp: Math.floor(start_time/1000),
             };
@@ -241,7 +242,7 @@ export default function PlayPage() {
     const scrobble = () => {
         const scrobble_list = buildScrobbleList();
         console.log(scrobble_list)
-        bulkScrobble(username, scrobble_list)
+        bulkScrobble(username, scrobble_list, releaseImg)
             .then( res => {
                 console.log(res);
             })
