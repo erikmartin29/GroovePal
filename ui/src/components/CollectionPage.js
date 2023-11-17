@@ -27,15 +27,18 @@ const Cell = (props) => {
                     bgcolor: 'white',
                     boxShadow: 8,
                     border: 1
-                }}
-                onClick={() => {
-                console.log(`${item.basic_information.title}  was clicked`);
-                navigate(`/play/${item.id}`)
-                }}
+                    }}
+                    onClick={() => {
+                    console.log(`${item.basic_information.title}  was clicked`);
+                    navigate(`/play/${item.id}`)
+                    }}
                 >
-                    <img src={ item.basic_information.cover_image }
+                    <img 
+                        src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
-                        width="175" height="175" />
+                        width="175" 
+                        height="175"
+                    />
                 </Box>
                 <Box>
                     <Typography sx={{
