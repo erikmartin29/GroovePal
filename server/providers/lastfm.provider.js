@@ -1,4 +1,5 @@
 const LastfmAPI = require('lastfmapi');
+const ScrobbleController = require('../controllers/ScrobbleController');
 
 const callback_url = 'http://localhost:8282/api/v1/lastfm/callback';
 const client = new LastfmAPI({
@@ -56,6 +57,8 @@ const scrobble = async (ctx) => {
         sesh.setSessionCredentials(ctx.request.body.credentials.session_user, ctx.request.body.credentials.session_key)
 
         const scrobble_list = ctx.request.body.scrobble_list;
+        const image_url = ctx.request.body.image_url;
+        const user_id = ctx.request.body.user_id;
 
         const log = async (track_list) => {
             return await Promise.all(track_list.map( (track) => {
@@ -63,7 +66,6 @@ const scrobble = async (ctx) => {
                     sesh.track.scrobble(track, (err, scrobbles) => {
                         if (err) {
                             reject(err);
-
                         }
                         resolve(scrobbles);
                     })   
@@ -72,12 +74,22 @@ const scrobble = async (ctx) => {
         };
 
         log(scrobble_list).then( scrobbles => {
+            console.log(scrobbles[0].scrobble);
             ctx.status = 200;
             ctx.body = scrobbles;
+            ScrobbleController
+                .addScrobbles(scrobble_list, user_id, image_url).then( _ => {
+                        ctx.body = scrobbles;
+                        ctx.status = 200;
+                    }).catch( error => {
+                        console.log(error);
+                        ctx.status = 201;
+                        ctx.body = 'could not save your scrobbles locally'
+                    }).finally(() => resolve());
         }).catch( error => {
             ctx.status = 201;
             ctx.body = `one or more songs were not scrobbled: ${error}`;
-        }).finally( () => resolve());
+        });
     });
 }
 
