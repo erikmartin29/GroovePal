@@ -99,18 +99,19 @@ export default function CollectionPage() {
 
     if ( loading ) 
         return (
-            <Box>
-                <Box sx={{
-                    width: '100%',
-                    height: '100vh',
+            <Box
+                sx={{
+                    width: '100vw',
+                    height: '75vh',
                     bgcolor: '#353939',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    }}> 
-                    <CircularProgress sx={{color:'white'}}/>
-                </Box> 
+                }}
+            >
+                <CircularProgress sx={{ color: 'white' }} />
             </Box>
-        )
+        );
 
     return (
             <Fragment>
