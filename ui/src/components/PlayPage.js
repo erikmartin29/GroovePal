@@ -241,25 +241,25 @@ export default function PlayPage() {
 
     useEffect(() => {
         const getData = async (release) => {
-            console.log(`fetching ${release}`)
             let rel = await getDiscogsRelease(albumID, username);
-            console.log(rel.data);
             setRelease(rel.data);
-            setTagsList([...rel.data.genres, ...rel.data.styles]); //change later
-            console.log(rel.data.tracklist)
+
+            let tmpTags = []
+            if(rel.data.genres !== undefined)
+                tmpTags.push(...rel.data.genres);
+            if(rel.data.styles !== undefined)
+                tmpTags.push(...rel.data.styles);
+            setTagsList(tmpTags);
+            
             let relImg = await getDiscogsReleaseImage(albumID, username);
             setReleaseImg(relImg.data);
             setLoading(false);
         }
-
         getData(albumID);
     }, [albumID, username]);
-    
-    //hard coding this for now, needs to be given to this page by Collection Page
-    let rowIdx = 0
-    
+
     //create useState for the array of tags, hard code size for now, figure out dynamics later
-    const [tagsList, setTagsList] = useState(blankTags(5));
+    const [tagsList, setTagsList] = useState(blankTags(0));
     const [allTags, setAllTags] = useState(blankTags(10));
     const [ tracklist, setTrackList ] = useState([]);
     const [editting, setEditting] = useState(false);
@@ -367,8 +367,9 @@ export default function PlayPage() {
                         
                         <Box sx={{
                             width: '75%',
-                            height: '500px',
+                            //height: '400px',
                             display: 'flex',
+                            flexDirection: 'column',
                             justifyContent: 'top',
                             alignItems: 'top',
                             mx: 2,
