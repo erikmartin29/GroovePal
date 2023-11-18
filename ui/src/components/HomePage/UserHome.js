@@ -1,33 +1,27 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, List, ListItem, ListItemText } from '@mui/material';
 
-import testImage from './IMG_4254.jpeg';
-
-
-function createData (image, song, artist, album, timestamp) {
-    return {image, song, artist, album, timestamp};
-}
-
-const testRows = [
-      createData(testImage, "Test", "Nobody", "Neverland", "Today"),
-      createData(testImage, "Test", "Nobody", "Neverland", "Today"),
-      createData(testImage, "Test", "Nobody", "Neverland", "Today")
-];
+import {AuthConsumer} from '../../context/AuthProvider';
+import {getPlays} from '../../utils/api_provider/api_provider';
 
 
 const RecentTracksRows = (props) => {
     
-    const {row} = props
+    const {row, index} = props
+    
+    const date = new Date(Number(row.timestamp)*1000);
+    const formattedTime = date.toLocaleString();
+    
     
     return (
-            <TableRow key={row.song}>
+            <TableRow key={index}>
                 <TableCell>
-                    <img src={row.image} width="100" height="100"/>
+                    <img src={row.image_url} width="100" height="100"/>
                 </TableCell>
-                <TableCell> {row.song} </TableCell>
-                <TableCell> {row.artist} </TableCell>
-                <TableCell> {row.album} </TableCell>
-                <TableCell> {row.timestamp} </TableCell>
+                <TableCell> {row.track_name} </TableCell>
+                <TableCell> {row.track_artist} </TableCell>
+                <TableCell> {row.track_album} </TableCell>
+                <TableCell> {formattedTime} </TableCell>
             </TableRow>
     )
 }
@@ -42,7 +36,7 @@ const TopListRows = (props) => {
         
         return (
                 <ListItem divider="true">
-                    <ListItemText primary="test"/>
+                    <ListItemText primary={test}/>
                 </ListItem>
                 )
     }
@@ -60,9 +54,19 @@ const createList = (num) => {
 
 export default function UserHome() {
     
-    const [recentTracks, setRecentTracks] = useState(createList(10));
+    const {username} = AuthConsumer();
+    const [recentTracks, setRecentTracks] = useState([]);
     const [topAlbums, setTopAlbums] = useState(createList(10));
     const [topArtists, setTopArtists] = useState(createList(10));
+    
+    useEffect(() => {
+        getPlays(username).then( res => {
+            console.log(res);
+            setRecentTracks(res.data);
+        }).catch( error => {
+            console.log(error);
+        })
+    }, [username])
     
     /*
      <TableCell>Thumbnail</TableCell>
@@ -101,8 +105,8 @@ export default function UserHome() {
                             }}>
                                 <TableBody>
                                     {
-                                        testRows.map((row) => (
-                                                               <RecentTracksRows row={row} />
+                                        recentTracks.map((row, index) => (
+                                                                        <RecentTracksRows row={row} index={index} />
                                        ))
                                     }
                                 </TableBody>

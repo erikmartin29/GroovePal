@@ -5,13 +5,6 @@ import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from 
 
 import { useNavigate } from 'react-router-dom';
 
-//Claire's Changes and Notes:
-//created the page, procedurally generates the collection grid, some things hardcoded for now
-//do we want a tooltip for the grid with each album's name and artist?
-//do we want a search bar to search for specific albums in the collection?
-//side bar with list of all tags used by that user, that you can click and filters albums with those tags (favourites always there)
-//have a favourites tag, but make that one a heart symbol and always there
-
 const Cell = (props) => {
     
     //props will go here
@@ -102,6 +95,7 @@ export default function CollectionPage() {
                     width: '100%',
                     height: '100vh',
                     bgcolor: '#353939',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     }}> 
