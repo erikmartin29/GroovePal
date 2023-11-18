@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography, CircularProgress } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress} from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 //Claire's Changes and Notes:
 //created the page, procedurally generates the collection grid, some things hardcoded for now
@@ -13,44 +15,66 @@ import { useNavigate } from 'react-router-dom';
 
 const Cell = (props) => {
     
-    //props will go here
-    //onclick to change to the play page with the album info
-    const {item ,rowIdx, navigate} = props
+    const { item, rowIdx, navigate } = props;
+    const [isHovered, setIsHovered] = useState(false);
+    
+    const handleMouseEnter = () => {setIsHovered(true)}
+    const handleMouseLeave = () => {setIsHovered(false)}
+
+    const BootstrapTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.arrow}`]: {
+          color: theme.palette.common.black,
+          maxWidth: 1000,
+          fontSize: theme.typography.pxToRem(12)
+        },
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: theme.palette.common.black,
+        },
+    }));
     
     return (
-            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Container>
-                <Box sx={{
-                    flexGrow: 1,
-                    width: 175,
-                    height: 175,
-                    bgcolor: 'white',
-                    boxShadow: 8,
-                    border: 1
+        <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
+            <Container>
+                <Box
+                    sx={{
+                        flexGrow: 1,
+                        width: 175,
+                        height: 175,
+                        bgcolor: 'white',
+                        boxShadow: 5,
+                        transition: 'transform 0.3s',
+                        transform: isHovered ? 'scale(1.1)' : 'scale(1)',
                     }}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
                     onClick={() => {
-                    console.log(`${item.basic_information.title}  was clicked`);
-                    navigate(`/play/${item.id}`)
+                        console.log(`${item.basic_information.title} was clicked`);
+                        navigate(`/play/${item.id}`);
                     }}
                 >
-                    <img 
-                        src={ item.basic_information.cover_image }
-                        alt={ item.basic_information.title }
-                        width="175" 
-                        height="175"
-                    />
+
+                    
+                    <BootstrapTooltip title={`${item.basic_information.title} - ${item.basic_information.artists[0].name}`} placement="bottom">
+                        <img 
+                            src={item.basic_information.cover_image}
+                            alt={item.basic_information.title}
+                            width="175" 
+                            height="175"
+                        />
+                    </BootstrapTooltip>
+
                 </Box>
                 <Box>
-                    <Typography sx={{
-                        color: 'white'
-                    }}>
+                    <Typography sx={{ color: 'white' }}>
                         {/*item.basic_information.title*/}
                         <br />
                         {/*item.basic_information.artists[0].name*/}
                     </Typography>
                 </Box>
             </Container>
-            </Grid>
+        </Grid>
     );
 }
 
