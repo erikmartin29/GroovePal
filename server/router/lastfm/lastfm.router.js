@@ -9,22 +9,23 @@ const lastfmRouter = require('koa-router')({
 lastfmRouter.get('/auth/:user_id', lastfm_provider.lfm_oauth, err => console.log(err));
 
 lastfmRouter.get('/callback/:user_id/', async (ctx) => {
-    lastfm_provider.lfm_callback(ctx)
-    .then( data => {
-        console.log(data);
-        SecretsController.setLastfmSecretKey(data)
-            .then( res => {
-                console.log(res);
-                ctx.status = 200;
-            })
-            .catch( error => {
-                console.log(error);
-                ctx.status = 500
-            })
-    }).catch( error => {
-        console.log(error) 
-        ctx.status = 500
-    });
+    try {
+        const credentials = await lastfm_provider.lfm_callback(ctx);
+        const res = await SecretsController.setLastfmSecretKey(credentials)
+        console.log(res);
+        ctx.status = 200;
+        ctx.body = `
+            <h2>Authentication Complete</h2>
+            <br/>
+            <p>
+            You can close this window.
+            </p>
+        `;
+        console.log(ctx.status);
+    } catch (e) {
+        ctx.body = 'internal server error';
+        ctx.status = 500;
+    }
 });
 
 lastfmRouter.post('/scrobble', TokenInjector.lastfm_middleware, lastfm_provider.scrobble); 
