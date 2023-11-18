@@ -16,10 +16,6 @@ import { styled } from '@mui/material/styles';
 const Cell = (props) => {
     
     const { item, rowIdx, navigate } = props;
-    const [isHovered, setIsHovered] = useState(false);
-    
-    const handleMouseEnter = () => {setIsHovered(true)}
-    const handleMouseLeave = () => {setIsHovered(false)}
 
     const BootstrapTooltip = styled(({ className, ...props }) => (
         <Tooltip {...props} classes={{ popper: className }} />
@@ -42,20 +38,18 @@ const Cell = (props) => {
                         flexGrow: 1,
                         width: 175,
                         height: 175,
-                        bgcolor: 'white',
-                        boxShadow: 5,
-                        transition: 'transform 0.3s',
-                        transform: isHovered ? 'scale(1.1)' : 'scale(1)',
+                        boxShadow: '0px 0px 50px 8px rgba(0, 0, 0, 0.2)',
+                        transition: 'transform 0.2s, boxShadow 0.2s',
+                        "&:hover": {
+                            transform: "scale(1.1)",
+                            boxShadow: '0px 0px 50px 10px rgba(0, 0, 0, 0.2)',
+                        }
                     }}
-                    onMouseEnter={handleMouseEnter}
-                    onMouseLeave={handleMouseLeave}
                     onClick={() => {
                         console.log(`${item.basic_information.title} was clicked`);
                         navigate(`/play/${item.id}`);
                     }}
                 >
-
-                    
                     <BootstrapTooltip title={`${item.basic_information.title} - ${item.basic_information.artists[0].name}`} placement="bottom">
                         <img 
                             src={item.basic_information.cover_image}

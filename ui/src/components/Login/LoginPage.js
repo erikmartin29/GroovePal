@@ -46,7 +46,7 @@ export default function LoginPage() {
                     alignItems: 'center', 
                     textAlign: 'center',
                     fontSize: '32px',
-                    color: 'white'
+                    color: '#ffffff'
                 }}
             >
                 Vinyl Scrobbler
@@ -61,7 +61,7 @@ export default function LoginPage() {
             borderWidth: 1, 
             borderStyle: 'solid',
             borderRadius: '10px', 
-            borderColor: 'black',
+            borderColor: '#000000',
             boxShadow: 8,
             bgcolor: '#e6e2d3'
         }}>
@@ -83,7 +83,7 @@ export default function LoginPage() {
                 <Button
                     sx={{
                         bgcolor: '#618343',
-                        color: 'black',
+                        color: '#000000',
                         mt: 3,
                         mb: 0
                     }}
@@ -96,7 +96,7 @@ export default function LoginPage() {
                 <Button
                     sx={{
                         bgcolor: '#82B74B',
-                        color: 'black',
+                        color: '#000000',
                         mt: 2,
                         mb: 3
                     }}
@@ -108,7 +108,7 @@ export default function LoginPage() {
                 </Button>
                 <Button
                     sx={{
-                        color: 'black',
+                        color: '#000000',
                         fontWeight: 'bold'
                     }}
                     onClick={() => navigate('/', {replace:true})}
