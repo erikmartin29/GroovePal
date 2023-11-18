@@ -1,8 +1,7 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography, CircularProgress, Tooltip } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress } from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
-
 import { useNavigate } from 'react-router-dom';
 
 //Claire's Changes and Notes:
@@ -28,18 +27,18 @@ const Cell = (props) => {
                     bgcolor: 'white',
                     boxShadow: 8,
                     border: 1
-                }}
-
-                onClick={() => {
-                console.log(`${item.basic_information.title}  was clicked`);
-                navigate(`/play/${item.id}`)
-                }}
+                    }}
+                    onClick={() => {
+                    console.log(`${item.basic_information.title}  was clicked`);
+                    navigate(`/play/${item.id}`)
+                    }}
                 >
-                <Tooltip title={`${item.basic_information.artists[0].name} - ${item.basic_information.title}`} >
-                    <img src={ item.basic_information.cover_image }
+                    <img 
+                        src={ item.basic_information.cover_image }
                         alt={ item.basic_information.title }
-                        width="175" height="175" />
-                </Tooltip>
+                        width="175" 
+                        height="175"
+                    />
                 </Box>
                 <Box>
                     <Typography sx={{
@@ -64,6 +63,9 @@ const albumDisplay = (num) => {
 export default function CollectionPage() {
 
     const [collection, setCollection] = useState([]);
+
+    const [filterString, setFilterString] = useState("");
+
     const { username } = AuthConsumer();
     const [ loading, setLoading ] = useState(true);
     
@@ -97,76 +99,63 @@ export default function CollectionPage() {
 
     if ( loading ) 
         return (
-            <Box>
-                <Box sx={{
-                    width: '100%',
-                    height: '100vh',
+            <Box
+                sx={{
+                    width: '100vw',
+                    height: '75vh',
                     bgcolor: '#353939',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    }}> 
-                    <CircularProgress sx={{color:'white'}}/>
-                </Box> 
+                }}
+            >
+                <CircularProgress sx={{ color: 'white' }} />
             </Box>
-        )
+        );
 
     return (
             <Fragment>
                 <Box sx={{
-                    height: '100vh',
+                    height: '100%',
                     bgcolor: '#353939',
-                    border: 1
                 }}>
-                    {/*temp spacer box for demo*/}
-                    <Box
-                        sx={{
-                        height: 40,
-                        bgcolor: '353939',
-                        }}
-                        >
-                    </Box>
 
-                    {/*
-                    //commenting out for demo since its not working
                     <Box sx={{
                         display: 'flex',
-                        justifyContent: 'space-between',
+                        justifyContent: 'center',
                         alignItems: 'center',
+                        m: 4
                     }}>
                         <TextField
                             sx={{
                                 width: 400,
-                                m: 2,
                                 bgcolor: 'white',
                                 boxShadow: 3
                             }}
                             label="Search"
                             type="search"
                             variant="filled"
-                        >
-                        </TextField>
-                        
-                        <Button sx={{
-                            bgcolor: '#e6e2d3',
-                            color: 'black',
-                            boxShadow: 8,
-                            height: 45,
-                            m: 2
-                        }}
-                        variant="contained"
-                        color="inherit">
-                            Add Album
-                        </Button>
+                            onChange={(event) => setFilterString(event.target.value.toLowerCase())}
+                        />
                     </Box>
-                    */}
                     <Container sx={{
                         display: 'flex',
                     }}>
-            <Grid container spacing={2}>
-            {
-                collection.map((item, idx) => <Cell key={idx} item={item} rowIdx={idx} navigate={navigate}/>)
-            }
-            </Grid>
+                        <Grid container spacing={2}>
+                        {
+
+                            collection.filter((item) => {
+                                if(filterString === "") return true;
+                                // check through all artists
+                                for(let i = 0; i < item.basic_information.artists.length; i++) {
+                                    if(item.basic_information.artists[i].name.toLowerCase().startsWith(filterString)) 
+                                        return true;
+                                }
+                                // check through all titles
+                                return item.basic_information.title.toLowerCase().startsWith(filterString);
+                            }).map((item, idx) => <Cell key={idx} item={item} rowIdx={idx} navigate={navigate}/>)
+                        }
+                        </Grid>
                     </Container>
                 </Box>
             </Fragment>

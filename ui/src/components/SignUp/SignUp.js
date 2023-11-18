@@ -5,8 +5,6 @@ import { blue } from '@mui/material/colors';
 import { authenticateLastFM, signUp, validUsername } from '../../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
 
-import { darkGreen, lightGreen } from '../ColorPalette';
-
 export default function SignUp() {
     
     //Claire's Changes and Notes:
@@ -124,7 +122,6 @@ export default function SignUp() {
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
                     />
-            <ThemeProvider theme={lightGreen}>
                     <Button
                         sx={{
                             mt: 3,
@@ -132,11 +129,10 @@ export default function SignUp() {
                         }}
                             type='submit'
                             variant='contained'
-                            color="lightGreen"
+                            color="#82B74B"
                     >
                         Create
                     </Button>
-            </ThemeProvider>
                     <Button
                         sx={{
                             color: 'black',
