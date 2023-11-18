@@ -95,7 +95,6 @@ export default function CollectionPage() {
                     width: '100%',
                     height: '100vh',
                     bgcolor: '#353939',
-                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     }}> 

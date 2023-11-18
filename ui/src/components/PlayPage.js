@@ -298,7 +298,6 @@ export default function PlayPage() {
                     width: '100%',
                     height: '100vh',
                     bgcolor: '#353939',
-                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}> <CircularProgress sx={{color:'white'}} /> 
