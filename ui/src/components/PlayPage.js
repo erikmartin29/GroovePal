@@ -59,6 +59,7 @@ const Tag = (props) => {
     return (
         <Grid item key={index}>
             <Chip
+                style={{ color: 'white' }}
                 label={title}
                 disabled={disable}
             />
@@ -149,35 +150,28 @@ const TagDisplay = (props) => {
     return (
             <Box sx={{
                 width: 230,
-                height: 300,
+                //height: 230,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: 'space-between',
-                mt: 2,
-                ml: 2,
-                bgcolor: '#ffffff',
-                boxShadow: 8,
-                border: 1,
-                //borderRadius: '16px'
+                justifyContent: 'left',
+                alignItems: 'left',
+                mb:2,
             }}>
                 <Grid container
                     spacing={1}
-                    sx={{
-                        m: 2,
-                    }}>
-                        {
+                    sx={{ mt: 2 }}>
+                    {
                             tagsList.map((item, idx) => <Tag key={idx} item={item} index={idx} />)
-                        }
+                    }
                 </Grid>
-                <Button
+                {/*<Button
                     sx={{
                         color: 'red'
                     }}
                     onClick={onClickCallback()}
                 >
                     Edit Tags
-                </Button>
+                </Button>*/}
             </Box>
     );
 };
@@ -290,7 +284,7 @@ export default function PlayPage() {
             <Box
                 sx={{
                     width: '100vw',
-                    height: '80vh',
+                    height: '75vh',
                     bgcolor: '#353939',
                     display: 'flex',
                     alignItems: 'center',
@@ -307,13 +301,17 @@ export default function PlayPage() {
             <Fragment>
                 <Box sx={{ width: '100%', height: '100vh', bgcolor: '#353939'}}>
                     <Box sx={{ display: 'flex' }}>
-                        <Button sx={{ m: 2 }}
+                        <Button sx={{ m: 2, bgcolor: '#141414', color: 'white'}}
+                        
                             variant="contained"
-                            onClick={() => navigate('/collection', {replace:true})}
+                            onClick={() => navigate('/collection', {replace:true}
+                            )
+                        }
                         >
-                            Back
+                        Back to Collection
                         </Button>
                     </Box>
+
                     <Container sx={{
                         width: '100%',
                         height: 700,
@@ -325,47 +323,48 @@ export default function PlayPage() {
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
+                            justifyContent: 'left',
+                            alignItems: 'left',
                         }}>
                             <Box sx={{
                                 width: 230,
                                 height: 230,
                                 display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
+                                justifyContent: 'left',
+                                alignItems: 'left',
                                 mt: 2,
                                 ml: 2,
-                                bgcolor: 'white',
+                                //bgcolor: 'white',
                                 boxShadow: 8,
                                 border: 1
                             }}>
                                 <img src={ releaseImg || release.thumb || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
-                                    alt={ release.title}
-                                width="230" height="230" />
+                                     alt={ release.title}
+                                     width="230" 
+                                     height="230" />
                             </Box>
                             <Box sx={{
                                 width: 230,
                                 height: 150,
-                                display: 'block',
+                                //display: 'block',
                                 mt: 2,
                                 ml: 2,
-                                //borderRadius: 3,
-                            bgcolor: '#ffffff',
-                            boxShadow: 8,
-                                border: 1
+                                justifyContent: 'left',
+                                alignItems: 'left',
                             }}>
-                                <Typography sx={{ alignText: 'center', padding: '10px' }}>
+                                <Typography sx={{ alignText: 'center', padding: '5px', color:"white", fontSize: '20pt', fontWeight: 'bold'}}>
                                     { release.title }
-                                    <Divider />
+                                </Typography>
+                                <Typography sx={{ alignText: 'center', padding: '5px', color:"white", fontSize: '15pt', mb:1}}>
                                     { release.artists[0].name }
                                 </Typography>
-                                <Box sx={{margin: 1, textAlign: 'center'}}>
-                                    <Button disabled={scrobbling} sx={{ bgcolor: 'brown', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
-                                    { scrobbling && <LinearProgress />}
-                                </Box>
+                                <Button disabled={scrobbling} sx={{ bgcolor: 'red', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
+                                { scrobbling && <LinearProgress sx={{mt:1}}/>}
+                                <TagDisplay tagsList={tagsList} editting={false/*editting*/} onClickCallback={() => onClickCallbackEdit} />
+                                {/*<Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />*/}
                             </Box>
-                            <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
-                            <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
+                        
                         <Box sx={{
                             width: '75%',
                             height: '500px',
@@ -374,29 +373,12 @@ export default function PlayPage() {
                             alignItems: 'top',
                             mx: 2,
                             my: 2,
-                            bgcolor: '#ffffff',
-                            boxShadow: 0,
-                            border: 1
                         }}>
                         <TracklistTable tracks={release.tracklist || []} />
-                            
                         </Box>
+
                     </Container>
-            <Typography sx={{
-                color: 'white'
-            }}>
-            { /*
-            Ideas/Notes:
-            <br />
-            -liner notes?
-            <br />
-            -display back image as well as front
-            <br />
-            -add title at top of page (not app bar), album title with artist?
-                */}
-            </Typography>
                 </Box>
-            
             </Fragment>
     );
 }
