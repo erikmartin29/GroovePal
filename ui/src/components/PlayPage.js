@@ -26,7 +26,7 @@ const TracklistTable = (props) => {
     
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-      <Table sticky-header="true" sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
+      <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
         <TableHead>
             <TableRow>
                 <TableCell sx={{ textAlign: 'start'}}><Typography sx={{ fontWeight: 'bold' }}>Track</Typography></TableCell>

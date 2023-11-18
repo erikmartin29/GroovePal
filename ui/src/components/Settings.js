@@ -10,7 +10,7 @@ export default function Settings() {
     return (
             <Fragment>
                 <Box sx={{
-                    height: '100vh',
+                    //height: '100vh',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',

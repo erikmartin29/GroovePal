@@ -89,25 +89,17 @@ export default function CollectionPage() {
     
     let navigate = useNavigate();
 
-    // note: simplified api call, now that we dont need to 
-    // explicity request the images
-
-    const getData = async (username) => {
-        let col = await getDiscogsCollection(username)
-        var tmpArr = [];
-        for(let i = 0; i < 10; i++) {
-               let release = col.data["releases"][i];
-               tmpArr.push(release)
-               setCollection(tmpArr);
-               setLoading(false);
-        }
-   }
-
     useEffect(() => {
-        //getData(username);
         getDiscogsCollection(username).then( res => {
-            console.log(res);
-            setCollection(res.data['releases']);
+            //TODO: sort by various keys other than date_added
+            let newArr = res.data['releases'].sort(function(a,b){
+                let x = a.date_added
+                let y = b.date_added
+                if(x<y){return 1}
+                if(x>y){return -1}
+                return 0
+            })
+            setCollection(newArr);
         }).catch( error => {
             console.log(error);
         }).finally( () => {
