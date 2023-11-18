@@ -285,15 +285,21 @@ export default function PlayPage() {
     let navigate = useNavigate();
 
     // TODO: make color match theme, increase size and center 
-    if(loading) {
-        return ( <Box sx={{
-                    width: '100%',
-                    height: '100vh',
+    if ( loading )  {
+        return (
+            <Box
+                sx={{
+                    width: '100vw',
+                    height: '80vh',
                     bgcolor: '#353939',
+                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                }}> <CircularProgress sx={{color:'white'}} /> 
-                </Box> );
+                }}
+            >
+                <CircularProgress sx={{ color: 'white' }} />
+            </Box>
+        );
     }
     
     //#353939
