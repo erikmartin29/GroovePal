@@ -17,10 +17,15 @@ axiosClient.interceptors.response.use(
     (response) => response,
     (error) => { 
         console.log('I see you encountered an error');
-        const { logout } = AuthConsumer();
+        
         if ( error.response.status === 401 ) {
+            const { logout } = AuthConsumer();
             logout();
             window.location.href = '/login'
+        }
+        if (error.response.status === 500) {
+            window.location.href = '/settings';
+            alert("Error: please make sure you've linked Discogs and lastFM")
         }
     return Promise.reject(error);
     }
