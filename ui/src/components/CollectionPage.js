@@ -102,7 +102,7 @@ export default function CollectionPage() {
             <Box>
                 <Box sx={{
                     width: '100%',
-                    height: '100%',
+                    height: '100vh',
                     bgcolor: '#353939',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -117,7 +117,6 @@ export default function CollectionPage() {
                 <Box sx={{
                     height: '100%',
                     bgcolor: '#353939',
-                    border: 1
                 }}>
 
                     <Box sx={{

@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
-import { darkGreen, lightGreen, headerBrown } from './ColorPalette';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
@@ -58,15 +57,12 @@ const Tag = (props) => {
     let disable = "";
     
     return (
-            <ThemeProvider theme={lightGreen}>
-                <Grid item key={index}>
-                    <Chip
-                        label={title}
-                        color="lightGreen"
-                        disabled={disable}
-                    />
-                </Grid>
-            </ThemeProvider>
+        <Grid item key={index}>
+            <Chip
+                label={title}
+                disabled={disable}
+            />
+        </Grid>
     );
 }
 
@@ -78,19 +74,17 @@ const EditTag = (props) => {
     let disable = "";
     
     return (
-            <ThemeProvider theme={lightGreen}>
-                <Grid item key={index}>
-                    <Chip
-                        sx={{
-                
-                        }}
-                        label={title}
-                        color="lightGreen"
-                        onDelete={handleDelete}
-                        disabled={disable}
-                    />
-                </Grid>
-            </ThemeProvider>
+    <Grid item key={index}>
+        <Chip
+            sx={{
+    
+            }}
+            label={title}
+            color="lightGreen"
+            onDelete={handleDelete}
+            disabled={disable}
+        />
+    </Grid>
     );
 }
 
@@ -115,10 +109,10 @@ const Editor = (props) => {
                 alignItems: 'space-between',
                 mt: 2,
                 ml: 2,
-                bgcolor: '#e6e2d3',
+                bgcolor: '#ffffff',
                 boxShadow: 8,
                 border: 1,
-                borderRadius: '16px'
+                //borderRadius: '16px'
             }}>
                 <Grid container
                     spacing={1}
@@ -133,7 +127,6 @@ const Editor = (props) => {
                     sx={{
                         color: 'red'
                     }}
-                    color="inherit"
                     onClick={onClickCallback()}
                 >
                     Finish
@@ -163,10 +156,10 @@ const TagDisplay = (props) => {
                 alignItems: 'space-between',
                 mt: 2,
                 ml: 2,
-                bgcolor: '#e6e2d3',
+                bgcolor: '#ffffff',
                 boxShadow: 8,
                 border: 1,
-                borderRadius: '16px'
+                //borderRadius: '16px'
             }}>
                 <Grid container
                     spacing={1}
@@ -181,7 +174,6 @@ const TagDisplay = (props) => {
                     sx={{
                         color: 'red'
                     }}
-                    color="inherit"
                     onClick={onClickCallback()}
                 >
                     Edit Tags
@@ -311,7 +303,6 @@ export default function PlayPage() {
                     <Box sx={{ display: 'flex' }}>
                         <Button sx={{ m: 2 }}
                             variant="contained"
-                            color="inherit"
                             onClick={() => navigate('/collection', {replace:true})}
                         >
                             Back
@@ -330,8 +321,8 @@ export default function PlayPage() {
                             flexDirection: 'column',
                         }}>
                             <Box sx={{
-                                width: 175,
-                                height: 175,
+                                width: 230,
+                                height: 230,
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -343,7 +334,7 @@ export default function PlayPage() {
                             }}>
                                 <img src={ releaseImg || release.thumb || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
                                     alt={ release.title}
-                                width="175" height="175" />
+                                width="230" height="230" />
                             </Box>
                             <Box sx={{
                                 width: 230,
@@ -351,8 +342,8 @@ export default function PlayPage() {
                                 display: 'block',
                                 mt: 2,
                                 ml: 2,
-                                borderRadius: 3,
-                            bgcolor: '#e6e2d3',
+                                //borderRadius: 3,
+                            bgcolor: '#ffffff',
                             boxShadow: 8,
                                 border: 1
                             }}>

@@ -7,8 +7,6 @@ import {
     useNavigate
 } from 'react-router-dom';
 
-import { darkGreen, lightGreen } from '../ColorPalette';
-
 export default function LoginPage() {
     
     //Claire's Changes and Notes:
@@ -82,7 +80,6 @@ export default function LoginPage() {
                     required={true}
                     onChange={ event => setPassword(event.target.value) }
                 />
-                <ThemeProvider theme={darkGreen}>
                 <Button
                     sx={{
                         bgcolor: '#618343',
@@ -91,13 +88,11 @@ export default function LoginPage() {
                         mb: 0
                     }}
                     variant="contained"
-                    color="darkGreen"
+                    color="#82B74B"
                     onClick={() => loginHandler({ user_id: username, user_pass: password })}
                 >
                     Login
                 </Button>
-                </ThemeProvider>
-                <ThemeProvider theme={lightGreen}>
                 <Button
                     sx={{
                         bgcolor: '#82B74B',
@@ -106,12 +101,11 @@ export default function LoginPage() {
                         mb: 3
                     }}
                     variant="contained"
-                    color="lightGreen"
+                    color="#82B74B"
                     onClick={() => navigate('/signup', {replace: true})}
                 >
                     Sign Up
                 </Button>
-                </ThemeProvider>
                 <Button
                     sx={{
                         color: 'black',

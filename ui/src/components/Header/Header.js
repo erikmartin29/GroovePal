@@ -2,7 +2,6 @@ import { AppBar, Toolbar, Box, Typography, Button, Tooltip, Menu, MenuItem, Them
 import { Fragment, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { AuthConsumer } from "../../context/AuthProvider";
-import { darkGreen, lightGreen, headerBrown } from '../ColorPalette';
 import Avatar from '@mui/material/Avatar';
 import AlbumIcon from '@mui/icons-material/Album';
 
@@ -44,7 +43,7 @@ export default function Header() {
                     <Toolbar sx={{
                         display: 'flex',
                         justifyContent: 'space-between',
-                        bgcolor: '#b9936c'
+                        bgcolor: '#141414'
                     }}>
                         <h2>GroovePal</h2>
                         <Box 
@@ -54,7 +53,6 @@ export default function Header() {
                                 justifyContent: 'right'
                             }}
                         >
-                        <ThemeProvider theme={headerBrown}>
                         <Button
                             sx={{
                                 color: 'white',
@@ -69,12 +67,11 @@ export default function Header() {
                         >
                         {
                             authed && 
-                            <Avatar sx={{ bgcolor: headerBrown }}>
+                            <Avatar sx={{ bgcolor: "#141414" }}>
                                 <AlbumIcon />
                             </Avatar>
                         }
                         </Button>
-                        </ThemeProvider>
                             <Menu
                                 id="basic-menu"
                                 anchorEl={anchorEl}

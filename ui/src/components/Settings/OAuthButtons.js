@@ -18,6 +18,7 @@ export default function OAuthButtons() {
 
     const handlePopup = (url) => {
         window.open(url, popup_window, 'width=500,height=500');
+        
     }
 
     useEffect(() => {
