@@ -230,7 +230,7 @@ export default function PlayPage() {
         });
     }
 
-    const scrobble_emulate_play = async () => {
+    const scrobble_emulate_play = async (scrobble_list) => {
         const delay_play = (track, idx) => {
             return new Promise((resolve) => {
                 let temp_playing = [...playing];
@@ -240,8 +240,14 @@ export default function PlayPage() {
                 console.log(`playing ${track.title}`);
                 setTimeout(() => {
                     console.log(`finished: ${track.title}`);
-                    //scrobble here 
-                    resolve(true);
+                    bulkScrobble(username, scrobble_list.slice(idx, idx+1), releaseImg)
+                        .then(res => {
+                            console.log(res);
+                        }).catch(error => {
+                            console.log(error)
+                    }).finally( () => {
+                        resolve(true);
+                    })
                 }, delay);
             });
         }
@@ -253,15 +259,7 @@ export default function PlayPage() {
     const scrobble = () => {
         const scrobble_list = buildScrobbleList();
         console.log(scrobble_list)
-        scrobble_emulate_play(); 
-        bulkScrobble(username, scrobble_list, releaseImg)
-            .then( res => {
-                console.log(res);
-            })
-            .catch( error => {
-                console.log('error scrobbling', error);
-            })
-            .finally( () => setScrobbling(false) )
+        scrobble_emulate_play(scrobble_list); 
     }
 
     useEffect(() => {
