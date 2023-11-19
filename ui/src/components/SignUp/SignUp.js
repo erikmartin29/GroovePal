@@ -69,7 +69,7 @@ export default function SignUp() {
                             alignItems: 'center',
                             textAlign: 'center',
                             fontSize: '32px',
-                            color: 'white'
+                            color: '#ffffff'
                         }}>
                             New Account
                     </Typography>
@@ -83,7 +83,7 @@ export default function SignUp() {
                 borderWidth: 1,
                 borderStyle: 'solid',
                 borderRadius: '10px',
-                borderColor: 'black',
+                borderColor: '#000000',
                 bgcolor: '#e6e2d3',
                 boxShadow: 8
             }}>
@@ -135,7 +135,7 @@ export default function SignUp() {
                     </Button>
                     <Button
                         sx={{
-                            color: 'black',
+                            color: '#000000',
                             fontWeight: 'bold',
                             mt: 2,
                         }}

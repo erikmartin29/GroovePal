@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography, CircularProgress } from '@mui/material';
+import { Box, Grid, Button, Container, TextField, Typography, CircularProgress} from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
 import { useNavigate } from 'react-router-dom';
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material/styles';
 
 //Claire's Changes and Notes:
 //created the page, procedurally generates the collection grid, some things hardcoded for now
@@ -13,44 +15,60 @@ import { useNavigate } from 'react-router-dom';
 
 const Cell = (props) => {
     
-    //props will go here
-    //onclick to change to the play page with the album info
-    const {item ,rowIdx, navigate} = props
+    const { item, rowIdx, navigate } = props;
+
+    const BootstrapTooltip = styled(({ className, ...props }) => (
+        <Tooltip {...props} classes={{ popper: className }} />
+      ))(({ theme }) => ({
+        [`& .${tooltipClasses.arrow}`]: {
+          color: theme.palette.common.black,
+          maxWidth: 1000,
+          fontSize: theme.typography.pxToRem(12)
+        },
+        [`& .${tooltipClasses.tooltip}`]: {
+          backgroundColor: theme.palette.common.black,
+        },
+    }));
     
     return (
-            <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
-                <Container>
-                <Box sx={{
-                    flexGrow: 1,
-                    width: 175,
-                    height: 175,
-                    bgcolor: 'white',
-                    boxShadow: 8,
-                    border: 1
+        <Grid item key={rowIdx} xs={6} sm={4} md={3} lg={2} xl={2}>
+            <Container>
+                <Box
+                    sx={{
+                        flexGrow: 1,
+                        width: 175,
+                        height: 175,
+                        boxShadow: '0px 0px 50px 8px rgba(0, 0, 0, 0.2)',
+                        transition: 'transform 0.2s, boxShadow 0.2s',
+                        "&:hover": {
+                            transform: "scale(1.1)",
+                            boxShadow: '0px 0px 50px 10px rgba(0, 0, 0, 0.2)',
+                        }
                     }}
                     onClick={() => {
-                    console.log(`${item.basic_information.title}  was clicked`);
-                    navigate(`/play/${item.id}`)
+                        console.log(`${item.basic_information.title} was clicked`);
+                        navigate(`/play/${item.id}`);
                     }}
                 >
-                    <img 
-                        src={ item.basic_information.cover_image }
-                        alt={ item.basic_information.title }
-                        width="175" 
-                        height="175"
-                    />
+                    <BootstrapTooltip title={`${item.basic_information.title} - ${item.basic_information.artists[0].name}`} placement="bottom">
+                        <img 
+                            src={item.basic_information.cover_image}
+                            alt={item.basic_information.title}
+                            width="175" 
+                            height="175"
+                        />
+                    </BootstrapTooltip>
+
                 </Box>
                 <Box>
-                    <Typography sx={{
-                        color: 'white'
-                    }}>
+                    <Typography sx={{ color: 'white' }}>
                         {/*item.basic_information.title*/}
                         <br />
                         {/*item.basic_information.artists[0].name*/}
                     </Typography>
                 </Box>
             </Container>
-            </Grid>
+        </Grid>
     );
 }
 
@@ -71,25 +89,17 @@ export default function CollectionPage() {
     
     let navigate = useNavigate();
 
-    // note: simplified api call, now that we dont need to 
-    // explicity request the images
-
-    const getData = async (username) => {
-        let col = await getDiscogsCollection(username)
-        var tmpArr = [];
-        for(let i = 0; i < 10; i++) {
-               let release = col.data["releases"][i];
-               tmpArr.push(release)
-               setCollection(tmpArr);
-               setLoading(false);
-        }
-   }
-
     useEffect(() => {
-        //getData(username);
         getDiscogsCollection(username).then( res => {
-            console.log(res);
-            setCollection(res.data['releases']);
+            //TODO: sort by various keys other than date_added
+            let newArr = res.data['releases'].sort(function(a,b){
+                let x = a.date_added
+                let y = b.date_added
+                if(x<y){return 1}
+                if(x>y){return -1}
+                return 0
+            })
+            setCollection(newArr);
         }).catch( error => {
             console.log(error);
         }).finally( () => {
