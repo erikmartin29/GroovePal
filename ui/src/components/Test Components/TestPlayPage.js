@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
-import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
+import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
-import { AuthConsumer } from '../context/AuthProvider';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import { AuthConsumer } from '../../context/AuthProvider';
+import { darkGreen, lightGreen, headerBrown } from '../ColorPalette';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,8 +12,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { blue, grey, green } from '@mui/material/colors';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import CircleIcon from '@mui/icons-material/Circle';
+import { blue, grey, green } from '@mui/material/colors';
 
 const handleDelete = () => {
     console.log("delete was clicked");
@@ -23,9 +24,10 @@ const handleClick = () => {
     console.log("Tag was clicked");
 }
 
+
+
 const TracklistTable = (props) => {
     const {tracks, playing} = props
-    console.log(tracks);
     
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
@@ -45,13 +47,11 @@ const TracklistTable = (props) => {
             >
               <TableCell>{ track.title }</TableCell>
               <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
-              <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
-                <CircleIcon sx={{
-                    margin: '0px',
-                    padding: '0px',
-                    color: playing[idx] ? green[500] : blue[500]
-                }}/>
-              </TableCell>
+              <TableCell sx={{ display: 'flex', justifyContent: 'end' }}><CircleIcon sx={{ 
+                  margin: '0px',
+                  padding: '0px',
+                  color: playing[idx] ? green[500] : blue[500]
+              }}/></TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -68,13 +68,15 @@ const Tag = (props) => {
     let disable = "";
     
     return (
-        <Grid item key={index}>
-            <Chip
-                style={{ color: 'white' }}
-                label={title}
-                disabled={disable}
-            />
-        </Grid>
+            <ThemeProvider theme={lightGreen}>
+                <Grid item key={index}>
+                    <Chip
+                        label={title}
+                        color="lightGreen"
+                        disabled={disable}
+                    />
+                </Grid>
+            </ThemeProvider>
     );
 }
 
@@ -86,17 +88,19 @@ const EditTag = (props) => {
     let disable = "";
     
     return (
-    <Grid item key={index}>
-        <Chip
-            sx={{
-    
-            }}
-            label={title}
-            color="lightGreen"
-            onDelete={handleDelete}
-            disabled={disable}
-        />
-    </Grid>
+            <ThemeProvider theme={lightGreen}>
+                <Grid item key={index}>
+                    <Chip
+                        sx={{
+                
+                        }}
+                        label={title}
+                        color="lightGreen"
+                        onDelete={handleDelete}
+                        disabled={disable}
+                    />
+                </Grid>
+            </ThemeProvider>
     );
 }
 
@@ -121,10 +125,10 @@ const Editor = (props) => {
                 alignItems: 'space-between',
                 mt: 2,
                 ml: 2,
-                bgcolor: '#ffffff',
+                bgcolor: '#e6e2d3',
                 boxShadow: 8,
                 border: 1,
-                //borderRadius: '16px'
+                borderRadius: '16px'
             }}>
                 <Grid container
                     spacing={1}
@@ -139,6 +143,7 @@ const Editor = (props) => {
                     sx={{
                         color: 'red'
                     }}
+                    color="inherit"
                     onClick={onClickCallback()}
                 >
                     Finish
@@ -161,28 +166,36 @@ const TagDisplay = (props) => {
     return (
             <Box sx={{
                 width: 230,
-                //height: 230,
+                height: 300,
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'left',
-                alignItems: 'left',
-                mb:2,
+                justifyContent: 'space-between',
+                alignItems: 'space-between',
+                mt: 2,
+                ml: 2,
+                bgcolor: '#e6e2d3',
+                boxShadow: 8,
+                border: 1,
+                borderRadius: '16px'
             }}>
                 <Grid container
                     spacing={1}
-                    sx={{ mt: 2 }}>
-                    {
+                    sx={{
+                        m: 2,
+                    }}>
+                        {
                             tagsList.map((item, idx) => <Tag key={idx} item={item} index={idx} />)
-                    }
+                        }
                 </Grid>
-                {/*<Button
+                <Button
                     sx={{
                         color: 'red'
                     }}
+                    color="inherit"
                     onClick={onClickCallback()}
                 >
                     Edit Tags
-                </Button>*/}
+                </Button>
             </Box>
     );
 };
@@ -192,7 +205,7 @@ const blankTags = (num) => {
     return (new Array(num).fill());
 }
 
-export default function PlayPage() {
+export default function TestPlayPage() {
     
     //Claire's Changes and Notes:
     //created the page, some things hardcoded for now
@@ -202,11 +215,11 @@ export default function PlayPage() {
     //need to implement actual
 
     const [loading, setLoading] = useState(true);
-    const [ playing, setPlaying ] = useState([]);
     const { username } = AuthConsumer();
     const { albumID } = useParams();
     const [ scrobbling, setScrobbling ] = useState(false);
 
+    const [ playing, setPlaying ] = useState([]);
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
 
@@ -230,26 +243,21 @@ export default function PlayPage() {
         });
     }
 
-    const scrobble_emulate_play = async (scrobble_list) => {
+    // emulate api call w/ timeout
+    const bulkScrobble_mock = async () => {
         const delay_play = (track, idx) => {
             return new Promise((resolve) => {
-                let temp_playing = [...playing];
-                temp_playing[idx] = true;
-                setPlaying(temp_playing);
+                let temp = [...playing];
+                temp[idx] = true;
+                setPlaying(temp);
                 const delay = convertToMilliseconds(track.duration)
                 console.log(`playing ${track.title}`);
+                // scrobble here
                 setTimeout(() => {
-                    console.log(`finished: ${track.title}`);
-                    bulkScrobble(username, scrobble_list.slice(idx, idx+1), releaseImg)
-                        .then(res => {
-                            console.log(res);
-                        }).catch(error => {
-                            console.log(error)
-                    }).finally( () => {
-                        resolve(true);
-                    })
-                }, delay);
-            });
+                    console.log(`finished ${track.title}`);
+                    resolve(true);
+                }, delay)               
+            })
         }
         for ( let idx = 0; idx < release.tracklist.length; idx++ ) {
             await delay_play(release.tracklist[idx], idx);
@@ -259,30 +267,41 @@ export default function PlayPage() {
     const scrobble = () => {
         const scrobble_list = buildScrobbleList();
         console.log(scrobble_list)
-        scrobble_emulate_play(scrobble_list); 
+        /*
+        bulkScrobble(username, scrobble_list, releaseImg)
+            .then( res => {
+                console.log(res);
+            })
+            .catch( error => {
+                console.log('error scrobbling', error);
+            })
+            .finally( () => setScrobbling(false) )
+        */
+        bulkScrobble_mock().then( () => setScrobbling(false) );
     }
 
     useEffect(() => {
         const getData = async (release) => {
+            console.log(`fetching ${release}`)
             let rel = await getDiscogsRelease(albumID, username);
+            console.log(rel.data);
             setRelease(rel.data);
-
-            let tmpTags = []
-            if(rel.data.genres !== undefined)
-                tmpTags.push(...rel.data.genres);
-            if(rel.data.styles !== undefined)
-                tmpTags.push(...rel.data.styles);
-            setTagsList(tmpTags);
-            
+            setTagsList([...rel.data.genres, ...rel.data.styles]); //change later
+            console.log(rel.data.tracklist)
             let relImg = await getDiscogsReleaseImage(albumID, username);
             setReleaseImg(relImg.data);
+            setPlaying(new Array(rel.data.length).fill(false));
             setLoading(false);
         }
+
         getData(albumID);
     }, [albumID, username]);
-
+    
+    //hard coding this for now, needs to be given to this page by Collection Page
+    let rowIdx = 0
+    
     //create useState for the array of tags, hard code size for now, figure out dynamics later
-    const [tagsList, setTagsList] = useState(blankTags(0));
+    const [tagsList, setTagsList] = useState(blankTags(5));
     const [allTags, setAllTags] = useState(blankTags(10));
     const [ tracklist, setTrackList ] = useState([]);
     const [editting, setEditting] = useState(false);
@@ -302,21 +321,15 @@ export default function PlayPage() {
     let navigate = useNavigate();
 
     // TODO: make color match theme, increase size and center 
-    if ( loading )  {
-        return (
-            <Box
-                sx={{
-                    width: '100vw',
-                    height: '75vh',
+    if(loading) {
+        return ( <Box sx={{
+                    width: '100%',
+                    height: '100vh',
                     bgcolor: '#353939',
-                    display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                }}
-            >
-                <CircularProgress sx={{ color: 'white' }} />
-            </Box>
-        );
+                }}> <CircularProgress sx={{color:'white'}} /> 
+                </Box> );
     }
     
     //#353939
@@ -324,17 +337,14 @@ export default function PlayPage() {
             <Fragment>
                 <Box sx={{ width: '100%', height: '100vh', bgcolor: '#353939'}}>
                     <Box sx={{ display: 'flex' }}>
-                        <Button sx={{ m: 2, bgcolor: '#141414', color: 'white'}}
-                        
+                        <Button sx={{ m: 2 }}
                             variant="contained"
-                            onClick={() => navigate('/collection', {replace:true}
-                            )
-                        }
+                            color="inherit"
+                            onClick={() => navigate('/collection', {replace:true})}
                         >
-                        Back to Collection
+                            Back
                         </Button>
                     </Box>
-
                     <Container sx={{
                         width: '100%',
                         height: 700,
@@ -346,63 +356,78 @@ export default function PlayPage() {
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
-                            justifyContent: 'left',
-                            alignItems: 'left',
                         }}>
                             <Box sx={{
-                                width: 230,
-                                height: 230,
+                                width: 175,
+                                height: 175,
                                 display: 'flex',
-                                justifyContent: 'left',
-                                alignItems: 'left',
+                                justifyContent: 'center',
+                                alignItems: 'center',
                                 mt: 2,
                                 ml: 2,
-                                //bgcolor: 'white',
+                                bgcolor: 'white',
                                 boxShadow: 8,
                                 border: 1
                             }}>
                                 <img src={ releaseImg || release.thumb || "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/No_image_available.svg/600px-No_image_available.svg.png"}
-                                     alt={ release.title}
-                                     width="230" 
-                                     height="230" />
+                                    alt={ release.title}
+                                width="175" height="175" />
                             </Box>
                             <Box sx={{
                                 width: 230,
                                 height: 150,
-                                //display: 'block',
+                                display: 'block',
                                 mt: 2,
                                 ml: 2,
-                                justifyContent: 'left',
-                                alignItems: 'left',
+                                borderRadius: 3,
+                            bgcolor: '#e6e2d3',
+                            boxShadow: 8,
+                                border: 1
                             }}>
-                                <Typography sx={{ alignText: 'center', padding: '5px', color:"white", fontSize: '20pt', fontWeight: 'bold'}}>
+                                <Typography sx={{ alignText: 'center', padding: '10px' }}>
                                     { release.title }
-                                </Typography>
-                                <Typography sx={{ alignText: 'center', padding: '5px', color:"white", fontSize: '15pt', mb:1}}>
+                                    <Divider />
                                     { release.artists[0].name }
                                 </Typography>
-                                <Button disabled={scrobbling} sx={{ bgcolor: 'red', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
-                                { scrobbling && <LinearProgress sx={{mt:1}}/>}
-                                <TagDisplay tagsList={tagsList} editting={false/*editting*/} onClickCallback={() => onClickCallbackEdit} />
-                                {/*<Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />*/}
+                                <Box sx={{margin: 1, textAlign: 'center'}}>
+                                    <Button disabled={scrobbling} sx={{ bgcolor: 'brown', color: 'white' }} variant='contained' onClick={scrobble}>Scrobble</Button>   
+                                    { scrobbling && <LinearProgress />}
+                                </Box>
                             </Box>
+                            <TagDisplay tagsList={tagsList} editting={editting} onClickCallback={() => onClickCallbackEdit} />
+                            <Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />
                         </Box>
-                        
                         <Box sx={{
                             width: '75%',
-                            //height: '400px',
+                            height: '500px',
                             display: 'flex',
-                            flexDirection: 'column',
                             justifyContent: 'top',
                             alignItems: 'top',
                             mx: 2,
                             my: 2,
+                            bgcolor: '#ffffff',
+                            boxShadow: 0,
+                            border: 1
                         }}>
                         <TracklistTable playing={playing} tracks={release.tracklist || []} />
+                            
                         </Box>
-
                     </Container>
+            <Typography sx={{
+                color: 'white'
+            }}>
+            { /*
+            Ideas/Notes:
+            <br />
+            -liner notes?
+            <br />
+            -display back image as well as front
+            <br />
+            -add title at top of page (not app bar), album title with artist?
+                */}
+            </Typography>
                 </Box>
+            
             </Fragment>
     );
 }
