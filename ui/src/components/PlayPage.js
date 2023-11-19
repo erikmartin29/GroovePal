@@ -12,6 +12,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
+import { blue, grey, green } from '@mui/material/colors';
+import CircleIcon from '@mui/icons-material/Circle';
+
 const handleDelete = () => {
     console.log("delete was clicked");
 }
@@ -21,7 +24,7 @@ const handleClick = () => {
 }
 
 const TracklistTable = (props) => {
-    const {tracks} = props
+    const {tracks, playing} = props
     console.log(tracks);
     
     return (
@@ -31,16 +34,24 @@ const TracklistTable = (props) => {
             <TableRow>
                 <TableCell sx={{ textAlign: 'start'}}><Typography sx={{ fontWeight: 'bold' }}>Track</Typography></TableCell>
                 <TableCell sx={{ textAlign: 'end' }}><AccessTimeIcon /></TableCell>
+                <TableCell></TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
-          {tracks.map((track) => (
+          {tracks.map((track, idx) => (
             <TableRow
               key={track.title}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell>{ track.title }</TableCell>
               <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
+              <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
+                <CircleIcon sx={{
+                    margin: '0px',
+                    padding: '0px',
+                    color: playing[idx] ? green[500] : blue[500]
+                }}/>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -191,6 +202,7 @@ export default function PlayPage() {
     //need to implement actual
 
     const [loading, setLoading] = useState(true);
+    const [ playing, setPlaying ] = useState([]);
     const { username } = AuthConsumer();
     const { albumID } = useParams();
     const [ scrobbling, setScrobbling ] = useState(false);
@@ -218,16 +230,30 @@ export default function PlayPage() {
         });
     }
 
-    // emulate api call w/ timeout
-    const bulkScrobble_mock = () => {
-        setTimeout(() => {
-            setScrobbling(false);
-        }, 5 * 1000)
+    const scrobble_emulate_play = async () => {
+        const delay_play = (track, idx) => {
+            return new Promise((resolve) => {
+                let temp_playing = [...playing];
+                temp_playing[idx] = true;
+                setPlaying(temp_playing);
+                const delay = convertToMilliseconds(track.duration)
+                console.log(`playing ${track.title}`);
+                setTimeout(() => {
+                    console.log(`finished: ${track.title}`);
+                    //scrobble here 
+                    resolve(true);
+                }, delay);
+            });
+        }
+        for ( let idx = 0; idx < release.tracklist.length; idx++ ) {
+            await delay_play(release.tracklist[idx], idx);
+        }
     }
 
     const scrobble = () => {
         const scrobble_list = buildScrobbleList();
         console.log(scrobble_list)
+        scrobble_emulate_play(); 
         bulkScrobble(username, scrobble_list, releaseImg)
             .then( res => {
                 console.log(res);
@@ -236,7 +262,6 @@ export default function PlayPage() {
                 console.log('error scrobbling', error);
             })
             .finally( () => setScrobbling(false) )
-        //bulkScrobble_mock();
     }
 
     useEffect(() => {
@@ -375,7 +400,7 @@ export default function PlayPage() {
                             mx: 2,
                             my: 2,
                         }}>
-                        <TracklistTable tracks={release.tracklist || []} />
+                        <TracklistTable playing={playing} tracks={release.tracklist || []} />
                         </Box>
 
                     </Container>
