@@ -5,6 +5,7 @@ import CollectionPage from '../components/CollectionPage';
 import ProfilePage from '../components/ProfilePage';
 import Settings from '../components/Settings';
 import PlayPage from '../components/PlayPage';
+import TestPlayPage from "../components/Test Components/TestPlayPage";
 
 const routes = [
     {
@@ -45,6 +46,11 @@ const routes = [
     {
         href: '/play/:albumID',
         component: <PlayPage />,
+        protected: true,
+    },
+    {
+        href: '/alt-player/:albumID',
+        component: <TestPlayPage />,
         protected: true,
     }
 ];
