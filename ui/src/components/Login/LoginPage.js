@@ -1,4 +1,4 @@
-import { Box, Stack, Input, Button, Typography, ThemeProvider } from "@mui/material";
+import { Box, Stack, Input, Button, Typography } from "@mui/material";
 import { Fragment, useState } from "react";
 import { AuthConsumer } from "../../context/AuthProvider";
 import {
@@ -38,20 +38,6 @@ export default function LoginPage() {
             borderColor: '#353939',
             height: '100vh'
         }}>
-        <Box>
-            <Typography component='h1' 
-                sx={{ 
-                    margin: 'auto', 
-                    mt: 10, 
-                    alignItems: 'center', 
-                    textAlign: 'center',
-                    fontSize: '32px',
-                    color: '#ffffff'
-                }}
-            >
-                Vinyl Scrobbler
-            </Typography>
-        </Box>
         <Box sx={{ 
             margin: 'auto', 
             mt: 10,
@@ -82,38 +68,34 @@ export default function LoginPage() {
                 />
                 <Button
                     sx={{
-                        bgcolor: '#618343',
-                        color: '#000000',
+                        bgcolor: '#141414',
+                        color: 'white',
+                        ':hover': {
+                            bgcolor: '#333333',
+                        },
                         mt: 3,
                         mb: 0
                     }}
                     variant="contained"
-                    color="#82B74B"
                     onClick={() => loginHandler({ user_id: username, user_pass: password })}
                 >
                     Login
                 </Button>
                 <Button
                     sx={{
-                        bgcolor: '#82B74B',
-                        color: '#000000',
+                        bgcolor: '#141414',
+                        color: 'white',
+                        ':hover': {
+                            bgcolor: '#333333',
+                        },
                         mt: 2,
                         mb: 3
                     }}
                     variant="contained"
-                    color="#82B74B"
+                    //color="#82B74B"
                     onClick={() => navigate('/signup', {replace: true})}
                 >
                     Sign Up
-                </Button>
-                <Button
-                    sx={{
-                        color: '#000000',
-                        fontWeight: 'bold'
-                    }}
-                    onClick={() => navigate('/', {replace:true})}
-                >
-                    Back
                 </Button>
             </Stack>
         </Box>
