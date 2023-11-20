@@ -38,20 +38,6 @@ export default function LoginPage() {
             borderColor: '#353939',
             height: '100vh'
         }}>
-        <Box>
-            <Typography component='h1' 
-                sx={{ 
-                    margin: 'auto', 
-                    mt: 10, 
-                    alignItems: 'center', 
-                    textAlign: 'center',
-                    fontSize: '32px',
-                    color: '#ffffff'
-                }}
-            >
-                Vinyl Scrobbler
-            </Typography>
-        </Box>
         <Box sx={{ 
             margin: 'auto', 
             mt: 10,
