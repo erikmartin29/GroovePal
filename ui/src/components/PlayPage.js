@@ -245,14 +245,13 @@ export default function PlayPage() {
     }
 
 
-    const delay_play = (track, idx) => {
+    const delay_play = (track, scrobble_list, idx) => {
         return new Promise( async (resolve) => {
             const delay = convertToMilliseconds(track.duration)
             console.log(`playing ${track.title}`);
             setTimeout( async () => {
                 console.log(`finished: ${track.title}`);
-                /*
-                    bulkScrobble(username, scrobble_list.slice(idx, idx+1), releaseImg)
+                bulkScrobble(username, scrobble_list.slice(idx, idx+1), releaseImg)
                     .then(res => {
                         console.log(res);
                     }).catch(error => {
@@ -260,17 +259,15 @@ export default function PlayPage() {
                     }).finally( () => {
                         resolve(true);
                     })
-                    */
-                resolve(true);
-            }, 5000);
+            }, delay);
         });
     }
 
-    const scrobble_emulate_play = async () => {
+    const scrobble_emulate_play = async (scrobble_list) => {
         for ( let idx = 0; idx < release.tracklist.length; idx++ ) {
             console.log(idx);
             setPlaying(idx);
-            await delay_play(release.tracklist[idx], idx);
+            await delay_play(release.tracklist[idx], scrobble_list, idx);
             p.push(idx);
             setPlayed(p);
             console.log(played);
