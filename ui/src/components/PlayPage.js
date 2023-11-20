@@ -12,7 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { blue, grey, green } from '@mui/material/colors';
+import { red, blue, grey, green } from '@mui/material/colors';
 import CircleIcon from '@mui/icons-material/Circle';
 
 const handleDelete = () => {
@@ -24,9 +24,21 @@ const handleClick = () => {
 }
 
 const TracklistTable = (props) => {
-    const {tracks, playing} = props
-    console.log(tracks);
-    
+    const {tracks, played, playing} = props
+
+    console.log('played', played);
+    console.log('playing', playing);
+
+    const get_color = (idx) => {
+        if ( played.includes(idx) )
+            return blue[500];
+
+        if ( idx === playing ) 
+            return green[500];
+
+        return grey[500];
+    };
+
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
       <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
@@ -49,7 +61,7 @@ const TracklistTable = (props) => {
                 <CircleIcon sx={{
                     margin: '0px',
                     padding: '0px',
-                    color: playing[idx] ? green[500] : blue[500]
+                    color: get_color(idx),
                 }}/>
               </TableCell>
             </TableRow>
@@ -201,8 +213,10 @@ export default function PlayPage() {
     //how do we want to do tags? (use mui Chips?)
     //need to implement actual
 
-    const [loading, setLoading] = useState(true);
-    const [ playing, setPlaying ] = useState([]);
+    const [ loading, setLoading ] = useState(true);
+    const [ played, setPlayed ] = useState([]);
+    let p = [];
+    const [ playing, setPlaying ] = useState(-1);
     const { username } = AuthConsumer();
     const { albumID } = useParams();
     const [ scrobbling, setScrobbling ] = useState(false);
@@ -230,40 +244,49 @@ export default function PlayPage() {
         });
     }
 
-    const scrobble_emulate_play = async (scrobble_list) => {
-        const delay_play = (track, idx) => {
-            return new Promise((resolve) => {
-                let temp_playing = [...playing];
-                temp_playing[idx] = true;
-                setPlaying(temp_playing);
-                const delay = convertToMilliseconds(track.duration)
-                console.log(`playing ${track.title}`);
-                setTimeout(() => {
-                    console.log(`finished: ${track.title}`);
+
+    const delay_play = (track, idx) => {
+        return new Promise( async (resolve) => {
+            const delay = convertToMilliseconds(track.duration)
+            console.log(`playing ${track.title}`);
+            setTimeout( async () => {
+                console.log(`finished: ${track.title}`);
+                /*
                     bulkScrobble(username, scrobble_list.slice(idx, idx+1), releaseImg)
-                        .then(res => {
-                            console.log(res);
-                        }).catch(error => {
-                            console.log(error)
+                    .then(res => {
+                        console.log(res);
+                    }).catch(error => {
+                        console.log(error)
                     }).finally( () => {
                         resolve(true);
                     })
-                }, delay);
-            });
-        }
-        for ( let idx = 0; idx < release.tracklist.length; idx++ ) {
-            await delay_play(release.tracklist[idx], idx);
-        }
+                    */
+                resolve(true);
+            }, 5000);
+        });
     }
 
+    const scrobble_emulate_play = async () => {
+        for ( let idx = 0; idx < release.tracklist.length; idx++ ) {
+            console.log(idx);
+            setPlaying(idx);
+            await delay_play(release.tracklist[idx], idx);
+            p.push(idx);
+            setPlayed(p);
+            console.log(played);
+        }
+        setScrobbling(false);
+    }
+
+    // todo render snackbar when scrobble session is completed
     const scrobble = () => {
+        p = []; // clear play history
         const scrobble_list = buildScrobbleList();
-        console.log(scrobble_list)
         scrobble_emulate_play(scrobble_list); 
     }
 
     useEffect(() => {
-        const getData = async (release) => {
+        const getData = async () => {
             let rel = await getDiscogsRelease(albumID, username);
             setRelease(rel.data);
 
@@ -273,7 +296,6 @@ export default function PlayPage() {
             if(rel.data.styles !== undefined)
                 tmpTags.push(...rel.data.styles);
             setTagsList(tmpTags);
-            
             let relImg = await getDiscogsReleaseImage(albumID, username);
             setReleaseImg(relImg.data);
             setLoading(false);
@@ -398,7 +420,7 @@ export default function PlayPage() {
                             mx: 2,
                             my: 2,
                         }}>
-                        <TracklistTable playing={playing} tracks={release.tracklist || []} />
+                        <TracklistTable played={played} playing={playing} tracks={release.tracklist || []} />
                         </Box>
 
                     </Container>
