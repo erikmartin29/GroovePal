@@ -5,9 +5,18 @@ import OAuthButtons from './Settings/OAuthButtons';
 export default function Settings() {
 
     const [password, setPassword] = useState('');
+    const [passwordConfirm, setPasswordConfirm] = useState('');
 
     function changePassword() {
         console.log(password);
+        console.log(passwordConfirm);
+
+        if (password !== passwordConfirm) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        console.log("Passwords match");
     }
 
     return (
@@ -42,6 +51,13 @@ export default function Settings() {
                         sx={{ margin: 2, width: 180 }}
                         required={true}
                         onChange={event => setPassword(event.target.value)}
+                    />
+                    <Input
+                        placeholder="Confirm New Password"
+                        type="password"
+                        sx={{ margin: 2, width: 180 }}
+                        required={true}
+                        onChange={event => setPasswordConfirm(event.target.value)}
                     />
                     <Button variant="contained" color="primary" onClick={() => {
                         // update password in the database

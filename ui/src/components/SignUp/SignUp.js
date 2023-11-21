@@ -17,11 +17,20 @@ export default function SignUp() {
         event.preventDefault();
 
         if ( newAccount.user_id === undefined || newAccount.user_pass === undefined ||
-             newAccount.user_fname === undefined || newAccount.user_lname === undefined) 
+             newAccount.user_fname === undefined || newAccount.user_lname === undefined || 
+             newAccount.user_pass_confirm === undefined) 
         {
             alert("Please provide a value for each field");
             return;
         }
+
+        if(newAccount.user_pass !== newAccount.user_pass_confirm) {
+            alert("Passwords do not match");
+            return;
+        }
+
+        //we can remove the passwordConfirm field from the newAccount object, since it won't need to be in the database.
+        delete newAccount.user_pass_confirm;
 
         /*
         validUsername(newAccount.user_id).then( res => {
@@ -45,6 +54,7 @@ export default function SignUp() {
         })
         .catch( error => console.log(error) )
         */
+
         signUp(newAccount)
         .then( res => console.log(res.data) )
         .catch( error => console.log(error))
@@ -98,26 +108,33 @@ export default function SignUp() {
             >
                 <Stack>
                     <Input
-                        placeholder="username"
+                        placeholder="Username"
                         sx={{ magin: 2, mb: 2 }}
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_id: e.target.value })}
                     />
                     <Input
-                        placeholder="password"
+                        placeholder="Password"
                         type="password"
                         sx={{ mt: 2, mb: 2, width: '100%' }}
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_pass: e.target.value })}
                     />
                     <Input
-                        placeholder="firstname"
+                        placeholder="Confirm Password"
+                        type="password"
+                        sx={{ mt: 2, mb: 2, width: '100%' }}
+                        required={true}
+                        onChange={ e => setNewAccount({ ...newAccount, user_pass_confirm: e.target.value })}
+                    />
+                    <Input
+                        placeholder="First Name"
                         sx={{ mt: 2, mb: 2 }}
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_fname: e.target.value })}
                     />
                     <Input
-                        placeholder="lastname"
+                        placeholder="Last Name"
                         sx={{ mt: 2 }}
                         required={true}
                         onChange={ e => setNewAccount({ ...newAccount, user_lname: e.target.value })}
@@ -129,7 +146,7 @@ export default function SignUp() {
                         }}
                             type='submit'
                             variant='contained'
-                            color="#82B74B"
+                            //color="#82B74B"
                     >
                         Create
                     </Button>
