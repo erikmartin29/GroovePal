@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../../context/AuthProvider';
-import { darkGreen, lightGreen, headerBrown } from '../ColorPalette';
+import { lightGreen, headerBrown } from '../ColorPalette';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
