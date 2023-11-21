@@ -75,7 +75,7 @@ export function getMostPlayedArtist(username) {
     return axiosClient.get(`/lastfm/most-played/artist/${username}`);
 }
 
-export function getMostPlayedArtist(username) {
+export function getMostPlayedAlbum(username) {
     return axiosClient.get(`/lastfm/most-played/album/${username}`);
 }
 
