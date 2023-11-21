@@ -71,3 +71,11 @@ export function getPlays(username) {
     return axiosClient.get(`/lastfm/get-scrobbles/${username}`)
 }
 
+export function getMostPlayedArtist(username) {
+    return axiosClient.get(`/lastfm/most-played/artist/${username}`);
+}
+
+export function getMostPlayedArtist(username) {
+    return axiosClient.get(`/lastfm/most-played/album/${username}`);
+}
+
