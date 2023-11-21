@@ -14,6 +14,7 @@ import Paper from '@mui/material/Paper';
 
 import { red, blue, grey, green } from '@mui/material/colors';
 import CircleIcon from '@mui/icons-material/Circle';
+import CheckIcon from '@mui/icons-material/Check';
 
 const handleDelete = () => {
     console.log("delete was clicked");
@@ -39,33 +40,68 @@ const TracklistTable = (props) => {
         return grey[500];
     };
 
+    const get_status = (idx) => {
+        if ( played.includes(idx) )
+            return 1; //played
+        if ( idx === playing ) 
+            return 2; //playing
+        return 3; //unplayed
+    };
+
     return (
     <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-      <Table sticky-header sx={{ minWidth: 650 }} size="small" aria-label="sticky table">
+      <Table sticky-header sx={{ minWidth: 400 }} size="small" aria-label="sticky table">
+        <colgroup>
+            <col style={{width:'90%'}}/>
+            <col style={{width:'9%'}}/>
+            <col style={{width:'1%'}}/>
+        </colgroup>
         <TableHead>
             <TableRow>
                 <TableCell sx={{ textAlign: 'start'}}><Typography sx={{ fontWeight: 'bold' }}>Track</Typography></TableCell>
-                <TableCell sx={{ textAlign: 'end' }}><AccessTimeIcon /></TableCell>
+                <TableCell></TableCell>
                 <TableCell></TableCell>
             </TableRow>
         </TableHead>
         <TableBody>
-          {tracks.map((track, idx) => (
-            <TableRow
-              key={track.title}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell>{ track.title }</TableCell>
-              <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
-              <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
-                <CircleIcon sx={{
-                    margin: '0px',
-                    padding: '0px',
-                    color: get_color(idx),
-                }}/>
-              </TableCell>
-            </TableRow>
-          ))}
+            {tracks.map((track, idx) => (
+                <TableRow
+                    key={track.title}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                    <TableCell>{ track.title }</TableCell>
+                    <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
+                    <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
+                        {(() => {
+                            switch(get_status(idx)) {
+                                case 1:
+                                    // played
+                                    return <CheckIcon sx={{
+                                        margin: '0px',
+                                        padding: '0px',
+                                        color: green[500],
+                                    }}/>;
+                                case 2: 
+                                    // playing
+                                    return <CircularProgress 
+                                    size='1.5rem'
+                                    sx={{
+                                        margin: '0px',
+                                        padding: '0px',
+                                        color: blue[500],
+                                    }}/>;
+                                default:
+                                    // not played
+                                    return <CircleIcon sx={{
+                                        margin: '0px',
+                                        padding: '0px',
+                                        color: grey[300],
+                                    }}/>;
+                            }
+                        })()}
+                    </TableCell>
+                </TableRow>
+            ))}
         </TableBody>
 
       </Table>
