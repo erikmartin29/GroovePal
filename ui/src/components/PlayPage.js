@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -242,16 +241,9 @@ const blankTags = (num) => {
 
 export default function PlayPage() {
     
-    //Claire's Changes and Notes:
-    //created the page, some things hardcoded for now
-    //need some data to be passed from the Collection Page
-    //need to display track list
-    //how do we want to do tags? (use mui Chips?)
-    //need to implement actual
-
+    let p = [];
     const [ loading, setLoading ] = useState(true);
     const [ played, setPlayed ] = useState([]);
-    let p = [];
     const [ playing, setPlaying ] = useState(-1);
     const { username } = AuthConsumer();
     const { albumID } = useParams();
@@ -312,7 +304,6 @@ export default function PlayPage() {
             await delay_play(release.tracklist[idx], scrobble_list, idx);
             p.push(idx);
             setPlayed(p);
-            console.log(played);
         }
         setScrobbling(false);
     }
@@ -325,9 +316,33 @@ export default function PlayPage() {
     }
 
     useEffect(() => {
+        const buildTracklist = (tl) => {
+            console.log(tl);
+            let sides = tl.map( (item) => (
+                item.position[0]
+            ))
+            sides = [...new Set(sides)]; // remove duplicates
+            
+            console.log(sides);
+
+            let partition = {};
+            for ( let side of sides ) {
+                partition[side] = tracklist.filter( (track) => {
+                    console.log(track.position[0], ' === ', side);
+                    if ( track.position[0] === side ) 
+                        return true;
+                    return false;
+                });
+            }
+
+            console.log('partition', partition);
+        }
+
         const getData = async () => {
             let rel = await getDiscogsRelease(albumID, username);
             setRelease(rel.data);
+
+            buildTracklist(rel.data.tracklist);
 
             let tmpTags = []
             if(rel.data.genres !== undefined)
@@ -342,12 +357,7 @@ export default function PlayPage() {
         getData(albumID);
     }, [albumID, username]);
 
-    //create useState for the array of tags, hard code size for now, figure out dynamics later
-    const [tagsList, setTagsList] = useState(blankTags(0));
-    const [allTags, setAllTags] = useState(blankTags(10));
-    const [ tracklist, setTrackList ] = useState([]);
-    const [editting, setEditting] = useState(false);
-    
+
     //onclickcallbacks for the tag editting buttons
     const onClickCallbackEdit = () => {
         setEditting(true);
