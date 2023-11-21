@@ -32,8 +32,6 @@ lastfmRouter.post('/scrobble', TokenInjector.lastfm_middleware, lastfm_provider.
 
 lastfmRouter.get('/get-scrobbles/:user_id', async (ctx) => {
     const { user_id } = ctx.request.params;
-    // todo query parameters for filtering
-   //const { count_artists, count_album };
     try {
         const scrobbles = await ScrobblesController.getScrobblesByUser(user_id);
         ctx.body = scrobbles;
@@ -42,5 +40,34 @@ lastfmRouter.get('/get-scrobbles/:user_id', async (ctx) => {
         console.log(e);
     }
 })
+
+lastfmRouter.get('/most-played/album/:user_id', async (ctx) => {
+    const { user_id } = ctx.request.params;
+    try {
+        const most_played = await ScrobblesController.getAlbumFreqByUser(user_id)
+        ctx.body = {
+            albums: most_played,
+        }
+        ctx.status = 200;
+    } catch ( e ) {
+        console.log(e);
+        ctx.status = 500;
+    }
+})
+
+lastfmRouter.get('/most-played/artist/:user_id', async (ctx) => {
+    const { user_id } = ctx.request.params;
+    try {
+        const most_played = await ScrobblesController.getArtistFreqByUser(user_id)
+        ctx.body = {
+            albums: most_played,
+        }
+        ctx.status = 200;
+    } catch ( e ) {
+        console.log(e);
+        ctx.status = 500;
+    }
+})
+
 
 module.exports = lastfmRouter;
