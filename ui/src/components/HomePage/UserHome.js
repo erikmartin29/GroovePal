@@ -28,21 +28,20 @@ const RecentTracksRows = (props) => {
 
 const TopListRows = (props) => {
     
-    const {row, label, index, size} = props;
-    
+    const {label, frequency, index, size} = props;
     
     if (index < size-1) {
         
         return (
                 <ListItem divider="true">
-                    <ListItemText primary={label}/>
+                    <ListItemText primary={label} secondary={`plays: ${frequency}`}/>
                 </ListItem>
                 )
     }
     
     return (
-            <ListItem>
-                <ListItemText primary={label} />
+            <ListItem >
+                <ListItemText primary={label} secondary={`plays: ${frequency}`}/>
             </ListItem>
     )
 }
@@ -81,14 +80,7 @@ export default function UserHome() {
         });
 
     }, [username])
-    
-    /*
-     <TableCell>Thumbnail</TableCell>
-     <TableCell>Song</TableCell>
-     <TableCell>Artist</TableCell>
-     <TableCell>Album</TableCell>
-     <TableCell>Timestamp</TableCell>
-     */
+   
     return (
             <Fragment>
                 <Box sx={{
@@ -96,11 +88,42 @@ export default function UserHome() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    bgcolor: '#353939'
+                    bgcolor: '#353939',
+                    pt: 2,
+                    pb: 2
                 }}>
-                    <Typography sx={{
+                    <Box sx={{
+                        width: '70%',
+                        height: '90%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        pr: 2
+                    }}>    
+                    <Typography variant="h4" sx={{
                         color: 'white'
                     }}>
+                        Recent Tracks
+                    </Typography>
+                    <TableContainer component={Paper}>
+                        <Table sx={{
+                            width: '100%',
+                            minHeight: '80vh'
+                        }}>
+                            <TableBody>
+                                {
+                                    recentTracks.map((row, index) => (
+                                        <RecentTracksRows row={row} index={index} />
+                                    ))
+                                }
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    </Box>
+                    <Box sx={{
+                        width: '20%',
+                        height: '90%',
+                    }}>
+
                         <Box sx={{
                             mb: 2
                         }}>
@@ -117,7 +140,7 @@ export default function UserHome() {
                             }}>
                                 {
                                     topAlbums.map((row, index) => (
-                                        <TopListRows row={row} index={index} frequency={0} size={topAlbums.length}/>
+                                        <TopListRows label={row.track_album} index={index} frequency={row.album_freq} size={topAlbums.length}/>
                                     ))
                                 }
                             </List>
@@ -136,7 +159,7 @@ export default function UserHome() {
                             }}>
                                 {
                                     topArtists.map((row, index) => (
-                                        <TopListRows label={row.track_album} frequency={0} index={index} size={topArtists.length}/>
+                                        <TopListRows row={row} label={row.track_artist} frequency={row.artist_freq} index={index} size={topArtists.length}/>
                                     ))
                                 }
                             </List>
