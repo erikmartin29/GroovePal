@@ -12,7 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import { red, blue, grey, green } from '@mui/material/colors';
+import { blue, grey, green } from '@mui/material/colors';
 import CircleIcon from '@mui/icons-material/Circle';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -260,6 +260,12 @@ export default function PlayPage() {
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
 
+    //create useState for the array of tags, hard code size for now, figure out dynamics later
+    const [tagsList, setTagsList] = useState(blankTags(0));
+    const [allTags, setAllTags] = useState(blankTags(10));
+    const [ tracklist, setTrackList ] = useState([]);
+    const [editting, setEditting] = useState(false);
+    
     const convertToMilliseconds = (timestr) => {
         const [ minutes, seconds] = timestr.split(':').map(Number);
         return (minutes*60000) + (seconds+1000);
