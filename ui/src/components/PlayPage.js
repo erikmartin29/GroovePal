@@ -2,7 +2,6 @@ import { Fragment, useEffect, useState } from 'react';
 import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,8 +10,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-
-import { red, blue, grey, green } from '@mui/material/colors';
+import { blue, grey, green } from '@mui/material/colors';
 import CircleIcon from '@mui/icons-material/Circle';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -27,8 +25,8 @@ const handleClick = () => {
 const TracklistTable = (props) => {
     const {tracks, played, playing} = props
 
-    console.log('played', played);
-    console.log('playing', playing);
+    //console.log('played', played);
+    //console.log('playing', playing);
 
     const get_color = (idx) => {
         if ( played.includes(idx) )
@@ -53,8 +51,9 @@ const TracklistTable = (props) => {
       <Table sticky-header sx={{ minWidth: 400 }} size="small" aria-label="sticky table">
         <colgroup>
             <col style={{width:'90%'}}/>
-            <col style={{width:'9%'}}/>
-            <col style={{width:'1%'}}/>
+            <col style={{width:'3.33%'}}/>
+            <col style={{width:'3.33%'}}/>
+            <col style={{width:'3.33%'}}/>
         </colgroup>
         <TableHead>
             <TableRow>
@@ -64,46 +63,48 @@ const TracklistTable = (props) => {
             </TableRow>
         </TableHead>
         <TableBody>
-            {tracks.map((track, idx) => (
-                <TableRow
-                    key={track.title}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                    <TableCell>{ track.title }</TableCell>
-                    <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
-                    <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
-                        {(() => {
-                            switch(get_status(idx)) {
-                                case 1:
-                                    // played
-                                    return <CheckIcon sx={{
-                                        margin: '0px',
-                                        padding: '0px',
-                                        color: green[500],
-                                    }}/>;
-                                case 2: 
-                                    // playing
-                                    return <CircularProgress 
-                                    size='1.5rem'
-                                    sx={{
-                                        margin: '0px',
-                                        padding: '0px',
-                                        color: blue[500],
-                                    }}/>;
-                                default:
-                                    // not played
-                                    return <CircleIcon sx={{
-                                        margin: '0px',
-                                        padding: '0px',
-                                        color: grey[300],
-                                    }}/>;
-                            }
-                        })()}
-                    </TableCell>
-                </TableRow>
-            ))}
+            {tracks.map((side) => {
+                return side.map((track, idx) => {
+                    return <TableRow
+                        key={track.title}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                        <TableCell>{ track.title }</TableCell>
+                        <TableCell align="right">{ track.position || ""}</TableCell>
+                        <TableCell align="right">{ track.duration || "XX:XX" }</TableCell>
+                        <TableCell sx={{ display: 'flex', justifyContent: 'end'}}>
+                            {(() => {
+                                switch(get_status(idx)) {
+                                    case 1:
+                                        // played
+                                        return <CheckIcon sx={{
+                                            margin: '0px',
+                                            padding: '0px',
+                                            color: green[500],
+                                        }}/>;
+                                    case 2: 
+                                        // playing
+                                        return <CircularProgress 
+                                        size='1.5rem'
+                                        sx={{
+                                            margin: '0px',
+                                            padding: '0px',
+                                            color: blue[500],
+                                        }}/>;
+                                    default:
+                                        // not played
+                                        return <CircleIcon sx={{
+                                            margin: '0px',
+                                            padding: '0px',
+                                            color: grey[300],
+                                        }}/>;
+                                }
+                            })()}
+                        </TableCell>
+                    </TableRow>
+                })
+            })}
         </TableBody>
-
       </Table>
     </TableContainer>
   );
@@ -257,6 +258,8 @@ export default function PlayPage() {
     const { albumID } = useParams();
     const [ scrobbling, setScrobbling ] = useState(false);
 
+    const [ tracklist, setTracklist ] = useState([]);
+
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
 
@@ -329,8 +332,24 @@ export default function PlayPage() {
             if(rel.data.styles !== undefined)
                 tmpTags.push(...rel.data.styles);
             setTagsList(tmpTags);
+
             let relImg = await getDiscogsReleaseImage(albumID, username);
             setReleaseImg(relImg.data);
+
+            //TODO: Move this to a function (currently not working, probably due some async problems)
+            //formatTracklist();
+            let list = [];
+            let sides = [];
+            for (let i = 0; i < rel.data.tracklist.length; i++) {
+                console.log(rel.data.tracklist[i].position.charAt(0));
+                if (!sides.includes(rel.data.tracklist[i].position.charAt(0))) {
+                    sides.push(rel.data.tracklist[i].position.charAt(0));
+                    list.push([]);
+                }
+                list[sides.length - 1].push(rel.data.tracklist[i]);
+            }
+            setTracklist(list);
+
             setLoading(false);
         }
         getData(albumID);
@@ -339,7 +358,6 @@ export default function PlayPage() {
     //create useState for the array of tags, hard code size for now, figure out dynamics later
     const [tagsList, setTagsList] = useState(blankTags(0));
     const [allTags, setAllTags] = useState(blankTags(10));
-    const [ tracklist, setTrackList ] = useState([]);
     const [editting, setEditting] = useState(false);
     
     //onclickcallbacks for the tag editting buttons
@@ -453,7 +471,7 @@ export default function PlayPage() {
                             mx: 2,
                             my: 2,
                         }}>
-                        <TracklistTable played={played} playing={playing} tracks={release.tracklist || []} />
+                        <TracklistTable played={played} playing={playing} tracks={tracklist || []} />
                         </Box>
 
                     </Container>
