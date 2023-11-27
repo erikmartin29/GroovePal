@@ -256,9 +256,8 @@ export default function PlayPage() {
     const [editting, setEditting] = useState(false);
 
     const convertToMilliseconds = (timestr) => {
-        //const [minutes, seconds] = timestr.split(':').map(Number);
-        //return (minutes * 60000) + (seconds * 1000);
-        return 1000;
+        const [minutes, seconds] = timestr.split(':').map(Number);
+        return (minutes * 60000) + (seconds * 1000);
     }
 
     const buildScrobbleList = (sideIdx) => {
