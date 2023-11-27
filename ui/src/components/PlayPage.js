@@ -272,7 +272,6 @@ export default function PlayPage() {
                 artist: release['artists'][0]['name'],
                 album: release['title'],
                 track: track.title,
-                duration: track.duration,
                 timestamp: Math.floor(start_time / 1000),
             };
         });
