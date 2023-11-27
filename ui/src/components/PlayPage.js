@@ -261,8 +261,8 @@ export default function PlayPage() {
 
     const convertToMilliseconds = (timestr) => {
         const [minutes, seconds] = timestr.split(':').map(Number);
-        return 1000;
-        //return (minutes * 60000) + (seconds * 1000);
+        //return 1000; // just here for degugging
+        return (minutes * 60000) + (seconds * 1000);
     }
 
     const buildScrobbleList = (sideIdx) => {
