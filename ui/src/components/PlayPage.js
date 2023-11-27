@@ -240,7 +240,9 @@ export default function PlayPage() {
     const { albumID } = useParams();
 
     const [scrobbling, setScrobbling] = useState(false);
+    const [scrobblingComplete, setScrobblingComplete] = useState(false);
 
+    const [sides, setSides] = useState([]);
     const [nextSide, setNextSide] = useState(0);
     const [maxSide, setMaxSide] = useState(0);
 
@@ -250,6 +252,8 @@ export default function PlayPage() {
     const [release, setRelease] = useState([]);
     const [releaseImg, setReleaseImg] = useState([]);
 
+    const [buttonText, setButtonText] = useState("Scrobble");
+
     //create useState for the array of tags, hard code size for now, figure out dynamics later
     const [tagsList, setTagsList] = useState(blankTags(0));
     const [allTags, setAllTags] = useState(blankTags(10));
@@ -257,7 +261,8 @@ export default function PlayPage() {
 
     const convertToMilliseconds = (timestr) => {
         const [minutes, seconds] = timestr.split(':').map(Number);
-        return (minutes * 60000) + (seconds * 1000);
+        return 1000;
+        //return (minutes * 60000) + (seconds * 1000);
     }
 
     const buildScrobbleList = (sideIdx) => {
@@ -304,6 +309,15 @@ export default function PlayPage() {
             tmpPlayed.push(playingIdx);
             setPlayed(tmpPlayed);
         }
+        
+        setButtonText("Scrobble Side " + sides[nextSide + 1])
+        setNextSide(nextSide + 1)
+
+        if (nextSide + 1 >= maxSide) {
+            setButtonText("Scrobbling Complete")
+            setScrobblingComplete(true);
+        }
+
         setScrobbling(false);
     };
 
@@ -343,6 +357,9 @@ export default function PlayPage() {
             setMaxSide(sides.length);
             setPartitionedTracklist(list);
 
+            setSides(sides);
+            setButtonText("Scrobble Side " + sides[0])
+
             setLoading(false);
         }
         getData(albumID);
@@ -378,6 +395,19 @@ export default function PlayPage() {
                 <CircularProgress sx={{ color: 'white' }} />
             </Box>
         );
+    }
+
+    function handleScrobbleClick() {
+        //console.log('scrobbling side', nextSide);
+        if (nextSide >= maxSide) {
+            alert("You've already scrobbled all sides!")
+            setButtonText("Scrobbling Complete")
+            setScrobbling(true);
+            return;
+        }
+        setButtonText("Scrobbling... ")
+        scrobble(nextSide)
+        setNextSide(nextSide + 1)
     }
 
     //#353939
@@ -443,19 +473,13 @@ export default function PlayPage() {
                                 {release.artists[0].name}
                             </Typography>
                             <Button
-                                disabled={scrobbling}
+                                disabled={scrobbling || scrobblingComplete}
                                 sx={{ bgcolor: 'red', color: 'white' }}
                                 variant='contained'
                                 onClick={() => {
-                                    console.log('scrobbling side', nextSide);
-                                    if (nextSide >= maxSide) {
-                                        alert("You've already scrobbled all sides!")
-                                        return;
-                                    }
-                                    scrobble(nextSide)
-                                    setNextSide(nextSide + 1)
+                                    handleScrobbleClick();
                                 }}>
-                                Scrobble
+                                {buttonText}
                             </Button>
                             {scrobbling && <LinearProgress sx={{ mt: 1 }} />}
                             <TagDisplay tagsList={tagsList} editting={false/*editting*/} onClickCallback={() => onClickCallbackEdit} />
