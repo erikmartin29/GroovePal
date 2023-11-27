@@ -146,7 +146,6 @@ export default function SignUp() {
                         }}
                             type='submit'
                             variant='contained'
-                            //color="#82B74B"
                     >
                         Create
                     </Button>
