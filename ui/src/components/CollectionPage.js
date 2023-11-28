@@ -113,7 +113,7 @@ export default function CollectionPage() {
                 sx={{
                     width: '100vw',
                     height: '75vh',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -127,7 +127,7 @@ export default function CollectionPage() {
             <Fragment>
                 <Box sx={{
                     height: '100%',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                 }}>
 
                     <Box sx={{

@@ -33,9 +33,9 @@ export default function LoginPage() {
     return authed ? <Navigate to={from} replace /> : (
         <Fragment>
         <Box sx={{
-            bgcolor: '#353939',
+            bgcolor: '#222222',
             border: 1,
-            borderColor: '#353939',
+            borderColor: '#222222',
             height: '100vh'
         }}>
         <Box sx={{ 

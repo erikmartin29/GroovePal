@@ -39,7 +39,7 @@ const TracklistTable = (props) => {
 
     return (
         <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
-            <Table sticky-header sx={{ minWidth: 400 }} size="small" aria-label="sticky table">
+            <Table sticky-header sx={{ minWidth: 400, bgcolor: '#141414' }} size="small" aria-label="sticky table">
                 <colgroup>
                     <col style={{ width: '90%' }} />
                     <col style={{ width: '3.33%' }} />
@@ -48,9 +48,9 @@ const TracklistTable = (props) => {
                 </colgroup>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ textAlign: 'start' }}><Typography sx={{ fontWeight: 'bold' }}>Track</Typography></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
+                        <TableCell sx={{ textAlign: 'start', borderBottom:"none" }}><Typography sx={{ fontWeight: 'bold', color: 'white' }}>Track</Typography></TableCell>
+                        <TableCell sx={{ borderBottom:"none" }}></TableCell>
+                        <TableCell sx={{ borderBottom:"none" }}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -59,10 +59,10 @@ const TracklistTable = (props) => {
                             key={track.title}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell>{track.title}</TableCell>
-                            <TableCell align="right">{track.position || ""}</TableCell>
-                            <TableCell align="right">{track.duration || "XX:XX"}</TableCell>
-                            <TableCell sx={{ display: 'flex', justifyContent: 'end' }}>
+                            <TableCell sx={{ borderBottom:"none" }}><Typography sx={{color:'white'}}>{track.title}</Typography></TableCell>
+                            <TableCell sx={{ borderBottom:"none" }} align="right"><Typography sx={{color:'white'}}>{track.position || ""}</Typography></TableCell>
+                            <TableCell sx={{ borderBottom:"none" }} align="right"><Typography sx={{color:'white'}}>{track.duration || "XX:XX"}</Typography></TableCell>
+                            <TableCell sx={{ display: 'flex', justifyContent: 'end', borderBottom:'none' }}>
                                 {(() => {
                                     switch (get_status(idx)) {
                                         case 1:
@@ -86,7 +86,7 @@ const TracklistTable = (props) => {
                                             return <CircleIcon sx={{
                                                 margin: '0px',
                                                 padding: '0px',
-                                                color: grey[300],
+                                                color: grey[800],
                                             }} />;
                                     }
                                 })()}
@@ -386,7 +386,7 @@ export default function PlayPage() {
                 sx={{
                     width: '100vw',
                     height: '75vh',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -413,7 +413,7 @@ export default function PlayPage() {
     //#353939
     return (
         <Fragment>
-            <Box sx={{ width: '100%', height: '100vh', bgcolor: '#353939' }}>
+            <Box sx={{ width: '100%', height: '100vh', bgcolor: '#222222' }}>
                 <Box sx={{ display: 'flex' }}>
                     <Button sx={{ m: 2, bgcolor: '#141414', color: 'white' }}
 

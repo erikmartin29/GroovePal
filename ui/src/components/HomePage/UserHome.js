@@ -182,7 +182,7 @@ export default function UserHome() {
                 sx={{
                     width: '100vw',
                     height: '100vh',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -200,7 +200,7 @@ export default function UserHome() {
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
-                bgcolor: '#353939',
+                bgcolor: '#222222',
                 pt: 1,
                 pb: 1
             }}>

@@ -67,9 +67,9 @@ export default function SignUp() {
             <Fragment>
             <Box sx={{
                 height: 900,
-                bgcolor: '#353939',
+                bgcolor: '#222222',
                 border: 1,
-                borderColor: '#353939'
+                borderColor: '#222222'
             }}>
                 <Box>
                     <Typography component="h1"

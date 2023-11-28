@@ -26,7 +26,7 @@ export default function Settings() {
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                bgcolor: '#353939'
+                bgcolor: '#222222'
             }}>
                 <Box sx={{
                     display: 'flex',
