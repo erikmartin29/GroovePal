@@ -89,13 +89,6 @@ export default function Header() {
                                 </MenuItem>
                             <MenuItem onClick={() => {
                                 handleClose();
-                                navigate('/profile', {replace: true})
-                            }}
-                            >
-                                Profile
-                            </MenuItem>
-                            <MenuItem onClick={() => {
-                                handleClose();
                                 navigate('/collection', {replace: true})
                             }}
                                 >

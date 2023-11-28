@@ -1,48 +1,139 @@
 import { Fragment, useState, useEffect } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, List, ListItem, ListItemText } from '@mui/material';
+import { Grid, Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
 
-import {AuthConsumer} from '../../context/AuthProvider';
-import {getPlays, getMostPlayedAlbum, getMostPlayedArtist} from '../../utils/api_provider/api_provider';
+import { AuthConsumer } from '../../context/AuthProvider';
+import { getPlays, getMostPlayedAlbum, getMostPlayedArtist } from '../../utils/api_provider/api_provider';
 
 
 const RecentTracksRows = (props) => {
-    
-    const {row, index} = props
-    
-    const date = new Date(Number(row.timestamp)*1000);
+
+    const { row, index } = props
+
+    const date = new Date(Number(row.timestamp) * 1000);
     const formattedTime = date.toLocaleString();
-    
-    
+
+
     return (
-            <TableRow key={index}>
-                <TableCell>
-                    <img src={row.image_url} width="100" height="100"/>
-                </TableCell>
-                <TableCell> {row.track_name} </TableCell>
-                <TableCell> {row.track_artist} </TableCell>
-                <TableCell> {row.track_album} </TableCell>
-                <TableCell> {formattedTime} </TableCell>
-            </TableRow>
+        <TableRow key={index}>
+            <TableCell sx={{borderBottom: "none"}}>
+                <img src={row.image_url} width="125" height="125" />
+            </TableCell>
+            <TableCell sx={{borderBottom: "none"}} align='left'> 
+                <Typography
+                sx={{
+                    color: 'white',
+                    mb: 1,
+                    fontSize: 20
+                }}> {row.track_name} 
+                </Typography>
+                <Typography
+                sx={{
+                    color: '#bbbbbb',
+                    mb: 1,
+                    fontSize: 15.5
+                }}> {row.track_album} 
+                </Typography>
+                <Typography
+                sx={{
+                    color: '#bbbbbb',
+                    mb: 1,
+                    fontSize: 15.5
+                }}> {row.track_artist} 
+                </Typography>
+                <Typography
+                sx={{
+                    color: '#bbbbbb',
+                    mb: 1,
+                    fontSize: 15.5
+                }}> {formattedTime} 
+                </Typography>
+                
+            </TableCell>
+        </TableRow>
     )
 }
 
-const TopListRows = (props) => {
-    
-    const {label, frequency, index, size} = props;
-    
-    if (index < size-1) {
-        
+const TopAlbumListRows = (props) => {
+
+    const { image_url, label, frequency, index, size } = props;
+
+    if (index < 3) {
+
         return (
-                <ListItem divider="true">
-                    <ListItemText primary={label} secondary={`plays: ${frequency}`}/>
-                </ListItem>
-                )
-    }
-    
-    return (
-            <ListItem >
-                <ListItemText primary={label} secondary={`plays: ${frequency}`}/>
+            <ListItem divider="true">
+                <Grid container sx={{ alignItems: "left" }}>
+                    <Grid item xs={4}>
+                        <img src={image_url} width="80" height="80" />
+                    </Grid>
+
+                    <Grid item xs={6}>
+                        <ListItemText primary={<Typography
+                        sx={{
+                            color: 'white',
+                            mb: 1,
+                            fontSize: 20,
+                            mb: 0
+                        }}> {label}
+                        </Typography>} 
+                        secondary={<Typography
+                        sx={{
+                            color: '#bbbbbb',
+                            mb: 1,
+                            fontSize: 15.5
+                        }}> {`${frequency} plays`}
+                        </Typography>}/>
+                    </Grid>
+                </Grid>
             </ListItem>
+        )
+    }
+
+    return (
+        <ListItem >
+            <ListItemText primary={label} secondary={`plays: ${frequency}`} />
+        </ListItem>
+    )
+}
+
+const TopArtistListRows = (props) => {
+
+    const { image_url, label, frequency, index, size } = props;
+
+    if (index < 3) {
+
+        return (
+            <ListItem divider="true">
+                <Grid container sx={{ alignItems: "left" }}>
+                    {/*<Grid item xs={4}>
+                        <img src={image_url} width="80" height="80" />
+                    </Grid>*/}
+
+                    <Grid item xs={10}>
+                        <ListItemText primary={<Typography
+                        sx={{
+                            color: 'white',
+                            mb: 1,
+                            fontSize: 20,
+                            mb: 0
+                        }}> {label}
+                        </Typography>} 
+                        secondary={<Typography
+                        sx={{
+                            color: '#bbbbbb',
+                            mb: 1,
+                            fontSize: 15.5
+                        }}> {`${frequency} plays`}
+                        </Typography>}/>
+                    </Grid>
+                </Grid>
+            </ListItem>
+        )
+    }
+
+    return (
+        <ListItem >
+            <ListItemText primary={label} secondary={`plays: ${frequency}`} />
+        </ListItem>
     )
 }
 
@@ -51,64 +142,92 @@ const createList = (num) => {
 }
 
 export default function UserHome() {
-    
-    const {username} = AuthConsumer();
+
+    const { username } = AuthConsumer();
     const [recentTracks, setRecentTracks] = useState([]);
     const [topAlbums, setTopAlbums] = useState([]);
     const [topArtists, setTopArtists] = useState([]);
-    
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        getPlays(username).then( res => {
-            console.log(res);
-            setRecentTracks(res.data);
-        }).catch( error => {
-            console.log(error);
-        });
+        const getData = async () => {
+            await getPlays(username).then(res => {
+                console.log(res);
+                setRecentTracks(res.data);
+            }).catch(error => {
+                console.log(error);
+            });
 
-        getMostPlayedArtist(username).then( res => {
-            setTopArtists(res.data.albums);
-            console.log(res.data);
-        }).catch( error => {
-            console.log(error);
-        });
+            await getMostPlayedArtist(username).then(res => {
+                setTopArtists(res.data.albums);
+                console.log(res.data);
+            }).catch(error => {
+                console.log(error);
+            });
 
-        getMostPlayedAlbum(username).then( res => {
-            console.log(res.data);
-            setTopAlbums(res.data.albums);
-        }).catch( error => {
-            console.log(error);
-        });
-
+            await getMostPlayedAlbum(username).then(res => {
+                console.log(res.data);
+                setTopAlbums(res.data.albums);
+            }).catch(error => {
+                console.log(error);
+            });
+            setLoading(false);
+        }
+        getData(username);
     }, [username])
-   
-    return (
-            <Fragment>
-                <Box sx={{
+
+    if (loading) {
+        return (
+            <Box
+                sx={{
+                    width: '100vw',
                     height: '100vh',
+                    bgcolor: '#222222',
                     display: 'flex',
-                    justifyContent: 'center',
                     alignItems: 'center',
-                    bgcolor: '#353939',
-                    pt: 2,
-                    pb: 2
+                    justifyContent: 'center',
+                }}
+            >
+                <CircularProgress sx={{ color: 'white' }} />
+            </Box>
+        );
+    }
+
+    return (
+        <Fragment>
+            <Box sx={{
+                height: '90vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                bgcolor: '#222222',
+                pt: 1,
+                pb: 1
+            }}>
+                <Box sx={{
+                    width: '30%',
+                    height: '90%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    pr: 2
                 }}>
-                    <Box sx={{
-                        width: '70%',
-                        height: '90%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        pr: 2
-                    }}>    
                     <Typography variant="h4" sx={{
-                        color: 'white'
+                        color: 'white',
+                        mb: 1,
+                        fontWeight: 'bold'
                     }}>
-                        Recent Tracks
+                        Recently Scrobbled Tracks
                     </Typography>
-                    <TableContainer component={Paper}>
-                        <Table sx={{
+                    <TableContainer component={Paper} style={{ maxHeight: 650 }}>
+                        <Table stickyHeader sx={{
                             width: '100%',
-                            minHeight: '80vh'
+                            minHeight: '80vh',
+                            bgcolor: '#141414'
                         }}>
+                            <colgroup>
+                                <col style={{ width: '10%' }} />
+                                <col style={{ width: '90%' }} />
+                            </colgroup>
                             <TableBody>
                                 {
                                     recentTracks.map((row, index) => (
@@ -118,54 +237,58 @@ export default function UserHome() {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    </Box>
-                    <Box sx={{
-                        width: '20%',
-                        height: '90%',
-                    }}>
+                </Box>
+                <Box sx={{
+                    width: '20%',
+                    height: '90%',
+                }}>
 
-                        <Box sx={{
-                            mb: 2
+                    <Box sx={{
+                        mb: 2
+                    }}>
+                        <Typography variant="h4" sx={{
+                            color: 'white',
+                            mb: 1,
+                            fontWeight: 'bold'
                         }}>
-                            <Typography variant="h4" sx={{
-                                color: 'white'
-                            }}>
-                                Top Albums
-                            </Typography>
-                            <List sx={{
-                                bgcolor: 'white',
-                                maxHeight: 300,
-                                position: 'relative',
-                                overflow: 'auto'
-                            }}>
-                                {
-                                    topAlbums.map((row, index) => (
-                                        <TopListRows label={row.track_album} index={index} frequency={row.album_freq} size={topAlbums.length}/>
-                                    ))
-                                }
-                            </List>
-                        </Box>
-                        <Box>
-                            <Typography variant="h4" sx={{
-                                color: 'white'
-                            }}>
-                                Top Artists
-                            </Typography>
-                            <List sx={{
-                                bgcolor: 'white',
-                                maxHeight: 300,
-                                position: 'relative',
-                                overflow: 'auto'
-                            }}>
-                                {
-                                    topArtists.map((row, index) => (
-                                        <TopListRows row={row} label={row.track_artist} frequency={row.artist_freq} index={index} size={topArtists.length}/>
-                                    ))
-                                }
-                            </List>
-                        </Box>
+                            Top Albums
+                        </Typography>
+                        <List sx={{
+                            bgcolor: '#141414',
+                            maxHeight: 300,
+                            position: 'relative',
+                            overflow: 'auto'
+                        }}>
+                            {
+                                topAlbums.slice(0,3).map((row, index) => (
+                                    <TopAlbumListRows image_url={row.image_url} label={row.track_album} index={index} frequency={row.album_freq} size={topAlbums.length} />
+                                ))
+                            }
+                        </List>
+                    </Box>
+                    <Box>
+                        <Typography variant="h4" sx={{
+                            color: 'white',
+                            mb: 1,
+                            fontWeight: 'bold'
+                        }}>
+                            Top Artists
+                        </Typography>
+                        <List sx={{
+                            bgcolor: '#141414',
+                            maxHeight: 300,
+                            position: 'relative',
+                            overflow: 'auto'
+                        }}>
+                            {
+                                topArtists.slice(0,3).map((row, index) => (
+                                    <TopArtistListRows image_url={row.image_url} row={row} label={row.track_artist} frequency={row.artist_freq} index={index} size={topArtists.length} />
+                                ))
+                            }
+                        </List>
                     </Box>
                 </Box>
-            </Fragment>
+            </Box>
+        </Fragment>
     );
 }

@@ -13,7 +13,7 @@ export default function HomePage() {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    bgcolor: '#353939'
+                    bgcolor: '#222222'
              }}>
                 <div style={{ margin: 100, padding: 100 }}>
                     <h1> HOME - this is a protected page</h1>

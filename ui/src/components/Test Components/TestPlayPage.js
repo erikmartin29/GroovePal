@@ -325,7 +325,7 @@ export default function TestPlayPage() {
         return ( <Box sx={{
                     width: '100%',
                     height: '100vh',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}> <CircularProgress sx={{color:'white'}} /> 
@@ -335,7 +335,7 @@ export default function TestPlayPage() {
     //#353939
     return ( 
             <Fragment>
-                <Box sx={{ width: '100%', height: '100vh', bgcolor: '#353939'}}>
+                <Box sx={{ width: '100%', height: '100vh', bgcolor: '#222222'}}>
                     <Box sx={{ display: 'flex' }}>
                         <Button sx={{ m: 2 }}
                             variant="contained"

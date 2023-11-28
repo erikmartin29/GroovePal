@@ -3,6 +3,8 @@ import { Box, Stack, Button } from '@mui/material';
 import { discogs_oauth, lastfm_oauth } from '../../utils/api_provider/api_provider';
 import { AuthConsumer } from '../../context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
+import CheckIcon from '@mui/icons-material/Check';
+import { green } from '@mui/material/colors';
 
 export default function OAuthButtons() {
 
@@ -10,44 +12,86 @@ export default function OAuthButtons() {
 
     let navigate = useNavigate();
 
-    const [ discogsUrl, setDiscogsUrl ] = useState('');
-    const [ lastfmUrl, setLastfmUrl ] = useState('');
-    const [ loading, setLoading ] = useState(true);
+    const [discogsUrl, setDiscogsUrl] = useState('');
+    const [lastfmUrl, setLastfmUrl] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    const [isDiscogsConnected, setIsDiscogsConnected] = useState(false);
+    const [isLastFMConnected, setIsLastFMConnected] = useState(false);
 
     const popup_window = useRef('');
 
     const handlePopup = (url) => {
         window.open(url, popup_window, 'width=500,height=500');
-        
+
     }
 
     useEffect(() => {
         const getUrls = async () => {
             discogs_oauth(username)
-                .then( res => setDiscogsUrl(res.data.authurl) )
-                .catch( error => console.log(error) )
+                .then(res => {
+                    setDiscogsUrl(res.data.authurl)
+                    //setIsDiscogsConnected(true)
+                })
+                .catch(error => console.log(error))
 
             lastfm_oauth(username)
-                .then( res => setLastfmUrl(res.data.authurl) )
-                .catch( error => console.log(error) )
+                .then(res => {
+                    setLastfmUrl(res.data.authurl)
+                    //setIsLastFMConnected(true)
+                })
+                .catch(error => console.log(error))
         }
 
-        getUrls().then( () => setLoading(false) );
+        getUrls().then(() => setLoading(false));
     }, [username])
 
-    return loading ? <span>loading</span> : (
+    return (
         <Box>
             <Stack direction='column'>
-                <Button 
-                    variant="contained" 
-                    sx={{ mt: 2, mb: 3 }}
-                    onClick={ () => handlePopup(discogsUrl)}>Link Discogs</Button>
-                <Button 
-                    variant="contained"
-                    sx={{ mt: 2, mb: 3 }}
-                    onClick={ () => handlePopup(lastfmUrl)}>Link LastFM</Button>
+                <Stack direction='row' alignItems='center'>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            mb: 3,
+                            color: 'black',
+                            backgroundColor: 'white',
+                            width: '100%',
+                            '&:hover': {
+                                backgroundColor: 'black',
+                                color: 'white',
+                            }
+                        }}
+                        onClick={() => handlePopup(discogsUrl)}>
+                        Link Discogs
+                    </Button>
+                    {isDiscogsConnected ? <CheckIcon sx={{ paddingLeft: 2, color: green[500] }} /> : null}
+                </Stack>
+
+                <Stack direction='row' alignItems='center'>
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            mb: 3,
+                            color: 'black',
+                            backgroundColor: 'white',
+                            width: '100%',
+                            '&:hover': {
+                                backgroundColor: 'black',
+                                color: 'white',
+                            }
+                        }}
+                        onClick={() => handlePopup(discogsUrl)}>
+                        Link LastFM
+                    </Button>
+                    {isLastFMConnected ? <CheckIcon sx={{ paddingLeft: 2, color: green[500] }} /> : null}
+                </Stack>
+
             </Stack>
         </Box>
     );
+
 }
 
