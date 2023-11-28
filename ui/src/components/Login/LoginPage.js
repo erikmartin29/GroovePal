@@ -33,9 +33,9 @@ export default function LoginPage() {
     return authed ? <Navigate to={from} replace /> : (
         <Fragment>
         <Box sx={{
-            bgcolor: '#353939',
+            bgcolor: '#222222',
             border: 1,
-            borderColor: '#353939',
+            borderColor: '#222222',
             height: '100vh'
         }}>
         <Box sx={{ 
@@ -49,32 +49,37 @@ export default function LoginPage() {
             borderRadius: '10px', 
             borderColor: '#000000',
             boxShadow: 8,
-            bgcolor: '#e6e2d3'
+            bgcolor: '#141414'
         }}>
-            <Stack>
+            <Stack alignItems='center'>
                 <Input
-                    
-                    placeholder="username"
-                    sx={{ margin: 2 }}
+                    placeholder="Username"
+                    sx={{ margin: 2, width: 180, color: 'white',
+                        // underline when selected
+                        ':after': { borderBottomColor: 'white' } }}
                     required={true}
                     onChange={ event => setUsername(event.target.value) }     
                 />
                 <Input 
-                    placeholder="password" 
+                    placeholder="Password" 
                     type="password"
-                    sx={{ margin: 2 }}
+                    sx={{ margin: 2, width: 180, color: 'white',
+                        // underline when selected
+                        ':after': { borderBottomColor: 'white' } }}
                     required={true}
                     onChange={ event => setPassword(event.target.value) }
                 />
                 <Button
                     sx={{
-                        bgcolor: '#141414',
-                        color: 'white',
+                        bgcolor: 'white',
+                        color: 'black',
                         ':hover': {
-                            bgcolor: '#333333',
+                            bgcolor: 'black',
+                            color: 'white',
                         },
                         mt: 3,
-                        mb: 0
+                        mb: 0,
+                        width: 180
                     }}
                     variant="contained"
                     onClick={() => loginHandler({ user_id: username, user_pass: password })}
@@ -83,13 +88,15 @@ export default function LoginPage() {
                 </Button>
                 <Button
                     sx={{
-                        bgcolor: '#141414',
-                        color: 'white',
+                        bgcolor: 'white',
+                        color: 'black',
                         ':hover': {
-                            bgcolor: '#333333',
+                            bgcolor: 'black',
+                            color: 'white',
                         },
-                        mt: 2,
-                        mb: 3
+                        mt: 3,
+                        mb: 0,
+                        width: 180
                     }}
                     variant="contained"
                     //color="#82B74B"

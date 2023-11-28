@@ -11,7 +11,7 @@ export default function ProfilePage() {
             <Fragment>
                 <Box sx={{
                     height: '100vh',
-                    bgcolor: '#353939',
+                    bgcolor: '#222222',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center'
