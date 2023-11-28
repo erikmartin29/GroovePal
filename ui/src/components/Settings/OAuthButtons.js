@@ -83,7 +83,7 @@ export default function OAuthButtons() {
                                 color: 'white',
                             }
                         }}
-                        onClick={() => handlePopup(discogsUrl)}>
+                        onClick={() => handlePopup(lastfmUrl)}>
                         Link LastFM
                     </Button>
                     {isLastFMConnected ? <CheckIcon sx={{ paddingLeft: 2, color: green[500] }} /> : null}
