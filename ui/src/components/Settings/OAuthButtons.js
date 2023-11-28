@@ -57,7 +57,7 @@ export default function OAuthButtons() {
                             mb: 3,
                             color: 'black',
                             backgroundColor: 'white',
-                            width: '100%',
+                            width: 180,
                             '&:hover': {
                                 backgroundColor: 'black',
                                 color: 'white',
@@ -77,7 +77,7 @@ export default function OAuthButtons() {
                             mb: 3,
                             color: 'black',
                             backgroundColor: 'white',
-                            width: '100%',
+                            width: 180,
                             '&:hover': {
                                 backgroundColor: 'black',
                                 color: 'white',
