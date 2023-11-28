@@ -71,7 +71,7 @@ const getArtistFreqByUser = async ( user_id ) => {
 const getAlbumFreqByUser = async ( user_id ) => {
     return new Promise((resolve, reject) => {
         const query = `
-            SELECT owner_id, track_artist, track_album, COUNT(track_album) as album_freq
+            SELECT owner_id, track_artist, track_album, image_url, COUNT(track_album) as album_freq
             FROM scrobbles
             WHERE owner_id = ?
             GROUP BY track_album
