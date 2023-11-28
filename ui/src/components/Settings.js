@@ -42,24 +42,36 @@ export default function Settings() {
                     borderRadius: '10px',
                     borderColor: '#000000',
                     boxShadow: 8,
-                    bgcolor: '#e6e6e6'
+                    bgcolor: '#141414'
                 }}>
                     <OAuthButtons />
                     <Input
                         placeholder="New Password"
                         type="password"
-                        sx={{ margin: 2, width: 180 }}
+                        sx={{ margin: 2, width: 180, color: 'white',
+                        // underline when selected
+                        ':after': { borderBottomColor: 'white' } }}
                         required={true}
                         onChange={event => setPassword(event.target.value)}
                     />
                     <Input
                         placeholder="Confirm New Password"
                         type="password"
-                        sx={{ margin: 2, width: 180 }}
+                        sx={{ margin: 2, width: 180, color: 'white',
+                        // underline when selected
+                        ':after': { borderBottomColor: 'white' }
+                     }}
                         required={true}
                         onChange={event => setPasswordConfirm(event.target.value)}
                     />
-                    <Button variant="contained" color="primary" onClick={() => {
+                    <Button 
+                        sx={{ mt: 2, mb: 3, color: 'black', backgroundColor: 'white', 
+                            '&:hover': {
+                                backgroundColor: 'black',
+                                color: 'white',
+                            }
+                        }}
+                        variant="contained" color="primary" onClick={() => {
                         // update password in the database
                         changePassword()
                     }}>
