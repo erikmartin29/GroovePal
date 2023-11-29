@@ -106,7 +106,13 @@ export default function CollectionPage() {
             console.log(error);
         }).finally( () => {
             setLoading(false);
-            setFilterString(query.get('search').toLowerCase());
+            console.log(query);
+            if ( query.size > 0 ) {
+                const filter = query.get('search');
+                if ( filter !== undefined || filter !== null ) {
+                    setFilterString(filter.toLowerCase());
+                }
+            }
         })
     }, [username, query]);
 
