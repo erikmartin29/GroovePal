@@ -29,8 +29,8 @@ const lfm_callback = (ctx) => {
         console.log(ctx.request);
         const { token } = ctx.request.query;
         const { user_id } = ctx.request.params
-        console.log('user_id:', user_id);
-        console.log('auth_token:', token);
+//        console.log('user_id:', user_id);
+//        console.log('auth_token:', token);
         client.authenticate(token, (error, session) => {
             if ( error ) 
                 return reject(`error in lastfm authenticator: ${JSON.stringify(error)}`)
@@ -49,7 +49,7 @@ const lfm_callback = (ctx) => {
     */
 const scrobble = async (ctx) => {
     return new Promise( (resolve, reject) => {
-        // create a new session?        
+        // create a new session        
         let sesh = new LastfmAPI({
             'api_key': process.env.LASTFM_API_KEY,
             'secret': process.env.LASTFM_API_SECRET
@@ -59,6 +59,7 @@ const scrobble = async (ctx) => {
         const scrobble_list = ctx.request.body.scrobble_list;
         const image_url = ctx.request.body.image_url;
         const user_id = ctx.request.body.user_id;
+        const release_id = ctx.request.body.release_id;
 
         const log = async (track_list) => {
             return await Promise.all(track_list.map( (track) => {
@@ -78,7 +79,7 @@ const scrobble = async (ctx) => {
             ctx.status = 200;
             ctx.body = scrobbles;
             ScrobbleController
-                .addScrobbles(scrobble_list, user_id, image_url).then( _ => {
+                .addScrobbles(scrobble_list, user_id, image_url, release_id).then( _ => {
                         ctx.body = scrobbles;
                         ctx.status = 200;
                     }).catch( error => {

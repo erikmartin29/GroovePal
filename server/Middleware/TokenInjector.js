@@ -10,8 +10,8 @@ const consumer_secret = process.env.DISCOGS_SECRET;
 
 async function discogs_middleware (ctx, next) {
     const { user_id } = ctx.request.body;
-    console.log(ctx.request.body);
-    console.log('discogs middleware hit');
+//    console.log(ctx.request.body);
+//    console.log('discogs middleware hit');
     if ( user_id !== undefined ) {
         // get credentials database
         try {
@@ -29,9 +29,9 @@ async function discogs_middleware (ctx, next) {
                     authorizeUrl: `https://www.discogs.com/oauth/authorize?oauth_token=${creds.token}`
                 },
             };
-            console.log('discogs credentials retrived');
+ //           console.log('discogs credentials retrived');
         } catch (error) {
-            console.log(`Error: ${error}`);
+ //           console.log(`Error: ${error}`);
             ctx.status = 500; 
             ctx.body = error; // forward error to the client
             return; // Don't continue to the next middleware
@@ -63,7 +63,7 @@ async function lastfm_middleware (ctx, next) {
             };
             console.log('lastfm credentials retrived');
         } catch (error) {
-            console.log(`Error: ${error}`);
+  //          console.log(`Error: ${error}`);
             ctx.status = 500;
             ctx.body = error;
             return; // don't continue to next middleware

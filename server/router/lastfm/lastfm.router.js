@@ -69,5 +69,21 @@ lastfmRouter.get('/most-played/artist/:user_id', async (ctx) => {
     }
 })
 
+lastfmRouter.get('/validate/:user_id', async (ctx) => {
+    const { user_id } = ctx.request.params;
+    try {
+        const creds = await SecretsController.getLastfmSecretKey({user_id});
+        // check if credentials are valid
+        ctx.body = {
+            status: (creds != undefined)
+        }
+        ctx.status = 200;
+    } catch (e) {
+        console.log(e);
+        ctx.status = 500;
+    }
+    ctx.status = 200;
+});
+
 
 module.exports = lastfmRouter;
