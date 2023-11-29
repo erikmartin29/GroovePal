@@ -59,6 +59,7 @@ const scrobble = async (ctx) => {
         const scrobble_list = ctx.request.body.scrobble_list;
         const image_url = ctx.request.body.image_url;
         const user_id = ctx.request.body.user_id;
+        const release_id = ctx.request.body.release_id;
 
         const log = async (track_list) => {
             return await Promise.all(track_list.map( (track) => {
@@ -78,7 +79,7 @@ const scrobble = async (ctx) => {
             ctx.status = 200;
             ctx.body = scrobbles;
             ScrobbleController
-                .addScrobbles(scrobble_list, user_id, image_url).then( _ => {
+                .addScrobbles(scrobble_list, user_id, image_url, release_id).then( _ => {
                         ctx.body = scrobbles;
                         ctx.status = 200;
                     }).catch( error => {
