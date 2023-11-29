@@ -151,6 +151,7 @@ export default function CollectionPage() {
                                 bgcolor: 'white',
                                 boxShadow: 3
                             }}
+                            defaultValue={`${filterString}`}
                             label="Search"
                             type="search"
                             variant="filled"

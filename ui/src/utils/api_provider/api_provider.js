@@ -48,7 +48,7 @@ export function discogs_oauth(username) {
 }
 
 export function getAuthStatusLastfm(username) {
-    return axiosClient.get(`/discogs/validate/${username}`);
+    return axiosClient.get(`/lastfm/validate/${username}`);
 }
 
 export function lastfm_oauth(username) {
@@ -92,6 +92,6 @@ export function getMostPlayedAlbum(username) {
 }
 
 export function getAuthStatusDiscogs(username) {
-    return axiosClient.get(`/lastfm/validate/${username}`);
+    return axiosClient.get(`/discogs/validate/${username}`);
 }
 

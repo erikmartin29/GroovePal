@@ -75,7 +75,7 @@ lastfmRouter.get('/validate/:user_id', async (ctx) => {
         const creds = await SecretsController.getLastfmSecretKey({user_id});
         // check if credentials are valid
         ctx.body = {
-            status: (creds != undefined)
+            synced: (creds !== undefined)
         }
         ctx.status = 200;
     } catch (e) {
