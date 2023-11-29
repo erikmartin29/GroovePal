@@ -67,8 +67,16 @@ export function getDiscogsReleaseImage(releaseID, username) {
     return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
 }
 
-export function bulkScrobble(username, track_list, image_url) {
-    return axiosClient.post(`/lastfm/scrobble`, { user_id: username, image_url: image_url, scrobble_list: track_list })
+export function bulkScrobble(username, track_list, image_url, release_id) {
+    return axiosClient.post(`/lastfm/scrobble`, { 
+        user_id: username, 
+        image_url: 
+        image_url, 
+        scrobble_list: 
+        track_list, 
+        release_id: 
+        release_id 
+    });
 }
 
 export function getPlays(username) {
