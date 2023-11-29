@@ -1,8 +1,8 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { Box, Grid, Button, Container, TextField, Typography, CircularProgress} from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
 import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
 
@@ -81,6 +81,8 @@ const albumDisplay = (num) => {
 export default function CollectionPage() {
 
     const [collection, setCollection] = useState([]);
+    const { search } = useLocation(); 
+    let query = useMemo(() => new URLSearchParams(search), [search]);
 
     const [filterString, setFilterString] = useState("");
 
@@ -104,8 +106,15 @@ export default function CollectionPage() {
             console.log(error);
         }).finally( () => {
             setLoading(false);
+            console.log(query);
+            if ( query.size > 0 ) {
+                const filter = query.get('search');
+                if ( filter !== undefined || filter !== null ) {
+                    setFilterString(filter.toLowerCase());
+                }
+            }
         })
-    }, [username]);
+    }, [username, query]);
 
     if ( loading ) 
         return (

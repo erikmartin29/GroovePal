@@ -45,7 +45,7 @@ export default function Header() {
                         justifyContent: 'space-between',
                         bgcolor: '#141414'
                     }}>
-                        <h2>GroovePal</h2>
+                        <a style={{ textDecoration: 'none', color: 'white' }} href='/'><h2>GroovePal</h2></a>
                         <Box 
                             sx={{
                                 width:'80%',

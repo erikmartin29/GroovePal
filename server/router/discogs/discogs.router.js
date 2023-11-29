@@ -10,8 +10,7 @@ const discogsRouter = require('koa-router')({
 });
 
 // require user to be logged in
-discogsRouter.use(VerifyJWT);
-discogsRouter.get('/auth/:user_id', Authorize(), discogs_provider.discogs_oath , err => console.log(err));
+discogsRouter.get('/auth/:user_id', discogs_provider.discogs_oath , err => console.log(err));
 
 // external request no jwt is going to be provided?
 discogsRouter.get('/callback/:user_id/', async (ctx) => {
@@ -31,6 +30,21 @@ discogsRouter.get('/callback/:user_id/', async (ctx) => {
         console.log(e);
         ctx.status = 500;
         ctx.body = 'unable to complete oauth for discogs';
+    }
+});
+
+discogsRouter.get('/validate/:user_id', async (ctx) => {
+    const { user_id } = ctx.request.params;
+    try {
+        const creds = secretsController.getDiscogsSecretKey({ user_id });
+        console.log(creds);
+        ctx.body = {
+            status: (creds != undefined)
+        }
+        ctx.status = 200;
+    } catch ( e ) {
+        console.log(e);
+        ctx.status = 500;
     }
 });
 

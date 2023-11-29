@@ -15,9 +15,11 @@ const RecentTracksRows = (props) => {
 
     return (
         <TableRow key={index}>
+            <a href={`/play/${row.release_id}`}>
             <TableCell sx={{borderBottom: "none"}}>
                 <img src={row.image_url} width="125" height="125" />
             </TableCell>
+            </a>
             <TableCell sx={{borderBottom: "none"}} align='left'> 
                 <Typography
                 sx={{
@@ -55,11 +57,12 @@ const RecentTracksRows = (props) => {
 
 const TopAlbumListRows = (props) => {
 
-    const { image_url, label, frequency, index, size } = props;
+    const { image_url, label, frequency, index, release_id } = props;
 
     if (index < 3) {
 
         return (
+            <a href={`/play/${release_id}`} style={{ textDecoration: 'none' }}>
             <ListItem divider="true">
                 <Grid container sx={{ alignItems: "left" }}>
                     <Grid item xs={4}>
@@ -85,12 +88,13 @@ const TopAlbumListRows = (props) => {
                     </Grid>
                 </Grid>
             </ListItem>
+            </a>
         )
     }
 
     return (
         <ListItem >
-            <ListItemText primary={label} secondary={`plays: ${frequency}`} />
+            <a href={`/play/${release_id}`} style={{ textDecoration: 'none' }}><ListItemText primary={label} secondary={`plays: ${frequency}`} /></a>
         </ListItem>
     )
 }
@@ -115,7 +119,7 @@ const TopArtistListRows = (props) => {
                             mb: 1,
                             fontSize: 20,
                             mb: 0
-                        }}> {label}
+                        }}> <a style={{ textDecoration: 'none', color: 'white' }} href={`/collection?search=${label}`}>{label}</a>
                         </Typography>} 
                         secondary={<Typography
                         sx={{
@@ -261,7 +265,7 @@ export default function UserHome() {
                         }}>
                             {
                                 topAlbums.slice(0,3).map((row, index) => (
-                                    <TopAlbumListRows image_url={row.image_url} label={row.track_album} index={index} frequency={row.album_freq} size={topAlbums.length} />
+                                    <TopAlbumListRows release_id={row.release_id} image_url={row.image_url} label={row.track_album} index={index} frequency={row.album_freq} size={topAlbums.length} />
                                 ))
                             }
                         </List>

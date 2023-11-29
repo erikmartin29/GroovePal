@@ -13,7 +13,7 @@ const discogs_oath = (ctx) => {
             consumer_secret,
             callback_url + `/${ctx.request.params.user_id}/`,
             (err, requestData) => {
-                console.log(requestData);
+                //console.log(requestData);
                 if ( err ) {
                     console.log(err);
                     return reject();
@@ -47,7 +47,7 @@ function discogs_callback(ctx) {
                 if ( err ) {
                     return reject(`error from discogs authenticater: ${err}`);
                 }
-                console.log('success!!!!')
+//                console.log('success!!!!')
                 return resolve({
                     token: accessData.token,
                     token_secret: accessData.tokenSecret,

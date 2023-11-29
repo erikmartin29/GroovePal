@@ -36,6 +36,7 @@ const tables = [
         track_album   VARCHAR(255)  NOT NULL,
         timestamp     VARCHAR(255)  NOT NULL, 
         image_url     VARCHAR(255)  NOT NULL,
+        release_id    VARCHAR(255)  NOT NULL,
         FOREIGN KEY (owner_id) REFERENCES users(user_id),
         PRIMARY KEY (owner_id, track_name, timestamp)
     );

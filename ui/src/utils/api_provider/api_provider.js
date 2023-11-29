@@ -47,6 +47,10 @@ export function discogs_oauth(username) {
     return axiosClient.get(`/discogs/auth/${username}`);
 }
 
+export function getAuthStatusLastfm(username) {
+    return axiosClient.get(`/discogs/validate/${username}`);
+}
+
 export function lastfm_oauth(username) {
     return axiosClient.get(`/lastfm/auth/${username}`);
 }
@@ -63,8 +67,16 @@ export function getDiscogsReleaseImage(releaseID, username) {
     return axiosClient.post(`/discogs/data/release-image/${releaseID}`, { user_id: username });
 }
 
-export function bulkScrobble(username, track_list, image_url) {
-    return axiosClient.post(`/lastfm/scrobble`, { user_id: username, image_url: image_url, scrobble_list: track_list })
+export function bulkScrobble(username, track_list, image_url, release_id) {
+    return axiosClient.post(`/lastfm/scrobble`, { 
+        user_id: username, 
+        image_url: 
+        image_url, 
+        scrobble_list: 
+        track_list, 
+        release_id: 
+        release_id 
+    });
 }
 
 export function getPlays(username) {
@@ -77,5 +89,9 @@ export function getMostPlayedArtist(username) {
 
 export function getMostPlayedAlbum(username) {
     return axiosClient.get(`/lastfm/most-played/album/${username}`);
+}
+
+export function getAuthStatusDiscogs(username) {
+    return axiosClient.get(`/lastfm/validate/${username}`);
 }
 
