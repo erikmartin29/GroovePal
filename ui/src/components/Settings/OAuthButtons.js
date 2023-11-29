@@ -40,15 +40,17 @@ export default function OAuthButtons() {
 
         getAuthStatusDiscogs(username)
             .then( res => {
-                console.log(res);
-                setIsDiscogsConnected(true);
+                if ( res.data.synced ) {
+                    setIsDiscogsConnected(true);
+                }
             })
             .catch( error => console.log(error) )
 
         getAuthStatusLastfm(username)
             .then( res => {
-                console.log(res);
-                setIsLastFMConnected(true);
+                if ( res.data.synced ) {
+                    setIsLastFMConnected(true);
+                }
             })
             .catch( error => console.log(error) )
 

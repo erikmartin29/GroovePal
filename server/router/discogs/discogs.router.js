@@ -36,10 +36,9 @@ discogsRouter.get('/callback/:user_id/', async (ctx) => {
 discogsRouter.get('/validate/:user_id', async (ctx) => {
     const { user_id } = ctx.request.params;
     try {
-        const creds = secretsController.getDiscogsSecretKey({ user_id });
-        console.log(creds);
+        const creds = await secretsController.getDiscogsSecretKey({ user_id });
         ctx.body = {
-            status: (creds != undefined)
+            synced: (creds != undefined)
         }
         ctx.status = 200;
     } catch ( e ) {
