@@ -288,7 +288,7 @@ export default function PlayPage() {
             console.log(`playing ${track.title}`);
             setTimeout(async () => {
                 console.log(`finished: ${track.title}`);
-                bulkScrobble(username, scrobble_list.slice(idx, idx + 1), releaseImg)
+                bulkScrobble(username, scrobble_list.slice(idx, idx + 1), releaseImg, release.id)
                     .then(res => {
                         console.log(res);
                     }).catch(error => {
