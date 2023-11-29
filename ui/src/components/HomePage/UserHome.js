@@ -115,7 +115,7 @@ const TopArtistListRows = (props) => {
                             mb: 1,
                             fontSize: 20,
                             mb: 0
-                        }}> {label}
+                        }}> <a style={{ textDecoration: 'none', color: 'white' }} href={`/collection?search=${label}`}>{label}</a>
                         </Typography>} 
                         secondary={<Typography
                         sx={{
