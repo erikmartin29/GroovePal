@@ -26,6 +26,24 @@ export default function OAuthButtons() {
     }
 
     useEffect(() => {
+        const checkSynced = setInterval(() => {
+            getAuthStatusDiscogs(username)
+                .then( res => {
+                    if ( res.data.synced ) {
+                        setIsDiscogsConnected(true);
+                    }
+                })
+                .catch( error => console.log(error) )
+
+            getAuthStatusLastfm(username)
+                .then( res => {
+                    if ( res.data.synced ) {
+                        setIsLastFMConnected(true);
+                    }
+                })
+                .catch( error => console.log(error) )
+        }, 1000 * 2); // check every 2 seconds
+
         discogs_oauth(username)
             .then(res => {
                 setDiscogsUrl(res.data.authurl)
@@ -38,22 +56,7 @@ export default function OAuthButtons() {
             })
             .catch(error => console.log(error))
 
-        getAuthStatusDiscogs(username)
-            .then( res => {
-                if ( res.data.synced ) {
-                    setIsDiscogsConnected(true);
-                }
-            })
-            .catch( error => console.log(error) )
-
-        getAuthStatusLastfm(username)
-            .then( res => {
-                if ( res.data.synced ) {
-                    setIsLastFMConnected(true);
-                }
-            })
-            .catch( error => console.log(error) )
-
+        return () => clearInterval(checkSynced);
     }, [username])
 
     return (
