@@ -48,9 +48,9 @@ const TracklistTable = (props) => {
                 </colgroup>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ textAlign: 'start', borderBottom:"none" }}><Typography sx={{ fontWeight: 'bold', color: 'white' }}>Track</Typography></TableCell>
-                        <TableCell sx={{ borderBottom:"none" }}></TableCell>
-                        <TableCell sx={{ borderBottom:"none" }}></TableCell>
+                        <TableCell sx={{ textAlign: 'start', borderBottom: "none" }}><Typography sx={{ fontWeight: 'bold', color: 'white' }}>Track</Typography></TableCell>
+                        <TableCell sx={{ borderBottom: "none" }}></TableCell>
+                        <TableCell sx={{ borderBottom: "none" }}></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -59,10 +59,10 @@ const TracklistTable = (props) => {
                             key={track.title}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell sx={{ borderBottom:"none" }}><Typography sx={{color:'white'}}>{track.title}</Typography></TableCell>
-                            <TableCell sx={{ borderBottom:"none" }} align="right"><Typography sx={{color:'white'}}>{track.position || ""}</Typography></TableCell>
-                            <TableCell sx={{ borderBottom:"none" }} align="right"><Typography sx={{color:'white'}}>{track.duration || "XX:XX"}</Typography></TableCell>
-                            <TableCell sx={{ display: 'flex', justifyContent: 'end', borderBottom:'none' }}>
+                            <TableCell sx={{ borderBottom: "none" }}><Typography sx={{ color: 'white' }}>{track.title}</Typography></TableCell>
+                            <TableCell sx={{ borderBottom: "none" }} align="right"><Typography sx={{ color: 'white' }}>{track.position || ""}</Typography></TableCell>
+                            <TableCell sx={{ borderBottom: "none" }} align="right"><Typography sx={{ color: 'white' }}>{track.duration || "XX:XX"}</Typography></TableCell>
+                            <TableCell sx={{ display: 'flex', justifyContent: 'end', borderBottom: 'none' }}>
                                 {(() => {
                                     switch (get_status(idx)) {
                                         case 1:
@@ -79,7 +79,7 @@ const TracklistTable = (props) => {
                                                 sx={{
                                                     margin: '0px',
                                                     padding: '0px',
-                                                    color: blue[500],
+                                                    color: 'white',
                                                 }} />;
                                         default:
                                             // not played
@@ -261,7 +261,7 @@ export default function PlayPage() {
 
     const convertToMilliseconds = (timestr) => {
         const [minutes, seconds] = timestr.split(':').map(Number);
-        //return 1000; // just here for degugging
+        //return 500; // just here for degugging
         return (minutes * 60000) + (seconds * 1000);
     }
 
@@ -309,7 +309,7 @@ export default function PlayPage() {
             tmpPlayed.push(playingIdx);
             setPlayed(tmpPlayed);
         }
-        
+
         setButtonText("Scrobble Side " + sides[nextSide + 1])
         setNextSide(nextSide + 1)
 
@@ -474,14 +474,28 @@ export default function PlayPage() {
                             </Typography>
                             <Button
                                 disabled={scrobbling || scrobblingComplete}
-                                sx={{ bgcolor: 'red', color: 'white' }}
+                                sx={{
+                                    bgcolor: 'black', color: 'white',
+                                    '&:disabled': {
+                                        color: 'white',
+                                    },
+                                    '&:hover': {
+                                        color: 'white',
+                                        backgroundColor: 'red',
+                                    }
+                                }}
                                 variant='contained'
                                 onClick={() => {
                                     handleScrobbleClick();
                                 }}>
                                 {buttonText}
                             </Button>
-                            {scrobbling && <LinearProgress sx={{ mt: 1 }} />}
+                            {scrobbling && <LinearProgress sx={{
+                                mt: 1, backgroundColor: 'black',
+                                '& .MuiLinearProgress-bar': {
+                                    backgroundColor: 'white'
+                                }
+                            }} />}
                             <TagDisplay tagsList={tagsList} editting={false/*editting*/} onClickCallback={() => onClickCallbackEdit} />
                             {/*<Editor allTags={allTags} editting={editting} onClickCallback={() => onClickCallbackFinish} />*/}
                         </Box>
