@@ -296,7 +296,7 @@ export default function PlayPage() {
                     }).finally(() => {
                         resolve(true);
                     })
-            }, delay);
+            }, delay - 2000);
         });
     }
 
