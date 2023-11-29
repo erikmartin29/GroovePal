@@ -29,8 +29,8 @@ const lfm_callback = (ctx) => {
         console.log(ctx.request);
         const { token } = ctx.request.query;
         const { user_id } = ctx.request.params
-        console.log('user_id:', user_id);
-        console.log('auth_token:', token);
+//        console.log('user_id:', user_id);
+//        console.log('auth_token:', token);
         client.authenticate(token, (error, session) => {
             if ( error ) 
                 return reject(`error in lastfm authenticator: ${JSON.stringify(error)}`)
@@ -49,7 +49,7 @@ const lfm_callback = (ctx) => {
     */
 const scrobble = async (ctx) => {
     return new Promise( (resolve, reject) => {
-        // create a new session?        
+        // create a new session        
         let sesh = new LastfmAPI({
             'api_key': process.env.LASTFM_API_KEY,
             'secret': process.env.LASTFM_API_SECRET

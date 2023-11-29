@@ -1,8 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Box, Stack, Button } from '@mui/material';
-import { discogs_oauth, lastfm_oauth } from '../../utils/api_provider/api_provider';
+import { 
+    discogs_oauth, 
+    lastfm_oauth,
+    getAuthStatusLastfm,
+    getAuthStatusDiscogs,
+} from '../../utils/api_provider/api_provider';
 import { AuthConsumer } from '../../context/AuthProvider';
-import { useNavigate } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import { green } from '@mui/material/colors';
 
@@ -10,12 +14,8 @@ export default function OAuthButtons() {
 
     const { username } = AuthConsumer();
 
-    let navigate = useNavigate();
-
     const [discogsUrl, setDiscogsUrl] = useState('');
     const [lastfmUrl, setLastfmUrl] = useState('');
-    const [loading, setLoading] = useState(true);
-
     const [isDiscogsConnected, setIsDiscogsConnected] = useState(false);
     const [isLastFMConnected, setIsLastFMConnected] = useState(false);
 
@@ -23,27 +23,35 @@ export default function OAuthButtons() {
 
     const handlePopup = (url) => {
         window.open(url, popup_window, 'width=500,height=500');
-
     }
 
     useEffect(() => {
-        const getUrls = async () => {
-            discogs_oauth(username)
-                .then(res => {
-                    setDiscogsUrl(res.data.authurl)
-                    //setIsDiscogsConnected(true)
-                })
-                .catch(error => console.log(error))
+        discogs_oauth(username)
+            .then(res => {
+                setDiscogsUrl(res.data.authurl)
+            })
+            .catch(error => console.log(error))
 
-            lastfm_oauth(username)
-                .then(res => {
-                    setLastfmUrl(res.data.authurl)
-                    //setIsLastFMConnected(true)
-                })
-                .catch(error => console.log(error))
-        }
+        lastfm_oauth(username)
+            .then(res => {
+                setLastfmUrl(res.data.authurl)
+            })
+            .catch(error => console.log(error))
 
-        getUrls().then(() => setLoading(false));
+        getAuthStatusDiscogs(username)
+            .then( res => {
+                console.log(res);
+                setIsDiscogsConnected(true);
+            })
+            .catch( error => console.log(error) )
+
+        getAuthStatusLastfm(username)
+            .then( res => {
+                console.log(res);
+                setIsLastFMConnected(true);
+            })
+            .catch( error => console.log(error) )
+
     }, [username])
 
     return (

@@ -47,6 +47,10 @@ export function discogs_oauth(username) {
     return axiosClient.get(`/discogs/auth/${username}`);
 }
 
+export function getAuthStatusLastfm(username) {
+    return axiosClient.get(`/discogs/validate/${username}`);
+}
+
 export function lastfm_oauth(username) {
     return axiosClient.get(`/lastfm/auth/${username}`);
 }
@@ -77,5 +81,9 @@ export function getMostPlayedArtist(username) {
 
 export function getMostPlayedAlbum(username) {
     return axiosClient.get(`/lastfm/most-played/album/${username}`);
+}
+
+export function getAuthStatusDiscogs(username) {
+    return axiosClient.get(`/lastfm/validate/${username}`);
 }
 
