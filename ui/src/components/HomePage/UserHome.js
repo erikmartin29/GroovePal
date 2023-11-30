@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
-import { Grid, Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
-
+import { Stack, Button, Grid, Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../../context/AuthProvider';
 import { getPlays, getMostPlayedAlbum, getMostPlayedArtist } from '../../utils/api_provider/api_provider';
 
@@ -153,6 +153,8 @@ export default function UserHome() {
     const [topArtists, setTopArtists] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    let navigate = useNavigate();
+
     useEffect(() => {
         const getData = async () => {
             await getPlays(username).then(res => {
@@ -196,6 +198,48 @@ export default function UserHome() {
             </Box>
         );
     }
+
+    if (recentTracks.length === 0)
+    return (
+        <Stack
+            sx={{
+                width: '100vw',
+                height: '75vh',
+                bgcolor: '#222222',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <Typography variant='h5' sx={{ color: 'white', fontWeight:'bold' }}>
+                    You haven't scrobbled anything with GroovePal yet!
+            </Typography>
+
+            <Typography variant='h6' sx={{ color: 'white' }}>
+                    Scrobble something from your collection to get started.
+            </Typography>
+
+            <Button
+                    sx={{
+                        mt: 2,
+                        mb: 3,
+                        color: 'black',
+                        backgroundColor: 'white',
+                        width: 180,
+                        '&:hover': {
+                            backgroundColor: 'black',
+                            color: 'white',
+                        }
+                    }}
+                    variant="contained"
+                    onClick={() => navigate('/collection', { replace: true }
+                    )
+                    }
+            >
+                    Go To Collection
+            </Button>
+        </Stack>
+    ); 
 
     return (
         <Fragment>

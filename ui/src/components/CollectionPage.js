@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
-import { Box, Grid, Button, Container, TextField, Typography, CircularProgress} from '@mui/material';
+import { Box, Stack, Grid, Button, Container, TextField, Typography, CircularProgress} from '@mui/material';
 import { AuthConsumer } from '../context/AuthProvider';
-import { getDiscogsCollection, getDiscogsRelease, getDiscogsReleaseImage } from '../utils/api_provider/api_provider';
+import { getDiscogsCollection, getAuthStatusDiscogs } from '../utils/api_provider/api_provider';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material/styles';
@@ -13,7 +13,7 @@ import { styled } from '@mui/material/styles';
 //side bar with list of all tags used by that user, that you can click and filters albums with those tags (favourites always there)
 //have a favourites tag, but make that one a heart symbol and always there
 
-const Cell = (props) => {
+const Cell = (props) => {    
     
     const { item, rowIdx, navigate } = props;
 
@@ -91,7 +91,17 @@ export default function CollectionPage() {
     
     let navigate = useNavigate();
 
+    const [isDiscogsConnected, setIsDiscogsConnected] = useState(false);
+
     useEffect(() => {
+        getAuthStatusDiscogs(username)
+            .then(res => {
+                if (res.data.synced) {
+                    setIsDiscogsConnected(true);
+                }
+            })
+            .catch(error => console.log(error))
+        
         getDiscogsCollection(username).then( res => {
             //TODO: sort by various keys other than date_added
             let newArr = res.data['releases'].sort(function(a,b){
@@ -131,6 +141,48 @@ export default function CollectionPage() {
                 <CircularProgress sx={{ color: 'white' }} />
             </Box>
         );
+
+    if (!isDiscogsConnected)
+        return (
+            <Stack
+                sx={{
+                    width: '100vw',
+                    height: '75vh',
+                    bgcolor: '#222222',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Typography variant='h5' sx={{ color: 'white', fontWeight: 'bold' }}>
+                    No Discogs Account Linked.
+                </Typography>
+
+                <Typography variant='h6' sx={{ color: 'white' }}>
+                    Please link your Discogs account in Settings to view your collection.
+                </Typography>
+
+                <Button
+                        sx={{
+                            mt: 2,
+                            mb: 3,
+                            color: 'black',
+                            backgroundColor: 'white',
+                            width: 180,
+                            '&:hover': {
+                                backgroundColor: 'black',
+                                color: 'white',
+                            }
+                        }}
+                        variant="contained"
+                        onClick={() => navigate('/settings', { replace: true }
+                        )
+                        }
+                >
+                        Go To Settings
+                </Button>
+            </Stack>
+        ); 
 
     return (
             <Fragment>
