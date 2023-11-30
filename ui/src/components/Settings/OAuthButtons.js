@@ -26,8 +26,8 @@ export default function OAuthButtons() {
     }
 
     useEffect(() => {
-        const checkSynced = setInterval(() => {
-            getAuthStatusDiscogs(username)
+        const checkAuthed = () => {
+                        getAuthStatusDiscogs(username)
                 .then( res => {
                     if ( res.data.synced ) {
                         setIsDiscogsConnected(true);
@@ -42,6 +42,12 @@ export default function OAuthButtons() {
                     }
                 })
                 .catch( error => console.log(error) )
+        }
+
+        checkAuthed();
+
+        const autoCheckAuthed = setInterval(() => {
+            checkAuthed();
         }, 1000 * 2); // check every 2 seconds
 
         discogs_oauth(username)
@@ -56,7 +62,7 @@ export default function OAuthButtons() {
             })
             .catch(error => console.log(error))
 
-        return () => clearInterval(checkSynced);
+        return () => clearInterval(autoCheckAuthed);
     }, [username])
 
     return (
