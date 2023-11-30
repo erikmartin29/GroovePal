@@ -1,8 +1,8 @@
 import { Fragment, useEffect, useState } from 'react';
-import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble } from '../utils/api_provider/api_provider';
+import { getDiscogsRelease, getDiscogsReleaseImage, bulkScrobble, getAuthStatusLastfm } from '../utils/api_provider/api_provider';
 import { useNavigate, useParams } from 'react-router-dom';
 import { AuthConsumer } from '../context/AuthProvider';
-import { Box, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
+import { Box, Stack, Container, Typography, Button, Chip, Grid, ThemeProvider, Divider, CircularProgress, LinearProgress } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -254,6 +254,8 @@ export default function PlayPage() {
 
     const [buttonText, setButtonText] = useState("Scrobble");
 
+    const [isLastFMConnected, setIsLastFMConnected] = useState(false);
+
     //create useState for the array of tags, hard code size for now, figure out dynamics later
     const [tagsList, setTagsList] = useState(blankTags(0));
     const [allTags, setAllTags] = useState(blankTags(10));
@@ -328,6 +330,14 @@ export default function PlayPage() {
     }
 
     useEffect(() => {
+        getAuthStatusLastfm(username)
+        .then(res => {
+            if (res.data.synced) {
+                setIsLastFMConnected(true);
+            }
+        })
+        .catch(error => console.log(error))
+
         const getData = async () => {
             let rel = await getDiscogsRelease(albumID, username);
             setRelease(rel.data);
@@ -409,6 +419,48 @@ export default function PlayPage() {
         scrobble(nextSide)
         setNextSide(nextSide + 1)
     }
+
+    if (!isLastFMConnected)
+    return (
+        <Stack
+            sx={{
+                width: '100vw',
+                height: '75vh',
+                bgcolor: '#222222',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            <Typography variant='h5' sx={{ color: 'white', fontWeight: 'bold' }}>
+                No LastFM Account Linked.
+            </Typography>
+
+            <Typography variant='h6' sx={{ color: 'white' }}>
+                Please link your LastFM account in Settings to scrobble albums.
+            </Typography>
+
+            <Button
+                    sx={{
+                        mt: 2,
+                        mb: 3,
+                        color: 'black',
+                        backgroundColor: 'white',
+                        width: 180,
+                        '&:hover': {
+                            backgroundColor: 'black',
+                            color: 'white',
+                        }
+                    }}
+                    variant="contained"
+                    onClick={() => navigate('/settings', { replace: true }
+                    )
+                    }
+            >
+                    Go To Settings
+            </Button>
+        </Stack>
+    ); 
 
     //#353939
     return (
