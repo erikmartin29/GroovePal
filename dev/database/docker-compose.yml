@@ -1,0 +1,16 @@
+version: "3"
+
+volumes:
+  db_data:
+    external: false
+
+services:
+  mariadb:
+    container_name: mariadb
+    image: mariadb:latest
+    environment: 
+      - MARIADB_ROOT_PASSWORD=${ROOT_PASS}
+    ports:
+      - "3306:3306"
+    volumes:
+      - "db_data:/var/lib/mysql"
